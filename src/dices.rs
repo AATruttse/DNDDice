@@ -22,7 +22,7 @@ pub fn n_d_drop_plus(n: usize, d: usize, plus: IntValue, drop: usize) -> Result<
     let dice = Uniform::new(1, d + 1);
     let mut dices: Vec<usize> = (0..n).map(|_| rng.sample(&dice)).collect();
 
-    if OPT.debug || OPT.verbose > 0 {
+    if OPT.debug || OPT.verbose > 1 {
         println!("{:?}", dices);
     }
 
@@ -58,7 +58,7 @@ pub fn n_d_crop_plus(n: usize, d: usize, plus: IntValue, crop: usize) -> Result<
     let dice = Uniform::new(1, d + 1);
     let mut dices: Vec<usize> = (0..n).map(|_| rng.sample(&dice)).collect();
 
-    if OPT.debug || OPT.verbose > 0 {
+    if OPT.debug || OPT.verbose > 1 {
         println!("{:?}", dices);
     }
 

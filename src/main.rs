@@ -26,7 +26,7 @@ fn main() {
             None => println!("Unknown method {}.", OPT.method)
         }
 
-        if OPT.debug || OPT.stat == 1 {
+        if OPT.debug || OPT.verbose > 0 || OPT.stat == 1 {
             println!("{:?}", stat);
         }
 
@@ -41,5 +41,8 @@ fn main() {
         println!("Max value: {}", statistics.get_max());
         println!("Mean value: {}", statistics.get_mean());
         println!("Median value: {}", statistics.get_median());
+        println!("Mode value: {}", statistics.get_mode());
+
+        println!("Probabilities: {:?}", statistics.get_probabilities());
     }
 }

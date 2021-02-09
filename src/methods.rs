@@ -25,7 +25,7 @@ fn vec_checksize(vec: &mut Vec<IntValue>, n: usize) {
 pub fn method_adnd1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
-    for i in 0..5 {
+    for i in 0..6 {
         stats[i] = n_d(3, 6)?;
     }
 
@@ -37,7 +37,7 @@ pub fn method_adnd1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 pub fn method_adnd2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
-    for i in 0..5 {
+    for i in 0..6 {
         stats[i] = max(n_d(3, 6)?, n_d(3, 6)?);
     }
 
@@ -49,7 +49,7 @@ pub fn method_adnd2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 pub fn method_adnd3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
-    for i in 0..5 {
+    for i in 0..6 {
         stats[i] = n_d(3, 6)?;
     }
 
@@ -81,7 +81,7 @@ pub fn method_adnd4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 pub fn method_adnd5(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
-    for i in 0..5 {
+    for i in 0..6 {
         stats[i] = n_d_drop(4, 6, 1)?;
     }
 
