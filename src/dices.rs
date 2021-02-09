@@ -7,6 +7,56 @@ use crate::init::OPT;
 /// Result int type for all dices
 pub type IntValue = i32;
 
+/// Throws n dices with d sides, drops drop lowest, crop greatest, and adds plus
+#[inline(always)]
+pub fn n_d_drop_crop_plus(n: usize, d: usize, plus: IntValue, drop: usize, crop: usize) -> Result<IntValue, DiceError> {
+    if n == 0 {
+        return Err(DiceError::Dices0);
+    }
+
+    if d == 0 {
+        return Err(DiceError::Sides0);
+    }    
+
+    let mut rng = rand::thread_rng();
+    let dice = Uniform::new(1, d + 1);
+    let mut dices: Vec<usize> = (0..n).map(|_| rng.sample(&dice)).collect();
+
+    if OPT.debug || OPT.verbose > 1 {
+        println!("{:?}", dices);
+    }
+
+    if drop > 0 {
+        if drop >= dices.len() {
+            return Err(DiceError::BadDrop{
+                n: dices.len(),
+                drop: drop
+            });
+        }
+
+        dices.sort();
+        dices.reverse();
+        dices.truncate(dices.len() - drop);
+    }
+
+    if crop > 0 {
+        if crop >= dices.len() {
+            return Err(DiceError::BadCrop{
+                n: dices.len(),
+                crop: crop
+            });
+        }
+
+        dices.sort();
+        dices.truncate(dices.len() - crop);
+    }
+
+
+    let sum : usize = dices.iter().sum();
+    Ok(plus + sum as IntValue)
+}
+
+
 /// Throws n dices with d sides, drops drop lowest and adds plus
 #[inline(always)]
 pub fn n_d_drop_plus(n: usize, d: usize, plus: IntValue, drop: usize) -> Result<IntValue, DiceError> {
