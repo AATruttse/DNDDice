@@ -126,9 +126,52 @@ impl Statistics {
 
         new_stat
     }
+}
 
+pub fn show_stats(stats: &Vec<IntValue>) {
+    let statistics : Statistics = Statistics::new(&stats);
 
+    if OPT.stat || OPT.min {
+        if !OPT.numbers_only {
+            print!("Min value: ");    
+        }
+        println!("{}", statistics.get_min());
+    }
 
+    if OPT.stat || OPT.max {
+        if !OPT.numbers_only {
+            print!("Max value: ");    
+        }
+        println!("{}", statistics.get_max());
+    }
+
+    if OPT.stat || OPT.mean {
+        if !OPT.numbers_only {
+            print!("Mean value: ");    
+        }
+        println!("{}", statistics.get_mean());
+    }
+
+    if OPT.stat || OPT.median {
+        if !OPT.numbers_only {
+            print!("Median value: ");    
+        }
+        println!("{}", statistics.get_median());
+    }
+
+    if OPT.stat || OPT.mode {
+        if !OPT.numbers_only {
+            print!("Mode value: ");    
+        }
+        println!("{}", statistics.get_mode());
+    }
+
+    if OPT.stat || OPT.probabilities {
+        if !OPT.numbers_only {
+            print!("Probabilities: ");    
+        }
+        println!("{:?}", statistics.get_probabilities());
+    }
 
 }
 

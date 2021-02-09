@@ -60,72 +60,13 @@ pub fn n_d_drop_crop_plus(n: usize, d: usize, plus: IntValue, drop: usize, crop:
 /// Throws n dices with d sides, drops drop lowest and adds plus
 #[inline(always)]
 pub fn n_d_drop_plus(n: usize, d: usize, plus: IntValue, drop: usize) -> Result<IntValue, DiceError> {
-    if n == 0 {
-        return Err(DiceError::Dices0);
-    }
-
-    if d == 0 {
-        return Err(DiceError::Sides0);
-    }    
-
-    let mut rng = rand::thread_rng();
-    let dice = Uniform::new(1, d + 1);
-    let mut dices: Vec<usize> = (0..n).map(|_| rng.sample(&dice)).collect();
-
-    if OPT.debug || OPT.verbose > 1 {
-        println!("{:?}", dices);
-    }
-
-    if drop > 0 {
-        if drop >= n {
-            return Err(DiceError::BadDrop{
-                n: n,
-                drop: drop
-            });
-        }
-
-        dices.sort();
-        dices.reverse();
-        dices.truncate(n - drop);
-    }
-
-    let sum : usize = dices.iter().sum();
-    Ok(plus + sum as IntValue)
+    n_d_drop_crop_plus(n, d, plus, drop, 0)
 }
 
 /// Throws n dices with d sides, drops crop greatest and adds plus
 #[inline(always)]
 pub fn n_d_crop_plus(n: usize, d: usize, plus: IntValue, crop: usize) -> Result<IntValue, DiceError> {
-    if n == 0 {
-        return Err(DiceError::Dices0);
-    }
-
-    if d == 0 {
-        return Err(DiceError::Sides0);
-    }    
-
-    let mut rng = rand::thread_rng();
-    let dice = Uniform::new(1, d + 1);
-    let mut dices: Vec<usize> = (0..n).map(|_| rng.sample(&dice)).collect();
-
-    if OPT.debug || OPT.verbose > 1 {
-        println!("{:?}", dices);
-    }
-
-    if crop > 0 {
-        if crop >= n {
-            return Err(DiceError::BadCrop{
-                n: n,
-                crop: crop
-            });
-        }
-
-        dices.sort();
-        dices.truncate(n - crop);
-    }
-
-    let sum : usize = dices.iter().sum();
-    Ok(plus + sum as IntValue)
+    n_d_drop_crop_plus(n, d, plus, 0, crop)
 }
 
 /// Throws n dices with d sides, drops drop lowest

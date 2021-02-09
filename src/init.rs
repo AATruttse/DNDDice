@@ -1,7 +1,5 @@
 use structopt::StructOpt;
 
-use crate::dices::IntValue;
-
 #[derive(Debug, StructOpt)]
 #[structopt(name = "Options", about = "StructOpt command line options for dice thrower")]
 pub struct Opt {
