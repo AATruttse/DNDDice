@@ -30,7 +30,7 @@ fn process_roll(all_stats: &mut Vec<IntValue>,
 
     let add = plus as IntValue - minus as IntValue;
 
-    if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
+    if OPT.debug || (OPT.verbose > 0 && !OPT.numbers_only) {
         let drop_str: String = match drop {
             0 => "".to_string(),
             x => format!(" drop {}", x)};
