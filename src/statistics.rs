@@ -171,11 +171,13 @@ pub fn show_stats(stats: &Vec<IntValue>) {
 
     if OPT.stat || OPT.probabilities {
         if !OPT.numbers_only {
-            print!("Probabilities: ");    
+            println!("Probabilities: ");    
         }
-        println!("{:?}", statistics.get_probabilities());
-    }
 
+        for (key, val) in statistics.get_probabilities() {
+            println!("{} - {:.digits$}", key, val, digits=OPT.round_digits as usize);
+        }
+    }
 }
 
 

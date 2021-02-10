@@ -43,7 +43,7 @@ pub struct Opt {
     #[structopt(short="C", long="crop", default_value = "0")]
     pub crop: usize,
 
-    /// Stat generation method
+    /// Stat generation method (adnd1, adnd2, etc...)
     #[structopt(short, long, default_value = "")]
     pub method: String,
 
@@ -74,6 +74,10 @@ pub struct Opt {
     /// Show probabilities
     #[structopt(long)]
     pub probabilities: bool,
+
+    /// Round probabilities to number of digits
+    #[structopt(long, default_value = "2")]
+    pub round_digits: u8,
 
     /// Show only numbers
     #[structopt(long)]
