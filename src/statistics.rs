@@ -2,6 +2,7 @@ use std::collections::BTreeMap;
 
 use crate::dices::IntValue;
 use crate::init::OPT;
+use crate::strings::ZEROSTAT_ERROR_MSG;
 
 /// Float type for statistics
 pub type StatValue = f32;
@@ -10,7 +11,7 @@ pub type StatValue = f32;
 type IntBins = BTreeMap<IntValue, usize>;
 type StatBins = BTreeMap<IntValue, StatValue>;
 
-static ERROR_MSG: &str = "Can't calculate statistics from zero-length slice";
+//static ERROR_MSG: &str = "Can't calculate statistics from zero-length slice";
 
 /// struct for dice statistics
 pub struct Statistics
@@ -56,16 +57,16 @@ impl Statistics {
     }
 
     fn calc_min(&mut self, data: &[IntValue]) {
-        self.min = *data.iter().min().expect(ERROR_MSG);
+        self.min = *data.iter().min().expect(ZEROSTAT_ERROR_MSG);
     }
 
     fn calc_max(&mut self, data: &[IntValue]) {
-        self.max = *data.iter().max().expect(ERROR_MSG);
+        self.max = *data.iter().max().expect(ZEROSTAT_ERROR_MSG);
     }
 
     fn calc_mean(&mut self, data: &[IntValue]) {
         if data.len() == 0 {
-            panic!(ERROR_MSG);
+            panic!(ZEROSTAT_ERROR_MSG);
         }
 
         self.mean = data.iter().sum::<IntValue>() as StatValue / data.len() as StatValue
@@ -73,7 +74,7 @@ impl Statistics {
 
     fn calc_median(&mut self, data: &[IntValue]) {
         if data.len() == 0 {
-            panic!(ERROR_MSG);
+            panic!(ZEROSTAT_ERROR_MSG);
         }
 
         let mut vec: Vec<IntValue> = data.to_vec();
@@ -85,7 +86,7 @@ impl Statistics {
 
     fn calc_bins(&mut self, data: &[IntValue]) {
         if data.len() == 0 {
-            panic!(ERROR_MSG);
+            panic!(ZEROSTAT_ERROR_MSG);
         }
   
         for &value in data {
@@ -96,15 +97,17 @@ impl Statistics {
             .map(|(key, val)| (*key, *val as StatValue / data.len() as StatValue))
             .collect();
 
-        if OPT.debug {
+        if OPT.debug && OPT.is_collect_stat() {
             println!("{:?}", self.bins);
-            println!("{:?}", self.probabilities);
+            if OPT.probabilities {
+                println!("{:?}", self.probabilities);
+            }
         }
 
         self.mode = *self.bins.iter()
             .max_by_key(|&(_, count)| count)
             .map(|(val, _)| val)
-            .expect(ERROR_MSG);
+            .expect(ZEROSTAT_ERROR_MSG);
     }
 
     pub fn new(data: &[IntValue]) -> Self {

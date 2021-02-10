@@ -1,23 +1,31 @@
 extern crate custom_error;
 #[macro_use]
 extern crate lazy_static;
+extern crate regex;
 
 pub mod dices;
 pub mod errors;
+pub mod help;
 pub mod init;
 pub mod methods;
 pub mod processes;
 pub mod statistics;
+pub mod strings;
 
 use std::cmp::max;
 
 use crate::dices::IntValue;
+use crate::help::help;
 use crate::init::OPT;
 use crate::methods::METHODSMAP;
 use crate::processes::process_dices;
 use crate::statistics::show_stats;
 
 fn main() {
+    if OPT.is_help() {
+        help();
+    }
+
     let mut stat: Vec<IntValue> = (0..6).collect();
 
     let mut all_stats: Vec<IntValue> = Vec::new();

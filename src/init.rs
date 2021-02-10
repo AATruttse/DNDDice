@@ -1,11 +1,15 @@
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
-#[structopt(name = "Options", about = "StructOpt command line options for dice thrower")]
+#[structopt(name = "dnddice", about = "RPG dice thrower for command line")]
 pub struct Opt {
     /// Activate debug mode
     #[structopt(long)]
     pub debug: bool,
+
+    /// Show help about dicecodes
+    #[structopt(long)]
+    pub help_dice_codes: bool,
 
     /// Set verbose
     #[structopt(short, parse(from_occurrences))]
@@ -75,17 +79,23 @@ pub struct Opt {
     #[structopt(long)]
     pub numbers_only: bool,
 
-    /// Dice code
+    /// No help messages
+    #[structopt(long)]
+    pub no_help: bool,
+
+    /// Dice codes (2d8+1, 4d6drop1 etc...)
     #[structopt(default_value = "")]
-    pub dices: String,
+    pub dicecodes: Vec<String>,
 }
 
 lazy_static! {
     pub static ref OPT: Opt = {
         let opt = Opt::from_args();
+        
         if opt.debug {
             println!("{:?}", opt);
         }
+        
         opt
     };
 }
@@ -101,5 +111,11 @@ impl Opt {
                self.mode ||
                self.probabilities;
     }
+
+    /// checks, if any help info need to be shown
+    pub fn is_help(&self) -> bool {
+        return self.help_dice_codes;
+    }
+
 }
 
