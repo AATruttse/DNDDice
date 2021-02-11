@@ -174,7 +174,7 @@ pub fn show_stats(stats: &Vec<IntValue>) {
         if !OPT.numbers_only {
             print!("Mean value: ");    
         }
-        println!("{}", statistics.get_mean());
+        println!("{:.digits$}", statistics.get_mean(), digits=OPT.round_digits as usize);
     }
 
     if OPT.stat || OPT.median {
