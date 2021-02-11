@@ -2,9 +2,52 @@ use regex::Regex;
 
 use crate::dices::IntValue;
 use crate::dices::n_d_drop_crop_plus;
+
+use crate::errors::cant_find_method;
+
 use crate::init::OPT;
+use crate::methods::METHODSMAP;
+
+use crate::statlists::StatList;
+use crate::statlists::STATLISTSMAP;
+
 use crate::strings::BADDICECODE_ERROR_MSG;
 use crate::strings::DICECODES_HELP_MSG;
+use crate::strings::UNKNOWNSTATLIST_ERROR_MSG;
+
+/// process stat generation method
+pub fn process_method(all_stats: &mut Vec<IntValue>) {
+    let mut stat : Vec<IntValue> = Vec::<IntValue>::new();
+
+    match METHODSMAP.get(&OPT.method[..]) {
+        Some(method) => {
+            let statlist: &StatList = STATLISTSMAP.
+                get(method.get_statlist()).
+                expect(UNKNOWNSTATLIST_ERROR_MSG);
+
+            stat.resize(statlist.len(), 0);
+            method.get_method()(&mut stat).unwrap();
+
+            if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
+                if method.is_ordered() && !OPT.numbers_only {
+                    for i in 0..statlist.len() {
+                        print!("{}: {}  ", statlist[i], stat[i]);
+                    }
+                    println!("");
+                }
+                else {
+                    println!("{:?}", stat);
+                }
+            }
+        },
+        None => {
+            cant_find_method(&OPT.method)
+        }
+    }
+
+    all_stats.extend(stat.clone());
+
+}
 
 /// process any dice roll, use all_stat for statistics
 pub fn process_dices(all_stats: &mut Vec<IntValue>) {

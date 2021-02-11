@@ -11,7 +11,15 @@ pub struct Opt {
     #[structopt(long)]
     pub help_dice_codes: bool,
 
-    /// Set verbose
+    /// Show help about generation methods
+    #[structopt(long)]
+    pub help_methods: bool,
+
+    /// Show help about generation method
+    #[structopt(long, default_value = "")]
+    pub help_method: String,
+
+    /// Verbose mode (-v, -vv, etc.)
     #[structopt(short, parse(from_occurrences))]
     pub verbose: u8,
 
@@ -75,6 +83,10 @@ pub struct Opt {
     #[structopt(long)]
     pub probabilities: bool,
 
+    /// Show sum
+    #[structopt(long)]
+    pub sum: bool,
+
     /// Round probabilities to number of digits
     #[structopt(long, default_value = "2")]
     pub round_digits: u8,
@@ -118,7 +130,9 @@ impl Opt {
 
     /// checks, if any help info need to be shown
     pub fn is_help(&self) -> bool {
-        return self.help_dice_codes;
+        return  self.help_dice_codes ||
+                self.help_methods ||
+                !self.help_method.is_empty()
     }
 
 }

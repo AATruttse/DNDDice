@@ -7,9 +7,13 @@ pub mod dices;
 pub mod errors;
 pub mod help;
 pub mod init;
+pub mod method;
+pub mod method_descs;
+pub mod method_descs_long;
 pub mod methods;
 pub mod processes;
 pub mod statistics;
+pub mod statlists;
 pub mod strings;
 
 use std::cmp::max;
@@ -17,8 +21,8 @@ use std::cmp::max;
 use crate::dices::IntValue;
 use crate::help::help;
 use crate::init::OPT;
-use crate::methods::METHODSMAP;
 use crate::processes::process_dices;
+use crate::processes::process_method;
 use crate::statistics::show_stats;
 
 fn main() {
@@ -26,25 +30,11 @@ fn main() {
         help();
     }
 
-    let mut stat: Vec<IntValue> = (0..6).collect();
-
     let mut all_stats: Vec<IntValue> = Vec::new();
 
     for _i in 0..max(1, OPT.num) {
         if !OPT.method.is_empty() {
-            match METHODSMAP.get(&OPT.method[..]) {
-                Some(method) => method(&mut stat).unwrap(),
-                None => {
-                    eprintln!("Unknown method {}.", OPT.method);
-                    std::process::exit(1);
-                }
-            }
-
-            if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
-                println!("{:?}", stat);
-            }
-
-            all_stats.extend(stat.clone());
+            process_method(&mut all_stats);
         }
         else {
             process_dices(&mut all_stats);

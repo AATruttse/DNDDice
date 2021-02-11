@@ -19,10 +19,11 @@ pub struct Statistics
     mean:   StatValue,
     median: IntValue,
     mode:   IntValue,
+    sum:    IntValue,
 
     min:    IntValue,
     max:    IntValue,
-    
+        
     bins:   IntBins,
     probabilities:   StatBins
 }
@@ -48,6 +49,10 @@ impl Statistics {
         self.mode
     }
 
+    pub fn get_sum(&self) -> IntValue {
+        self.sum
+    }    
+
     pub fn get_bins(&self) -> &IntBins {
         &self.bins
     }
@@ -69,7 +74,15 @@ impl Statistics {
             panic!(ZEROSTAT_ERROR_MSG);
         }
 
-        self.mean = data.iter().sum::<IntValue>() as StatValue / data.len() as StatValue
+        self.mean = data.iter().sum::<IntValue>() as StatValue / data.len() as StatValue;
+    }
+
+    fn calc_sum(&mut self, data: &[IntValue]) {
+        if data.len() == 0 {
+            panic!(ZEROSTAT_ERROR_MSG);
+        }
+
+        self.sum = data.iter().sum::<IntValue>();
     }
 
     fn calc_median(&mut self, data: &[IntValue]) {
@@ -115,6 +128,7 @@ impl Statistics {
             mean: 0.0,
             median: 0,
             mode: 0,
+            sum: 0,
             min: 0,
             max: 0,
             bins: IntBins::new(),
@@ -125,6 +139,7 @@ impl Statistics {
         new_stat.calc_max(data);
         new_stat.calc_mean(data);
         new_stat.calc_median(data);
+        new_stat.calc_sum(data);
         new_stat.calc_bins(data);
 
         new_stat
@@ -133,6 +148,13 @@ impl Statistics {
 
 pub fn show_stats(stats: &Vec<IntValue>) {
     let statistics : Statistics = Statistics::new(&stats);
+
+    if OPT.sum {
+        if !OPT.numbers_only {
+            print!("Sum: ");    
+        }
+        println!("{}", statistics.get_sum());
+    }
 
     if OPT.stat || OPT.min {
         if !OPT.numbers_only {
