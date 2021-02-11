@@ -1,7 +1,7 @@
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
-#[structopt(name = "dnddice", about = "RPG dice thrower for command line")]
+#[structopt(name = "dnddice", about = "RPG dice thrower for command line. Author: Dargot, dargot@yandex.ru")]
 pub struct Opt {
     /// Activate debug mode
     #[structopt(long)]

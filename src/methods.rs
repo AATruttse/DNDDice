@@ -174,6 +174,22 @@ pub fn method_arm2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
+/// Stat generation method for Pathfinder - Heroic method
+/// 2d6+6 with choice
+pub fn method_pf1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = n_d_plus(2, 6, 6)?;
+    }
+
+    stats[0..6].sort();
+    stats[0..6].reverse();
+
+    Ok(())
+}
+
+
 lazy_static! {
     pub static ref METHODSMAP: GenMethodsMap = {
         let mut m = GenMethodsMap::new();
@@ -186,12 +202,18 @@ lazy_static! {
 
         m.insert("cp2020_1", Method::new("cyberpunk-cp", true, CP2020_1_DESC, CP2020_1_HELP, method_cp1));
         m.insert("cp2020_2", Method::new("cyberpunk-stat", false, CP2020_2_DESC, CP2020_2_HELP, method_cp2));
-        m.insert("cp2020_3", Method::new("cyberpunk-stat", true, CP2020_2_DESC, CP2020_2_HELP, method_cp4));
+        m.insert("cp2020_3", Method::new("cyberpunk-stat", true, CP2020_3_DESC, CP2020_3_HELP, method_cp4));
         m.insert("cp2013_1", Method::new("cyberpunk-cp", true, CP2013_1_DESC, CP2013_1_HELP, method_cp1));
         m.insert("cp2013_2", Method::new("cyberpunk-cp", true, CP2013_2_DESC, CP2013_2_HELP, method_cp3));
 
         m.insert("arsmagica1", Method::new("arsmagica", false, ARM1_DESC, ARM1_HELP, method_arm1));
         m.insert("arsmagica2", Method::new("arsmagica", true, ARM2_DESC, ARM2_HELP, method_arm2));
+
+        m.insert("pfstandard", Method::new("d&d", false, PFSTANDARD_DESC, PFSTANDARD_HELP, method_adnd5));
+        m.insert("pfclassic", Method::new("d&d", false, PFCLASSIC_DESC, PFCLASSIC_HELP, method_adnd3));
+        m.insert("pfheroic", Method::new("d&d", false, PFHEROIC_DESC, PFHEROIC_HELP, method_pf1));
+
+        m.insert("pathfinder2", Method::new("d&d", false, PF2_DESC, PF2_HELP, method_adnd5));
 
         m
     };
