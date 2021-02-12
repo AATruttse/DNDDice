@@ -4,17 +4,34 @@ pub static ADND3_HELP: &str = "Roll 3d6 six times. Assign the results to your ch
 pub static ADND4_HELP: &str = "Roll 3d6 twelve times. Assign the best six results to your character's six abilities as you wish.";
 pub static ADND5_HELP: &str = "Roll 4d6 and discard the lowest die. Repeat six times. Assign the results to your character's six abilities as you wish.";
 
-pub static CP2013_1_HELP: &str = "Roll 9d10, use result for Character Points.";
-pub static CP2013_2_HELP: &str = "Roll 30+6d10, use result for Character Points.";
-pub static CP2020_1_HELP: &str = CP2013_1_HELP;
-pub static CP2020_2_HELP: &str = "Roll 1d10 nine times, rerolling any result of 2 or less. Assign the results to your character's nine abilities as you wish.";
-pub static CP2020_3_HELP: &str = "Roll 1d10 nine times, rerolling any result of 2 or less, and use the result for character's INT score. Repeat for REF, CL, TECH, LK, ATT, MA, EMP, and BODY.";
+pub static DND3_HELP: &str = ADND5_HELP;
+pub static DND3ORGANIC_HELP: &str = "Roll 4d6 and discard the lowest die. Repeat six times. Place in order, reroll any one ability, switch any two ability.";
+pub static DND3CA_HELP: &str = "Roll 3d6 six times. Assign the results to your character's six abilities as you wish. Reroll if there isn't any scores of 12 or better, or ability modifiers total -3 or lower.";
+pub static DND3RA_HELP: &str = "Roll 3d6, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma. Reroll if there isn't any scores of 12 or better, or ability modifiers total -3 or lower.";
+pub static DND3HP_HELP: &str = "Roll 5d6 and discard the two lowest dices. Repeat six times. Assign the results to your character's six abilities as you wish. Reroll if there isn't any scores of 15 or better, or ability modifiers total +2 or lower.";
 
-pub static ARM1_HELP: &str = "Roll two 1d10, subtract latter from former. Repeat three times and assign results to your character's four pair of characteristics as you wish.";
-pub static ARM2_HELP: &str = "Roll two 1d10, subtract latter from former, and use the result for character's Int/Per pair of characteristic. epeat for Str/Sta, Pre/Com, and Dex/Qik";
+pub static DND35_HELP: &str = ADND5_HELP;
+pub static DND35ORGANIC_HELP: &str = DND3ORGANIC_HELP;
+pub static DND35CA_HELP: &str = DND3CA_HELP;
+pub static DND35RA_HELP: &str = DND3RA_HELP;
+pub static DND35HP_HELP: &str = DND3HP_HELP;
+pub static DND35ELITE_HELP: &str = "15,14,13,12,10,8. Assign to your character's six abilities as you wish";
 
 pub static PFSTANDARD_HELP: &str = ADND5_HELP;
 pub static PFCLASSIC_HELP: &str = "Roll 3d6 six times. Assign the results to your character's six abilities as you wish.";
 pub static PFHEROIC_HELP: &str = ADND3_HELP;
 
 pub static PF2_HELP: &str = ADND5_HELP;
+
+pub static CP2013_1_HELP: &str = "Roll 9d10, use result for Character Points.";
+pub static CP2013_2_HELP: &str = "Roll 30+6d10, use result for Character Points.";
+pub static CP2020_1_HELP: &str = CP2013_1_HELP;
+pub static CP2020_2_HELP: &str = "Roll 1d10 nine times, rerolling any result of 2 or less. Assign the results to your character's nine abilities as you wish.";
+pub static CP2020_3_HELP: &str = "Roll 1d10 nine times, rerolling any result of 2 or less, and use the result for character's INT ability. Repeat for REF, CL, TECH, LK, ATT, MA, EMP, and BODY.";
+
+pub static CYBERSPACE_1_HELP: &str = "Roll 1d100 eleven times. Assign the results to your character's eleven stats as you wish.";
+pub static CYBERSPACE_2_HELP: &str = "Roll 1d100 eleven times and use the result for character's Co stat. Repeat for Ag, SD, Re, Me, St, Qu, Em, In, Pr, and Ap.";
+
+pub static ARM1_HELP: &str = "Roll two 1d10, subtract latter from former. Repeat three times and assign results to your character's four pair of characteristics as you wish.";
+pub static ARM2_HELP: &str = "Roll two 1d10, subtract latter from former, and use the result for character's Int/Per pair of characteristic. Repeat for Str/Sta, Pre/Com, and Dex/Qik";
+

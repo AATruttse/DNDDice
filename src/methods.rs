@@ -25,6 +25,16 @@ fn vec_checksize(vec: &mut Vec<IntValue>, n: usize) {
     }
 }
 
+/// Calculates modifier for stat according to D&D3 and later rules
+#[inline(always)]
+fn dnd3mod(stat: IntValue) -> IntValue {
+    match stat {
+        stat if stat > 10 => (stat - 10) / 2,
+        stat if stat < 10 => (stat - 11) / 2,
+        _ => 0
+    }
+}
+
 /// Stat generation method for AD&D 2ne ed - Method 1
 /// 3d6 without choice
 pub fn method_adnd1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
@@ -147,6 +157,33 @@ pub fn method_cp4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
+/// Stat generation method for Cyberspace - Method 1
+/// 1d100 with choice
+pub fn method_cyberspace1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 11);
+
+    for i in 0..11 {
+            stats[i] = n_d(1, 100)?;
+    }
+
+    stats[0..11].sort();
+    stats[0..11].reverse();
+
+    Ok(())
+}
+
+/// Stat generation method for Cyberspace - Method 2
+/// 1d100 without choice
+pub fn method_cyberspace2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 11);
+
+    for i in 0..11 {
+            stats[i] = n_d(1, 100)?;
+    }
+
+    Ok(())
+}
+
 /// Stat generation method for Ars Magica - Method 1
 /// 1d10-1d10 for each pair of characteristics with choice
 pub fn method_arm1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
@@ -189,6 +226,77 @@ pub fn method_pf1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
+/// Stat generation method for D&D 3rd ed - Organic method
+/// 4d6 drop lowest  without choice, reroll one, switch any two.
+pub fn method_dnd3_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 7);
+
+    for i in 0..7 {
+        stats[i] = n_d_drop(4, 6, 1)?;
+    }
+
+    Ok(())
+}
+
+/// Stat generation method for D&D 3rd ed - Custom average method
+/// Six 3d6 with choice. Reroll very bad stats.
+pub fn method_dnd3_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    while *stats[0..6].iter().max().unwrap() < 12 ||
+            stats[0..6].iter().fold (0, |sum, val| sum + dnd3mod(*val)) < -2 {
+            for i in 0..6 {
+                stats[i] = n_d(3, 6)?;
+            }
+    }
+
+    stats[0..6].sort();
+    stats[0..6].reverse();
+
+    Ok(())
+}
+/// Stat generation method for D&D 3rd ed - Random average method
+/// Six 3d6 without choice. Reroll very bad stats.
+pub fn method_dnd3_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    while *stats[0..6].iter().max().unwrap() < 12 ||
+            stats[0..6].iter().fold (0, |sum, val| sum + dnd3mod(*val)) < -2 {
+            for i in 0..6 {
+                stats[i] = n_d(3, 6)?;
+            }
+    }
+
+    Ok(())
+}
+
+/// Stat generation method for D&D 3rd ed - High-powered method
+/// Six 5d6 drop lowest two with choice. Reroll below average stats.
+pub fn method_dnd3_4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    while *stats[0..6].iter().max().unwrap() < 15 ||
+            stats[0..6].iter().fold (0, |sum, val| sum + dnd3mod(*val)) < 2 {
+            for i in 0..6 {
+                stats[i] = n_d_drop(4, 6, 1)?;
+            }
+    }
+
+    stats[0..6].sort();
+    stats[0..6].reverse();
+
+    Ok(())
+}
+
+/// Stat generation method for D&D 3.5 ed - Elite array method
+/// 15,14,13,12,10,8 with choice
+pub fn method_dnd35(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    *stats = [15, 14, 13, 12, 10, 8].to_vec();
+
+    Ok(())
+}
 
 lazy_static! {
     pub static ref METHODSMAP: GenMethodsMap = {
@@ -200,20 +308,37 @@ lazy_static! {
         m.insert("adnd4", Method::new("d&d", false, ADND4_DESC, ADND4_HELP, method_adnd4));
         m.insert("adnd5", Method::new("d&d", false, ADND5_DESC, ADND5_HELP, method_adnd5));
 
-        m.insert("cp2020_1", Method::new("cyberpunk-cp", true, CP2020_1_DESC, CP2020_1_HELP, method_cp1));
-        m.insert("cp2020_2", Method::new("cyberpunk-stat", false, CP2020_2_DESC, CP2020_2_HELP, method_cp2));
-        m.insert("cp2020_3", Method::new("cyberpunk-stat", true, CP2020_3_DESC, CP2020_3_HELP, method_cp4));
-        m.insert("cp2013_1", Method::new("cyberpunk-cp", true, CP2013_1_DESC, CP2013_1_HELP, method_cp1));
-        m.insert("cp2013_2", Method::new("cyberpunk-cp", true, CP2013_2_DESC, CP2013_2_HELP, method_cp3));
+        m.insert("dnd3", Method::new("d&d", false, DND3_DESC, DND3_HELP, method_adnd5));
+        m.insert("dnd3organic", Method::new("d&dreroll", true, DND3ORGANIC_DESC, DND3ORGANIC_HELP, method_dnd3_1));
+        m.insert("dnd3customavg", Method::new("d&d", false, DND3CA_DESC, DND3CA_HELP, method_dnd3_2));
+        m.insert("dnd3randomavg", Method::new("d&d", true, DND3RA_DESC, DND3RA_HELP, method_dnd3_3));
+        m.insert("dnd3highpow", Method::new("d&d", false, DND3HP_DESC, DND3HP_HELP, method_dnd3_4));
 
-        m.insert("arsmagica1", Method::new("arsmagica", false, ARM1_DESC, ARM1_HELP, method_arm1));
-        m.insert("arsmagica2", Method::new("arsmagica", true, ARM2_DESC, ARM2_HELP, method_arm2));
+        m.insert("dnd35", Method::new("d&d", false, DND35_DESC, DND35_HELP, method_adnd5));
+        m.insert("dnd35organic", Method::new("d&dreroll", true, DND35ORGANIC_DESC, DND35ORGANIC_HELP, method_dnd3_1));
+        m.insert("dnd35customavg", Method::new("d&d", false, DND35CA_DESC, DND35CA_HELP, method_dnd3_2));
+        m.insert("dnd35randomavg", Method::new("d&d", true, DND35RA_DESC, DND35RA_HELP, method_dnd3_3));
+        m.insert("dnd35highpow", Method::new("d&d", false, DND35HP_DESC, DND35HP_HELP, method_dnd3_4));
+        m.insert("dnd35elite", Method::new("d&d", false, DND35ELITE_DESC, DND35ELITE_HELP, method_dnd35));
 
         m.insert("pfstandard", Method::new("d&d", false, PFSTANDARD_DESC, PFSTANDARD_HELP, method_adnd5));
         m.insert("pfclassic", Method::new("d&d", false, PFCLASSIC_DESC, PFCLASSIC_HELP, method_adnd3));
         m.insert("pfheroic", Method::new("d&d", false, PFHEROIC_DESC, PFHEROIC_HELP, method_pf1));
 
         m.insert("pathfinder2", Method::new("d&d", false, PF2_DESC, PF2_HELP, method_adnd5));
+
+        m.insert("cp2013_1", Method::new("cyberpunk-cp", true, CP2013_1_DESC, CP2013_1_HELP, method_cp1));
+        m.insert("cp2013_2", Method::new("cyberpunk-cp", true, CP2013_2_DESC, CP2013_2_HELP, method_cp3));
+        m.insert("cp2020_1", Method::new("cyberpunk-cp", true, CP2020_1_DESC, CP2020_1_HELP, method_cp1));
+        m.insert("cp2020_2", Method::new("cyberpunk-stat", false, CP2020_2_DESC, CP2020_2_HELP, method_cp2));
+        m.insert("cp2020_3", Method::new("cyberpunk-stat", true, CP2020_3_DESC, CP2020_3_HELP, method_cp4));
+
+        m.insert("cyberspace1", Method::new("cyberspace", false, CYBERSPACE_1_DESC, CYBERSPACE_1_HELP, method_cyberspace1));
+        m.insert("cyberspace2", Method::new("cyberspace", true, CYBERSPACE_2_DESC, CYBERSPACE_2_HELP, method_cyberspace2));
+
+        m.insert("arsmagica1", Method::new("arsmagica", false, ARM1_DESC, ARM1_HELP, method_arm1));
+        m.insert("arsmagica2", Method::new("arsmagica", true, ARM2_DESC, ARM2_HELP, method_arm2));
+
 
         m
     };
