@@ -255,6 +255,7 @@ pub fn method_dnd3_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
     Ok(())
 }
+
 /// Stat generation method for D&D 3rd ed - Random average method
 /// Six 3d6 without choice. Reroll very bad stats.
 pub fn method_dnd3_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
@@ -298,9 +299,94 @@ pub fn method_dnd35(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
+/// Stat generation method for D&D 4th ed - Rolling scores method
+/// Six 4d6 drop 1 with choice. Reroll bad stats.
+pub fn method_dnd4_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    while stats[0..6].iter().fold (0, |sum, val| sum + dnd3mod(*val)) < 4 {
+            for i in 0..6 {
+                stats[i] = n_d_drop(4, 6, 1)?;
+            }
+    }
+
+    stats[0..6].sort();
+    stats[0..6].reverse();
+
+    Ok(())
+}
+
+/// Stat generation method for D&D 4th ed - Standard method
+/// 16,14,13,12,11,10 with choice
+pub fn method_dnd4_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    *stats = [16, 14, 13, 12, 11, 10].to_vec();
+
+    Ok(())
+}
+
+/// Stat generation method for WH40K - Method 1
+/// 2d10 for each characteristic without choice
+pub fn method_wh40k1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 9);
+
+    for i in 0..9 {
+        stats[i] = n_d(2, 10)?;
+    }
+
+    Ok(())
+}
+
+/// Stat generation method for WH40K - Method 2
+/// 2d10 for each characteristic without choice, reroll one
+pub fn method_wh40k2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 10);
+
+    for i in 0..10 {
+        stats[i] = n_d(2, 10)?;
+    }
+
+    Ok(())
+}
+
+/// Stat generation method for WH40K - Method 3
+/// 2d10 for each characteristic with choice
+pub fn method_wh40k3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 9);
+
+    for i in 0..9 {
+        stats[i] = n_d(2, 10)?;
+    }
+
+    stats[0..9].sort();
+    stats[0..9].reverse();
+
+    Ok(())
+}
+
+/// Stat generation method for WH40K - Method 4
+/// 2d10 for each characteristic with choice, reroll one
+pub fn method_wh40k4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 10);
+
+    for i in 0..10 {
+        stats[i] = n_d(2, 10)?;
+    }
+
+    stats[0..10].sort();
+    stats[0..10].reverse();
+
+    Ok(())
+}
+
+
+
 lazy_static! {
     pub static ref METHODSMAP: GenMethodsMap = {
         let mut m = GenMethodsMap::new();
+
+        m.insert("dnd", Method::new("d&d", true, DND_DESC, DND_HELP, method_adnd1));
         
         m.insert("adnd1", Method::new("d&d", true, ADND1_DESC, ADND1_HELP, method_adnd1));
         m.insert("adnd2", Method::new("d&d", true, ADND2_DESC, ADND2_HELP, method_adnd2));
@@ -321,6 +407,12 @@ lazy_static! {
         m.insert("dnd35highpow", Method::new("d&d", false, DND35HP_DESC, DND35HP_HELP, method_dnd3_4));
         m.insert("dnd35elite", Method::new("d&d", false, DND35ELITE_DESC, DND35ELITE_HELP, method_dnd35));
 
+        m.insert("dnd4", Method::new("d&d", false, DND4_DESC, DND4_HELP, method_dnd4_1));
+        m.insert("dnd4standard", Method::new("d&d", false, DND4STANDARD_DESC, DND4STANDARD_HELP, method_dnd4_2));
+
+        m.insert("dnd5", Method::new("d&d", false, DND5_DESC, DND5_HELP, method_adnd5));
+        m.insert("dnd5standard", Method::new("d&d", false, DND5STANDARD_DESC, DND5STANDARD_HELP, method_dnd35));
+
         m.insert("pfstandard", Method::new("d&d", false, PFSTANDARD_DESC, PFSTANDARD_HELP, method_adnd5));
         m.insert("pfclassic", Method::new("d&d", false, PFCLASSIC_DESC, PFCLASSIC_HELP, method_adnd3));
         m.insert("pfheroic", Method::new("d&d", false, PFHEROIC_DESC, PFHEROIC_HELP, method_pf1));
@@ -339,7 +431,11 @@ lazy_static! {
         m.insert("arsmagica1", Method::new("arsmagica", false, ARM1_DESC, ARM1_HELP, method_arm1));
         m.insert("arsmagica2", Method::new("arsmagica", true, ARM2_DESC, ARM2_HELP, method_arm2));
 
-
+        m.insert("wh40k", Method::new("warhammer", true, WH40K_DESC, WH40K_HELP, method_wh40k1));
+        m.insert("wh40k_reroll", Method::new("warhammer-reroll", true, WH40KREROLL_DESC, WH40KREROLL_HELP, method_wh40k2));
+        m.insert("wh40k_choice", Method::new("warhammer", false, WH40KCHOICE_DESC, WH40KCHOICE_HELP, method_wh40k3));
+        m.insert("wh40k_choicereroll", Method::new("warhammer-reroll", false, WH40KCHOICEREROLL_DESC, WH40KCHOICEREROLL_HELP, method_wh40k4));
+        
         m
     };
 }

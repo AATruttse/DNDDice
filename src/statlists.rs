@@ -15,7 +15,8 @@ lazy_static! {
         m.insert("cyberpunk-stat", vec!["INT","REF","CL","TECH","LK","ATT","MA","EMP","BODY"]);
         m.insert("cyberpunk-cp", vec!["Character points"]);
         m.insert("arsmagica", vec!["Int/Per","Str/Sta","Pre/Com","Dex/Qik"]);
-        m.insert("cyberspace", vec!["Co","Ag","SD","Re","Me","St","Qu","Em","In","Pr","Ap"]);
+        m.insert("warhammer", vec!["WS","BS","S","T","Ag","Int","Per","WP","Fel"]);
+        m.insert("warhammer-reroll", vec!["WS","BS","S","T","Ag","Int","Per","WP","Fel", "reroll"]);
 
         m
     };

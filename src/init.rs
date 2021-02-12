@@ -11,7 +11,7 @@ pub struct Opt {
     #[structopt(long)]
     pub help_dice_codes: bool,
 
-    /// Show help about generation methods
+    /// Show help about generation methods. See --help-method=METHOD to see help about METHOD
     #[structopt(long)]
     pub help_methods: bool,
 
@@ -51,7 +51,7 @@ pub struct Opt {
     #[structopt(short="C", long="crop", default_value = "0")]
     pub crop: usize,
 
-    /// Stat generation method (adnd1, adnd2, etc...)
+    /// Stat generation method (adnd1, adnd2, etc.) See --help-methods for full list.
     #[structopt(short, long, default_value = "")]
     pub method: String,
 
