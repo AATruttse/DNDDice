@@ -14,6 +14,7 @@ pub type StatList = Vec<&'static str>;
 /// Type for stat lists' BTreeMap 
 type StatListsMap = BTreeMap<&'static str, StatList>;
 
+// BTreeMap for stat lists
 lazy_static! {
     pub static ref STATLISTSMAP: StatListsMap = {
         let mut m = StatListsMap::new();

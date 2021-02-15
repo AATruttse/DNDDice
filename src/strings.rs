@@ -6,10 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+pub static METHODS_MESSAGE: &str = "Generation methods:";
+
 pub static BADDICECODE_ERROR_MSG: &str = "Can't parse the dice code:";
 pub static UNKNOWNMETHOD_ERROR_MSG: &str = "Unknown method";
 pub static UNKNOWNSTATLIST_ERROR_MSG: &str = "Internal error: Unknown stat list for method.";
 pub static ZEROSTAT_ERROR_MSG: &str = "Can't calculate statistics from zero-length slice";
+
 pub static DICECODES_HELP_MSG: &str = "Dice code format: [NUM1]d[NUM2][dropNUM3][cropNUM4][+NUM5][-NUM6]
 
 Where:

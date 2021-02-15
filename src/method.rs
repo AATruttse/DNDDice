@@ -9,17 +9,23 @@
 use crate::dices::IntValue;
 use crate::errors::DiceError;
 
-/// Type for generation methods
+/// Type for generation method's function ptr
 pub type GenMethod = fn (&mut Vec<IntValue>) -> Result<(), DiceError>;
 
 /// struct for generation method
 pub struct Method {
+    /// used in this method statistics list
     statlist:  &'static str,
+
+    /// is method gives ordered stats?
     is_ordered: bool,
 
+    /// string with method's short description
     desc:      &'static str,
+    /// string with method's long description
     desc_long: &'static str,
 
+    /// method's function ptr
     method:    GenMethod
 }
 

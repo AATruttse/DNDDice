@@ -9,8 +9,11 @@
 use crate::errors::cant_find_method;
 use crate::init::OPT;
 use crate::methods::METHODSMAP;
-use crate::strings::DICECODES_HELP_MSG;
 
+use crate::strings::DICECODES_HELP_MSG;
+use crate::strings::METHODS_MESSAGE;
+
+// shows needed help
 pub fn help() {
 
     if OPT.help_dice_codes {
@@ -29,17 +32,20 @@ pub fn help() {
     std::process::exit(0);
 }
 
+//shows help about dice codes 
 fn help_dicecodes() {
     println!("{}", DICECODES_HELP_MSG);
 }
 
+//shows help about methods 
 pub fn help_methods() {
-    println!("Generation methods:");
+    println!("{}", METHODS_MESSAGE);
     for (key, val) in METHODSMAP.iter() {
         println!("  {} - {}", key, val.get_desc());
     }
 }
 
+//shows help about methods 
 fn help_method(name: &str) {
     match METHODSMAP.get(name) {
         Some(method) => {

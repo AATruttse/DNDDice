@@ -15,7 +15,7 @@ use crate::init::OPT;
 /// Result int type for all dices
 pub type IntValue = i32;
 
-/// Throws n dices with d sides, drops drop lowest, crop greatest, and adds plus
+/// Rolls n dices with d sides, drops drop lowest, crop greatest, and adds plus
 #[inline(always)]
 pub fn n_d_drop_crop_plus(n: usize, d: usize, plus: IntValue, drop: usize, crop: usize) -> Result<IntValue, DiceError> {
     if n == 0 {
@@ -65,37 +65,37 @@ pub fn n_d_drop_crop_plus(n: usize, d: usize, plus: IntValue, drop: usize, crop:
 }
 
 
-/// Throws n dices with d sides, drops drop lowest and adds plus
+/// Rolls n dices with d sides, drops drop lowest and adds plus
 #[inline(always)]
 pub fn n_d_drop_plus(n: usize, d: usize, plus: IntValue, drop: usize) -> Result<IntValue, DiceError> {
     n_d_drop_crop_plus(n, d, plus, drop, 0)
 }
 
-/// Throws n dices with d sides, drops crop greatest and adds plus
+/// Rolls n dices with d sides, drops crop greatest and adds plus
 #[inline(always)]
 pub fn n_d_crop_plus(n: usize, d: usize, plus: IntValue, crop: usize) -> Result<IntValue, DiceError> {
     n_d_drop_crop_plus(n, d, plus, 0, crop)
 }
 
-/// Throws n dices with d sides, drops drop lowest
+/// Rolls n dices with d sides, drops drop lowest
 #[inline(always)]
 pub fn n_d_drop(n: usize, d: usize, drop: usize) -> Result<IntValue, DiceError> {
     n_d_drop_plus(n, d, 0, drop)
 }
 
-/// Throws _n dices with _d sides, drops _crop greatest
+/// Rolls _n dices with _d sides, drops _crop greatest
 #[inline(always)]
 pub fn n_d_crop(n: usize, d: usize, crop: usize) -> Result<IntValue, DiceError> {
     n_d_crop_plus(n, d, 0, crop)
 }
 
-/// Throws _n dices with _d sides and adds _plus
+/// Rolls _n dices with _d sides and adds _plus
 #[inline(always)]
 pub fn n_d_plus(n: usize, d: usize, plus: IntValue) -> Result<IntValue, DiceError> {
     n_d_drop_plus(n, d, plus, 0)
 }
 
-/// Throws _n dices with _d sides
+/// Rolls _n dices with _d sides
 #[inline(always)]
 pub fn n_d(n: usize, d: usize) -> Result<IntValue, DiceError> {
     n_d_plus(n, d, 0)

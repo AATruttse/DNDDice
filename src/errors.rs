@@ -20,6 +20,7 @@ custom_error!{pub DiceError
     BadCrop{n:usize, crop:usize} = "Can't crop {crop} dices from {n} dices!"
 }
 
+// Shows errors that there isn't known method str and known method list
 pub fn cant_find_method(method: &str) {
     eprintln!("{} {}.", UNKNOWNMETHOD_ERROR_MSG, method);
     if !OPT.no_help {
