@@ -165,7 +165,7 @@ fn process_dices_from_codes(all_stats: &mut Vec<IntValue>) {
             }
 
             let n : usize = params.get(1).map_or(
-                0,
+                1,
                 |m| match m.as_str() {
                     "" => 1,
                     x => x.parse().unwrap()
