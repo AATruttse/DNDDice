@@ -3,8 +3,8 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
 ## USAGE:
     dnddice.exe [FLAGS] [OPTIONS] [dicecodes]...
 
-FLAGS:
-        --debug              Activate debug mode
+# FLAGS:
+        --debug              Activate debug mode  
     -h, --help               Prints help information
         --help-dice-codes    Show help about dicecodes
         --help-methods       Show help about generation methods. See --help-method=METHOD to see help about METHOD
@@ -21,7 +21,7 @@ FLAGS:
     -V, --version            Prints version information
     -v                       Verbose mode (-v, -vv, etc.)
 
-OPTIONS:
+# OPTIONS:
     -C, --crop                           Number of greatest dices to be dropped [default: 0]
     -d, --dice                           Dice sides [default: 6]
     -n, --dice-num                       Number of dices [default: 1]
@@ -34,7 +34,7 @@ OPTIONS:
         --plus                           Result plus [default: 0]
         --round-digits                   Round probabilities to number of digits [default: 2]
 
-ARGS:
+# ARGS:
     <dicecodes>...    Dice codes (2d8+1, 4d6drop1 etc...) [default: ]
 
 ## License
