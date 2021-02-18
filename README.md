@@ -1,12 +1,12 @@
 RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yandex.ru>
 
-## USAGE:
+# USAGE:
     dnddice.exe [FLAGS] [OPTIONS] [dicecodes]...
 
-# FLAGS:
-        --debug              Activate debug mode  
+## FLAGS:
+        --debug              Activate debug mode
     -h, --help               Prints help information
-        --help-dice-codes    Show help about dicecodes
+        --help-dice-codes    Show help about dice codes' format description
         --help-methods       Show help about generation methods. See --help-method=METHOD to see help about METHOD
         --max                Show maximum
         --mean               Show mean
@@ -21,23 +21,22 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
     -V, --version            Prints version information
     -v                       Verbose mode (-v, -vv, etc.)
 
-# OPTIONS:
-    -C, --crop                           Number of greatest dices to be dropped [default: 0]
+## OPTIONS:
+    -C, --crop                           Number of greatest dices to be dropped
     -d, --dice                           Dice sides [default: 6]
     -n, --dice-num                       Number of dices [default: 1]
-    -D, --drop                           Number of lowest dices to be dropped [default: 0]
-        --help-method                    Show help about generation method [default: ]
+    -D, --drop                           Number of lowest dices to be dropped
+        --help-method                    Show help about generation method
     -m, --method                         Stat generation method (adnd1, adnd2, etc.) See --help-methods for full list
-                                         [default: ]
-        --minus                          Result minus [default: 0]
-    -N, --repetitions-num                Number of repetitions [default: 1]
-        --plus                           Result plus [default: 0]
+        --minus                          Result minus
+    -N, --repetitions-num                Number of repetitions
+        --plus                           Result plus
         --round-digits                   Round probabilities to number of digits [default: 2]
 
-# ARGS:
-    <dicecodes>...    Dice codes (2d8+1, 4d6drop1 etc...) [default: ]
+## ARGS:
+    <dicecodes>...    Dice codes (2d8plus1, 4d6drop1 etc.) See --help-dice-codes for format description
 
-## License
+# License
 
 Licensed under either of
 
