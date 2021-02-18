@@ -388,8 +388,7 @@ pub fn method_wh40k4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-
-
+// BTreeMap with all methods
 lazy_static! {
     pub static ref METHODSMAP: GenMethodsMap = {
         let mut m = GenMethodsMap::new();

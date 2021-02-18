@@ -70,14 +70,114 @@ pub fn process_dices(all_stats: &mut Vec<IntValue>) {
     }
 }
 
-/// process dice roll with given parameters, use all_stat for statistics
-fn process_roll(all_stats: &mut Vec<IntValue>, 
+/// process dice roll from keys
+fn process_dices_from_keys(all_stats: &mut Vec<IntValue>) {
+    all_stats.push(
+        process_roll(
+            OPT.dices_num,
+            OPT.dice,
+            OPT.plus,
+            OPT.minus,
+            OPT.drop,
+            OPT.crop
+        )
+    );
+}
+
+/// process dice roll from dice codes
+fn process_dices_from_codes(all_stats: &mut Vec<IntValue>) {
+    for dicecode in &OPT.dicecodes {
+        if !dicecode.is_empty() {
+
+            let dice_regex: &str = r"(?:(\d*)d(\d*)(?:(?:drop|d)(\d+)(?:crop|c)(\d+)|(?:(?:drop|d)(\d+)|(?:crop|c)(\d+)|(?:greatest|g)(\d+)|(?:lowest|l)(\d+)))?(?:(?:plus|p)(\d+))?(?:(?:minus|m)(\d+))?|(\d+))";
+            let dices_regex = ["^", dice_regex, "$"].concat();
+            //regular expression for dice codes parsing
+            let re = Regex::new(
+                dices_regex.as_str()).
+                unwrap();
+
+            let params_vec: Vec<&str> = match re.captures(&dicecode) {
+                Some(x) => x.iter().map(|p| p.map_or("", |m| m.as_str())).collect(),
+                None => process_bad_code(dicecode)
+            };
+
+            if OPT.debug {
+                println!("{:?}", params_vec);
+            }
+            
+            all_stats.push(process_params(&params_vec[1..]));
+        }
+    }
+}
+
+/// process dice params from code parsing
+fn process_params(params: &[&str]) -> IntValue {
+
+    if params.len() >= 11 && !params[10].is_empty()
+    {
+        let c: IntValue = params[10].parse().unwrap();
+        return c;
+    }
+
+    let n: usize = match params[0] {
+            "" => 1,
+            x => x.parse().unwrap()
+        };
+
+    let d: usize = match params[1] {
+        "" => 6,
+        x => x.parse().unwrap()
+    };
+
+    let drop: usize = match params[2] {
+        "" => match params[4] {
+            "" => match params[6] {
+                "" => 0,
+                x => {
+                    let g: usize = x.parse().unwrap();
+                    n - g
+                }
+            },
+            x => x.parse().unwrap()
+        },
+        x => x.parse().unwrap()
+    };
+
+    let crop: usize = match params[3] {
+        "" => match params[5] {
+            "" => match params[7] {
+                "" => 0,
+                x => {
+                    let l: usize = x.parse().unwrap();
+                    n - l
+                }
+            },
+            x => x.parse().unwrap()
+        },
+        x => x.parse().unwrap()
+    };
+
+    let plus: usize = match params[8] {
+        "" => 0,
+        x => x.parse().unwrap()
+    };
+
+    let minus: usize = match params[9] {
+        "" => 0,
+        x => x.parse().unwrap()
+    };
+
+    process_roll(n, d, plus, minus, drop, crop)
+}
+
+/// process dice roll with given parameters
+fn process_roll( 
     n: usize,
     d: usize,
     plus: usize,
     minus: usize,
     drop: usize,
-    crop: usize) {
+    crop: usize) -> IntValue {
 
     let add = plus as IntValue - minus as IntValue;
 
@@ -123,105 +223,14 @@ fn process_roll(all_stats: &mut Vec<IntValue>,
         println!("{}", res);
     }
 
-    all_stats.push(res);
-}
-
-/// process dice roll from keys
-fn process_dices_from_keys(all_stats: &mut Vec<IntValue>) {
-    process_roll(all_stats,
-        OPT.dices_num,
-        OPT.dice,
-        OPT.plus,
-        OPT.minus,
-        OPT.drop,
-        OPT.crop
-        );
+    res
 }
 
 /// processes error when dice code can't be parsed
-fn process_bad_code(dicecode: &String) -> regex::Captures<'static> {
+fn process_bad_code(dicecode: &String) -> Vec<&str> {
     eprintln!("{} {}", BADDICECODE_ERROR_MSG, dicecode);
     if !OPT.no_help {
         println!("{}", DICECODES_HELP_MSG);
     }
     std::process::exit(1);
-}
-
-/// process dice roll from dice codes
-fn process_dices_from_codes(all_stats: &mut Vec<IntValue>) {
-    for dicecode in &OPT.dicecodes {
-        if !dicecode.is_empty() {
-            let re = Regex::new(
-                r"(\d{0,})d(\d{0,})(drop(\d{1,}))?(crop(\d{1,}))?([+](\d{1,}))?([-](\d{1,}))?").
-                unwrap();
-
-            let params = match re.captures(&dicecode) {
-                Some(x) => x,
-                None => process_bad_code(dicecode)
-            };
-
-            // bad string such as gffdffgg
-            if dicecode != "d"
-                && &params[0] == "d"
-                && &params[1] == ""
-                && &params[2] == "" {
-                    process_bad_code(dicecode);
-            }
-
-            if OPT.debug {
-                println!("{:?}", params);
-            }
-
-            let n : usize = params.get(1).map_or(
-                1,
-                |m| match m.as_str() {
-                    "" => 1,
-                    x => x.parse().unwrap()
-                });
-
-            let d : usize = params.get(2).map_or(
-                6,
-                |m| match m.as_str() {
-                    "" => 6,
-                    x => x.parse().unwrap()
-                });
-
-            let drop : usize = params.get(4).map_or(
-                0,
-                |m| match m.as_str() {
-                    "" => 0,
-                    x => x.parse().unwrap()
-                });
-
-            let crop : usize = params.get(6).map_or(
-                0,
-                |m| match m.as_str() {
-                    "" => 0,
-                    x => x.parse().unwrap()
-                });
-
-            let plus : usize = params.get(8).map_or(
-                0,
-                |m| match m.as_str() {
-                    "" => 0,
-                    x => x.parse().unwrap()
-                });
-
-            let minus : usize = params.get(10).map_or(
-                0,
-                |m| match m.as_str() {
-                    "" => 0,
-                    x => x.parse().unwrap()
-                });
-
-            process_roll(all_stats,
-                n,
-                d,
-                plus,
-                minus,
-                drop, 
-                crop
-            );
-        }
-    }
 }

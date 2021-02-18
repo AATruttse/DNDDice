@@ -112,6 +112,7 @@ pub struct Opt {
     pub dicecodes: Vec<String>,
 }
 
+// Static variable for options
 lazy_static! {
     pub static ref OPT: Opt = {
         let opt = Opt::from_args();
