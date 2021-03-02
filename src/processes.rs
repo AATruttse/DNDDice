@@ -75,16 +75,20 @@ pub fn process_dices(all_stats: &mut Vec<IntValue>) {
 
 /// process dice roll from keys
 fn process_dices_from_keys(all_stats: &mut Vec<IntValue>) {
-    all_stats.push(
-        process_roll(
-            OPT.dices_num,
-            OPT.dice,
-            OPT.plus,
-            OPT.minus,
-            OPT.drop,
-            OPT.crop
-        )
-    );
+
+    let res = process_roll(
+        OPT.dices_num,
+        OPT.dice,
+        OPT.plus,
+        OPT.minus,
+        OPT.drop,
+        OPT.crop
+    ); 
+    all_stats.push(res);
+
+    if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
+        println!("{}", res);
+    }    
 }
 
 /// process dice roll from dice codes
@@ -129,7 +133,11 @@ fn process_dices_from_codes(all_stats: &mut Vec<IntValue>) {
 
             // process parsed dice codes
             let res = process_arithmetic(&dices_vec);
-            println!("{}", res);
+    
+            if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
+                println!("{}", res);
+            }
+
             all_stats.push(res);
         }
     }
