@@ -8,10 +8,14 @@
 
 use regex::Regex;
 
+use crate::arithmetic::Arythmetic;
+use crate::arithmetic::process_arithmetic;
+
 use crate::dices::IntValue;
 use crate::dices::n_d_drop_crop_plus;
 
 use crate::errors::cant_find_method;
+use crate::errors::DiceError;
 
 use crate::init::OPT;
 use crate::methods::METHODSMAP;
@@ -19,11 +23,10 @@ use crate::methods::METHODSMAP;
 use crate::statlists::StatList;
 use crate::statlists::STATLISTSMAP;
 
-use crate::strings::BADDICECODE_ERROR_MSG;
 use crate::strings::DICECODES_HELP_MSG;
 use crate::strings::UNKNOWNSTATLIST_ERROR_MSG;
 
-/// process stat generation method
+/// process stat generation method, uses all_stat for statistics
 pub fn process_method(all_stats: &mut Vec<IntValue>) {
     let mut stat : Vec<IntValue> = Vec::<IntValue>::new();
 
@@ -57,7 +60,7 @@ pub fn process_method(all_stats: &mut Vec<IntValue>) {
 
 }
 
-/// process any dice roll, use all_stat for statistics
+/// process any dice roll, uses all_stat for statistics
 pub fn process_dices(all_stats: &mut Vec<IntValue>) {
 
     if OPT.dicecodes.is_empty() ||
@@ -88,50 +91,81 @@ fn process_dices_from_keys(all_stats: &mut Vec<IntValue>) {
 fn process_dices_from_codes(all_stats: &mut Vec<IntValue>) {
     for dicecode in &OPT.dicecodes {
         if !dicecode.is_empty() {
-
-            let dice_regex: &str = r"(?:(\d*)d(\d*)(?:(?:drop|d)(\d+)(?:crop|c)(\d+)|(?:(?:drop|d)(\d+)|(?:crop|c)(\d+)|(?:greatest|g)(\d+)|(?:lowest|l)(\d+)))?(?:(?:plus|p)(\d+))?(?:(?:minus|m)(\d+))?|(\d+))";
-            let dices_regex = ["^", dice_regex, "$"].concat();
-            //regular expression for dice codes parsing
+            // parse dice codes with regular expression
+            let dice_regex: &str = r"([-+/*%^])?(?:(\d*)d(\d*)(?:(?:drop|d)(\d+)(?:crop|c)(\d+)|(?:(?:drop|d)(\d+)|(?:crop|c)(\d+)|(?:greatest|g)(\d+)|(?:lowest|l)(\d+)))?(?:(?:plus|p)(\d+))?(?:(?:minus|m)(\d+))?|(\d+))";
             let re = Regex::new(
-                dices_regex.as_str()).
+                dice_regex).
                 unwrap();
 
-            let params_vec: Vec<&str> = match re.captures(&dicecode) {
-                Some(x) => x.iter().map(|p| p.map_or("", |m| m.as_str())).collect(),
-                None => process_bad_code(dicecode)
-            };
+            // roll needed dices
+            let dices_vec: Vec<Arythmetic> = re.captures_iter(&dicecode).
+                into_iter().
+                enumerate().
+                map(|(num, it)| 
+                        match process_dice(num,
+                                           &it.iter().
+                                                map(|p| p.map_or("", |m| m.as_str())).
+                                                collect::<Vec<&str>>()[..]) {
+                            Ok(x) => x,
+                            Err(e) => {
+                                match e {  
+                                    DiceError::BadCode => {
+                                        eprintln!("{} {}!", e, dicecode);
+                                        if !OPT.no_help {
+                                            println!("{}", DICECODES_HELP_MSG);
+                                        }
+                                    }
+                                    _ => eprintln!("{}", e)
+                                };
+                                std::process::exit(1);                                
+                            }
+                        }
+                    ).
+                collect();
 
             if OPT.debug {
-                println!("{:?}", params_vec);
-            }
-            
-            all_stats.push(process_params(&params_vec[1..]));
+                println!("{:?}", dices_vec);
+            }                
+
+            // process parsed dice codes
+            let res = process_arithmetic(&dices_vec);
+            println!("{}", res);
+            all_stats.push(res);
         }
     }
 }
 
-/// process dice params from code parsing
-fn process_params(params: &[&str]) -> IntValue {
-
-    if params.len() >= 11 && !params[10].is_empty()
-    {
-        let c: IntValue = params[10].parse().unwrap();
-        return c;
+/// process single dice roll from parsed regular expression
+fn process_dice(idx: usize, params: &[&'static str]) -> Result<(&'static str, IntValue), DiceError> {
+    if OPT.debug {
+        println!("dice: {} - {:?}", idx, params);
     }
 
-    let n: usize = match params[0] {
-            "" => 1,
-            x => x.parse().unwrap()
-        };
+    if params.len() != 13
+    {
+        return Err(DiceError::BadDecryption);
+    }
 
-    let d: usize = match params[1] {
-        "" => 6,
-        x => x.parse().unwrap()
-    };
+    if (idx == 0 && !params[1].is_empty()) ||
+       (idx > 0 && params[1].is_empty()) {
+        return Err(DiceError::BadCode);
+    }
 
-    let drop: usize = match params[2] {
-        "" => match params[4] {
-            "" => match params[6] {
+
+    if !params[12].is_empty()
+    {
+        let c: IntValue = params[12].parse().unwrap();
+        return Ok((params[1], c));
+    }
+
+    let n: usize = match params[2] {"" => 1, x => x.parse().unwrap()};
+    let d: usize = match params[3] {"" => 6, x => x.parse().unwrap()};
+    let plus: usize = match params[10] {"" => 0, x => x.parse().unwrap()};
+    let minus: usize = match params[11] {"" => 0, x => x.parse().unwrap()};    
+
+    let drop: usize = match params[4] {
+        "" => match params[6] {
+            "" => match params[8] {
                 "" => 0,
                 x => {
                     let g: usize = x.parse().unwrap();
@@ -143,9 +177,9 @@ fn process_params(params: &[&str]) -> IntValue {
         x => x.parse().unwrap()
     };
 
-    let crop: usize = match params[3] {
-        "" => match params[5] {
-            "" => match params[7] {
+    let crop: usize = match params[5] {
+        "" => match params[7] {
+            "" => match params[9] {
                 "" => 0,
                 x => {
                     let l: usize = x.parse().unwrap();
@@ -155,19 +189,9 @@ fn process_params(params: &[&str]) -> IntValue {
             x => x.parse().unwrap()
         },
         x => x.parse().unwrap()
-    };
+    };        
 
-    let plus: usize = match params[8] {
-        "" => 0,
-        x => x.parse().unwrap()
-    };
-
-    let minus: usize = match params[9] {
-        "" => 0,
-        x => x.parse().unwrap()
-    };
-
-    process_roll(n, d, plus, minus, drop, crop)
+    Ok((params[1], process_roll(n, d, plus, minus, drop, crop)))
 }
 
 /// process dice roll with given parameters
@@ -196,7 +220,6 @@ fn process_roll(
             _  => "".to_string()
         };
                         
-        //{ let s = String::from("testing"); &s }
         print!("{}d{}{}{}{}: ",
          n,
          d,
@@ -219,18 +242,9 @@ fn process_roll(
         }
     };
 
-    if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
+    if OPT.debug || (OPT.verbose > 0 && !OPT.is_collect_stat()) {
         println!("{}", res);
     }
 
     res
-}
-
-/// processes error when dice code can't be parsed
-fn process_bad_code(dicecode: &String) -> Vec<&str> {
-    eprintln!("{} {}", BADDICECODE_ERROR_MSG, dicecode);
-    if !OPT.no_help {
-        println!("{}", DICECODES_HELP_MSG);
-    }
-    std::process::exit(1);
 }

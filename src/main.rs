@@ -11,6 +11,7 @@ extern crate custom_error;
 extern crate lazy_static;
 extern crate regex;
 
+pub mod arithmetic;
 pub mod dices;
 pub mod errors;
 pub mod help;
