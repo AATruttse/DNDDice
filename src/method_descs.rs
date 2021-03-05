@@ -8,6 +8,12 @@
 
 pub static DND_DESC: &str = "3d6 for each stat without choice";
 
+pub static DNDREALMAN_DESC:     &str = "D&D for Real Men - Six 4d6 drop lowest with choice";
+pub static DNDCRAZYLOONIE_DESC: &str = "D&D for Crazy Loonies - 1d20 for each stat without choice";
+pub static DNDMUNCHKIN_DESC:    &str = "D&D for Munchkins - 25 for each stat. With choice:)";
+pub static DNDEVILCHAMPION_DESC: &str = "D&D for Evil Champions - Six 4d6, reroll 1's, drop lowest with choice";
+pub static DNDNEWBIE_DESC:      &str = "D&D for Newbies - 3d6 for each stat without choice";
+
 pub static ADND1_DESC: &str = DND_DESC;
 pub static ADND2_DESC: &str = "Best of two 3d6 for each without choice";
 pub static ADND3_DESC: &str = "Six 3d6 with choice";

@@ -8,6 +8,12 @@
 
 pub static DND_HELP: &str = "Roll 3d6, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma.";
 
+pub static DNDREALMAN_HELP: &str = "D&D for Real Men - Roll 4d6 and discard the lowest die. Repeat six times. Assign the results to your character's six abilities as you wish.";
+pub static DNDCRAZYLOONIE_HELP: &str = "D&D for Crazy Loonies -  Roll 1d20, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma.";
+pub static DNDMUNCHKIN_HELP: &str = "D&D for Munchkins - Use 25 for each stat.";
+pub static DNDEVILCHAMPION_HELP: &str = "D&D for Evil Champions - Roll 4d6, reroll all 1's, discard the lowest die. Repeat six times. Assign the results to your character's six abilities as you wish.";
+pub static DNDNEWBIE_HELP: &str = "D&D for Newbies - Roll 3d6, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma.";
+
 pub static ADND1_HELP: &str = DND_HELP;
 pub static ADND2_HELP: &str = "Roll two 3d6, use the best result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma.";
 pub static ADND3_HELP: &str = "Roll 3d6 six times. Assign the results to your character's six abilities as you wish.";

@@ -13,6 +13,7 @@ use crate::dices::IntValue;
 use crate::dices::n_d;
 use crate::dices::n_d_drop;
 use crate::dices::n_d_plus;
+use crate::dices::n_d_reroll_drop;
 
 use crate::errors::DiceError;
 
@@ -20,6 +21,11 @@ use crate::method::Method;
 
 use crate::method_descs::*;
 use crate::method_descs_long::*;
+
+static ONE_ARRAY: [usize; 1] = [1];
+static ALL25_ARRAY: [IntValue; 6] = [25, 25, 25, 25, 25, 25];
+static DND35_ARRAY: [IntValue; 6] = [15, 14, 13, 12, 10, 8];
+static DND4_ARRAY: [IntValue; 6] = [16, 14, 13, 12, 11, 10];
 
 
 /// Type for generation methods' BTreeMap 
@@ -110,6 +116,40 @@ pub fn method_adnd5(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
     stats[0..6].sort();
     stats[0..6].reverse();
+
+    Ok(())
+}
+
+/// Stat generation method for D&D - Method for Crazy Loonies
+/// d20 without choice
+pub fn method_dndloonie(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = n_d(1, 20)?;
+    }
+
+    Ok(())
+}
+
+/// Stat generation method for D&D - Method for Munchkins
+/// 25,25,25,25,25,25
+pub fn method_dndmunchkin(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    *stats = ALL25_ARRAY.to_vec();
+
+    Ok(())
+}
+
+/// Stat generation method for D&D - Method for Evil Champions
+/// 4d6 drop lowest reroll 1's with choice
+pub fn method_dndevilchampion(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = n_d_reroll_drop(4, 6, &ONE_ARRAY, 1)?;
+    }
 
     Ok(())
 }
@@ -302,7 +342,7 @@ pub fn method_dnd3_4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 pub fn method_dnd35(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
-    *stats = [15, 14, 13, 12, 10, 8].to_vec();
+    *stats = DND35_ARRAY.to_vec();
 
     Ok(())
 }
@@ -329,7 +369,7 @@ pub fn method_dnd4_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 pub fn method_dnd4_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
-    *stats = [16, 14, 13, 12, 11, 10].to_vec();
+    *stats = DND4_ARRAY.to_vec();
 
     Ok(())
 }
@@ -394,6 +434,12 @@ lazy_static! {
         let mut m = GenMethodsMap::new();
 
         m.insert("dnd", Method::new("d&d", true, DND_DESC, DND_HELP, method_adnd1));
+
+        m.insert("dndrealman", Method::new("d&d", true, DNDREALMAN_DESC,  DNDREALMAN_HELP, method_adnd5));
+        m.insert("dndcrazieloonie", Method::new("d&d", true, DNDCRAZYLOONIE_DESC, DNDCRAZYLOONIE_HELP, method_dndloonie));
+        m.insert("dndmunchkin", Method::new("d&d", true, DNDMUNCHKIN_DESC, DNDMUNCHKIN_HELP, method_dndmunchkin));
+        m.insert("dndevilchampion", Method::new("d&d", true, DNDEVILCHAMPION_DESC, DNDEVILCHAMPION_HELP, method_dndevilchampion));
+        m.insert("dndnewbie", Method::new("d&d", true, DNDNEWBIE_DESC, DNDNEWBIE_HELP, method_adnd1));
         
         m.insert("adnd1", Method::new("d&d", true, ADND1_DESC, ADND1_HELP, method_adnd1));
         m.insert("adnd2", Method::new("d&d", true, ADND2_DESC, ADND2_HELP, method_adnd2));
