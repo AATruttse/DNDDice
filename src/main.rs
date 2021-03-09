@@ -17,6 +17,7 @@ pub mod errors;
 pub mod help;
 pub mod init;
 pub mod method;
+pub mod method_comments;
 pub mod method_descs;
 pub mod method_descs_long;
 pub mod methods;

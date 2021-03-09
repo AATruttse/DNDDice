@@ -66,3 +66,6 @@ pub static WH40K_HELP: &str = "Roll 2d10 for each characteristic, place in order
 pub static WH40KREROLL_HELP: &str = "Roll 2d10 for each characteristis, place in order. Reroll one.";
 pub static WH40KCHOICE_HELP: &str = "Roll nine 2d10. Assign the results to your characteristics as you wish.";
 pub static WH40KCHOICEREROLL_HELP: &str = "Roll nine 2d10. Reroll one. Assign the results to your characteristics as you wish.";
+
+pub static SWN_HELP: &str = "Roll 3d6, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma. Then you can change one ability to 14.";
+pub static SWNSTANDARD_HELP: &str = "14,12,11,10,9,7. Assign to your character's six abilities as you wish.";

@@ -19,6 +19,7 @@ use crate::errors::DiceError;
 
 use crate::method::Method;
 
+use crate::method_comments::*;
 use crate::method_descs::*;
 use crate::method_descs_long::*;
 
@@ -29,6 +30,7 @@ static DND4_ARRAY: [IntValue; 6] = [16, 14, 13, 12, 11, 10];
 static SFFOCUSED_ARRAY: [IntValue; 6] = [18, 14, 11, 10, 10, 10];
 static SFSPLIT_ARRAY: [IntValue; 6] = [16, 16, 11, 10, 10, 10];
 static SFVERSATILE_ARRAY: [IntValue; 6] = [14, 14, 14, 11, 10, 10];
+static SWN_ARRAY: [IntValue; 6] = [14, 14, 14, 11, 10, 10];
 
 
 /// Type for generation methods' BTreeMap 
@@ -476,6 +478,9 @@ lazy_static! {
         m.insert("wh40k_choice", Method::new("warhammer", false, WH40KCHOICE_DESC, WH40KCHOICE_HELP, method_wh40k3));
         m.insert("wh40k_choicereroll", Method::new("warhammer-reroll", false, WH40KCHOICEREROLL_DESC, WH40KCHOICEREROLL_HELP, method_wh40k4));
         
+        m.insert("swn", Method::new_w_comment("d&d", true, SWN_DESC, SWN_HELP, SWN_COMMENT, method_adnd1));
+        m.insert("swnstandard", Method::new("d&d", false, SWNSTANDARD_DESC, SWNSTANDARD_HELP,  |stats| method_array(&SWN_ARRAY, stats)));
+
         m
     };
 }

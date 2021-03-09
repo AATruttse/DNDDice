@@ -67,4 +67,6 @@ pub static WH40KREROLL_DESC: &str = "2d10 for each characteristic without choice
 pub static WH40KCHOICE_DESC: &str = "2d10 for each characteristic with choice";
 pub static WH40KCHOICEREROLL_DESC: &str = "2d10 for each characteristic with choice, reroll one";
 
+pub static SWN_DESC: &str = "3d6 for each stat without choice, then you can change one ability to 14";
+pub static SWNSTANDARD_DESC: &str = "14,12,11,10,9,7 with choice";
 

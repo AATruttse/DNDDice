@@ -8,6 +8,7 @@
 
 use crate::dices::IntValue;
 use crate::errors::DiceError;
+use crate::method_comments::ASYOUWISH_COMMENT;
 
 /// Type for generation method's function ptr
 pub type GenMethod = fn (&mut Vec<IntValue>) -> Result<(), DiceError>;
@@ -24,7 +25,8 @@ pub struct Method {
     desc:      &'static str,
     /// string with method's long description
     desc_long: &'static str,
-
+    /// string with comment to show to user
+    comment: &'static str,
     /// method's function ptr
     method:    GenMethod
 }
@@ -46,6 +48,10 @@ impl Method {
         self.desc_long
     }
 
+    pub fn get_comment(&self) -> &str {
+        self.comment
+    }    
+
     pub fn get_method(&self) -> GenMethod {
         self.method
     }
@@ -62,9 +68,33 @@ impl Method {
             is_ordered: is_ordered,
             desc: desc,
             desc_long: desc_long,
+            comment: match is_ordered {
+                true => "",
+                false => ASYOUWISH_COMMENT
+            },
             method: method
         };
 
         new_method
     }
+
+    pub fn new_w_comment(
+        statlist:   &'static str,
+        is_ordered: bool,
+        desc:       &'static str,
+        desc_long:  &'static str,
+        comment:  &'static str,
+        method:     GenMethod
+    ) -> Self {
+        let new_method = Method {
+            statlist: statlist,
+            is_ordered: is_ordered,
+            desc: desc,
+            desc_long: desc_long,
+            comment: comment,
+            method: method
+        };
+
+        new_method
+    }    
 }

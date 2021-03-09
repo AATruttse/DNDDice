@@ -49,6 +49,9 @@ pub fn process_method(all_stats: &mut Vec<IntValue>) {
                 else {
                     println!("{:?}", stat);
                 }
+                if !OPT.numbers_only {
+                    println!("{}", method.get_comment());
+                }
             }
         },
         None => {
