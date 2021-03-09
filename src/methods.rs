@@ -26,6 +26,9 @@ static ONE_ARRAY: [usize; 1] = [1];
 static ALL25_ARRAY: [IntValue; 6] = [25, 25, 25, 25, 25, 25];
 static DND35_ARRAY: [IntValue; 6] = [15, 14, 13, 12, 10, 8];
 static DND4_ARRAY: [IntValue; 6] = [16, 14, 13, 12, 11, 10];
+static SFFOCUSED_ARRAY: [IntValue; 6] = [18, 14, 11, 10, 10, 10];
+static SFSPLIT_ARRAY: [IntValue; 6] = [16, 16, 11, 10, 10, 10];
+static SFVERSATILE_ARRAY: [IntValue; 6] = [14, 14, 14, 11, 10, 10];
 
 
 /// Type for generation methods' BTreeMap 
@@ -49,9 +52,18 @@ fn dnd3mod(stat: IntValue) -> IntValue {
     }
 }
 
+/// Returns given array as result
+fn method_array(arr: &[IntValue], stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    *stats = arr.to_vec();
+
+    Ok(())
+}
+
 /// Stat generation method for AD&D 2ne ed - Method 1
 /// 3d6 without choice
-pub fn method_adnd1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_adnd1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     for i in 0..6 {
@@ -63,7 +75,7 @@ pub fn method_adnd1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for AD&D 2ne ed - Method 2
 /// Best of two 3d6 without choice
-pub fn method_adnd2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_adnd2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     for i in 0..6 {
@@ -75,7 +87,7 @@ pub fn method_adnd2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for AD&D 2ne ed - Method 3
 /// 3d6 with choice
-pub fn method_adnd3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_adnd3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     for i in 0..6 {
@@ -90,7 +102,7 @@ pub fn method_adnd3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for AD&D 2ne ed - Method 4
 /// Best 6 of 12 3d6 with choice
-pub fn method_adnd4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_adnd4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     let mut dices: Vec<IntValue> = (0..12).collect();
@@ -107,7 +119,7 @@ pub fn method_adnd4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for AD&D 2ne ed - Method 5
 /// 4d6 drop lowest with choice
-pub fn method_adnd5(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_adnd5(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     for i in 0..6 {
@@ -122,7 +134,7 @@ pub fn method_adnd5(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for D&D - Method for Crazy Loonies
 /// d20 without choice
-pub fn method_dndloonie(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_dndloonie(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     for i in 0..6 {
@@ -132,19 +144,9 @@ pub fn method_dndloonie(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-/// Stat generation method for D&D - Method for Munchkins
-/// 25,25,25,25,25,25
-pub fn method_dndmunchkin(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    *stats = ALL25_ARRAY.to_vec();
-
-    Ok(())
-}
-
 /// Stat generation method for D&D - Method for Evil Champions
 /// 4d6 drop lowest reroll 1's with choice
-pub fn method_dndevilchampion(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_dndevilchampion(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     for i in 0..6 {
@@ -156,7 +158,7 @@ pub fn method_dndevilchampion(stats: &mut Vec<IntValue>) -> Result<(), DiceError
 
 /// Stat generation method for CP2020 - Method 1
 /// 9d10 character points
-pub fn method_cp1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_cp1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 1);
 
     stats[0] = n_d(9, 10)?;
@@ -166,7 +168,7 @@ pub fn method_cp1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for CP2020 - Method 2
 /// 1d10 reroll 1,2 with choice
-pub fn method_cp2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_cp2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 9);
 
     for i in 0..9 {
@@ -183,7 +185,7 @@ pub fn method_cp2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for CP2013 - Method 1
 /// 9d10 character points
-pub fn method_cp3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_cp3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 1);
 
     stats[0] = n_d_plus(6, 10, 30)?;
@@ -193,7 +195,7 @@ pub fn method_cp3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for CP2020 - Method 3
 /// 1d10 reroll 1,2 without choice
-pub fn method_cp4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_cp4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 9);
 
     for i in 0..9 {
@@ -207,7 +209,7 @@ pub fn method_cp4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for Cyberspace - Method 1
 /// 1d100 with choice
-pub fn method_cyberspace1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_cyberspace1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 11);
 
     for i in 0..11 {
@@ -222,7 +224,7 @@ pub fn method_cyberspace1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for Cyberspace - Method 2
 /// 1d100 without choice
-pub fn method_cyberspace2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_cyberspace2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 11);
 
     for i in 0..11 {
@@ -234,7 +236,7 @@ pub fn method_cyberspace2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for Ars Magica - Method 1
 /// 1d10-1d10 for each pair of characteristics with choice
-pub fn method_arm1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_arm1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 4);
 
     for i in 0..4 {
@@ -249,7 +251,7 @@ pub fn method_arm1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for Ars Magica - Method 2
 /// 1d10-1d10 for each pair of characteristics without choice
-pub fn method_arm2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_arm2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 4);
 
     for i in 0..4 {
@@ -261,7 +263,7 @@ pub fn method_arm2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for Pathfinder - Heroic method
 /// 2d6+6 with choice
-pub fn method_pf1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_pf1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     for i in 0..6 {
@@ -276,7 +278,7 @@ pub fn method_pf1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for D&D 3rd ed - Organic method
 /// 4d6 drop lowest  without choice, reroll one, switch any two.
-pub fn method_dnd3_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_dnd3_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 7);
 
     for i in 0..7 {
@@ -288,7 +290,7 @@ pub fn method_dnd3_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for D&D 3rd ed - Custom average method
 /// Six 3d6 with choice. Reroll very bad stats.
-pub fn method_dnd3_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_dnd3_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     while *stats[0..6].iter().max().unwrap() < 12 ||
@@ -306,7 +308,7 @@ pub fn method_dnd3_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for D&D 3rd ed - Random average method
 /// Six 3d6 without choice. Reroll very bad stats.
-pub fn method_dnd3_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_dnd3_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     while *stats[0..6].iter().max().unwrap() < 12 ||
@@ -321,7 +323,7 @@ pub fn method_dnd3_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for D&D 3rd ed - High-powered method
 /// Six 5d6 drop lowest two with choice. Reroll below average stats.
-pub fn method_dnd3_4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_dnd3_4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     while *stats[0..6].iter().max().unwrap() < 15 ||
@@ -337,19 +339,9 @@ pub fn method_dnd3_4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-/// Stat generation method for D&D 3.5 ed - Elite array method
-/// 15,14,13,12,10,8 with choice
-pub fn method_dnd35(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    *stats = DND35_ARRAY.to_vec();
-
-    Ok(())
-}
-
 /// Stat generation method for D&D 4th ed - Rolling scores method
 /// Six 4d6 drop 1 with choice. Reroll bad stats.
-pub fn method_dnd4_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_dnd4_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     while stats[0..6].iter().fold (0, |sum, val| sum + dnd3mod(*val)) < 4 {
@@ -364,19 +356,9 @@ pub fn method_dnd4_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-/// Stat generation method for D&D 4th ed - Standard method
-/// 16,14,13,12,11,10 with choice
-pub fn method_dnd4_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    *stats = DND4_ARRAY.to_vec();
-
-    Ok(())
-}
-
 /// Stat generation method for WH40K - Method 1
 /// 2d10 for each characteristic without choice
-pub fn method_wh40k1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_wh40k1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 9);
 
     for i in 0..9 {
@@ -388,7 +370,7 @@ pub fn method_wh40k1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for WH40K - Method 2
 /// 2d10 for each characteristic without choice, reroll one
-pub fn method_wh40k2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_wh40k2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 10);
 
     for i in 0..10 {
@@ -400,7 +382,7 @@ pub fn method_wh40k2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for WH40K - Method 3
 /// 2d10 for each characteristic with choice
-pub fn method_wh40k3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_wh40k3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 9);
 
     for i in 0..9 {
@@ -415,7 +397,7 @@ pub fn method_wh40k3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
 /// Stat generation method for WH40K - Method 4
 /// 2d10 for each characteristic with choice, reroll one
-pub fn method_wh40k4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_wh40k4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 10);
 
     for i in 0..10 {
@@ -437,7 +419,7 @@ lazy_static! {
 
         m.insert("dndrealman", Method::new("d&d", true, DNDREALMAN_DESC,  DNDREALMAN_HELP, method_adnd5));
         m.insert("dndcrazieloonie", Method::new("d&d", true, DNDCRAZYLOONIE_DESC, DNDCRAZYLOONIE_HELP, method_dndloonie));
-        m.insert("dndmunchkin", Method::new("d&d", true, DNDMUNCHKIN_DESC, DNDMUNCHKIN_HELP, method_dndmunchkin));
+        m.insert("dndmunchkin", Method::new("d&d", true, DNDMUNCHKIN_DESC, DNDMUNCHKIN_HELP,  |stats| method_array(&ALL25_ARRAY, stats)));
         m.insert("dndevilchampion", Method::new("d&d", true, DNDEVILCHAMPION_DESC, DNDEVILCHAMPION_HELP, method_dndevilchampion));
         m.insert("dndnewbie", Method::new("d&d", true, DNDNEWBIE_DESC, DNDNEWBIE_HELP, method_adnd1));
         
@@ -458,19 +440,24 @@ lazy_static! {
         m.insert("dnd35customavg", Method::new("d&d", false, DND35CA_DESC, DND35CA_HELP, method_dnd3_2));
         m.insert("dnd35randomavg", Method::new("d&d", true, DND35RA_DESC, DND35RA_HELP, method_dnd3_3));
         m.insert("dnd35highpow", Method::new("d&d", false, DND35HP_DESC, DND35HP_HELP, method_dnd3_4));
-        m.insert("dnd35elite", Method::new("d&d", false, DND35ELITE_DESC, DND35ELITE_HELP, method_dnd35));
+        m.insert("dnd35elite", Method::new("d&d", false, DND35ELITE_DESC, DND35ELITE_HELP, |stats| method_array(&DND35_ARRAY, stats)));
 
         m.insert("dnd4", Method::new("d&d", false, DND4_DESC, DND4_HELP, method_dnd4_1));
-        m.insert("dnd4standard", Method::new("d&d", false, DND4STANDARD_DESC, DND4STANDARD_HELP, method_dnd4_2));
+        m.insert("dnd4standard", Method::new("d&d", false, DND4STANDARD_DESC, DND4STANDARD_HELP, |stats| method_array(&DND4_ARRAY, stats)));
 
         m.insert("dnd5", Method::new("d&d", false, DND5_DESC, DND5_HELP, method_adnd5));
-        m.insert("dnd5standard", Method::new("d&d", false, DND5STANDARD_DESC, DND5STANDARD_HELP, method_dnd35));
+        m.insert("dnd5standard", Method::new("d&d", false, DND5STANDARD_DESC, DND5STANDARD_HELP, |stats| method_array(&DND35_ARRAY, stats)));
 
         m.insert("pfstandard", Method::new("d&d", false, PFSTANDARD_DESC, PFSTANDARD_HELP, method_adnd5));
         m.insert("pfclassic", Method::new("d&d", false, PFCLASSIC_DESC, PFCLASSIC_HELP, method_adnd3));
         m.insert("pfheroic", Method::new("d&d", false, PFHEROIC_DESC, PFHEROIC_HELP, method_pf1));
 
         m.insert("pathfinder2", Method::new("d&d", false, PF2_DESC, PF2_HELP, method_adnd5));
+
+        m.insert("starfinder", Method::new("d&d", false, SF_DESC, SF_HELP, method_adnd5));
+        m.insert("sffocused", Method::new("d&d", false, SFFOCUSED_DESC, SFFOCUSED_HELP, |stats| method_array(&SFFOCUSED_ARRAY, stats)));
+        m.insert("sfsplit", Method::new("d&d", false, SFSPLIT_DESC, SFSPLIT_HELP, |stats| method_array(&SFSPLIT_ARRAY, stats)));
+        m.insert("sfversatile", Method::new("d&d", false, SFVERSATILE_DESC, SFVERSATILE_HELP, |stats| method_array(&SFVERSATILE_ARRAY, stats)));
 
         m.insert("cp2013_1", Method::new("cyberpunk-cp", true, CP2013_1_DESC, CP2013_1_HELP, method_cp1));
         m.insert("cp2013_2", Method::new("cyberpunk-cp", true, CP2013_2_DESC, CP2013_2_HELP, method_cp3));

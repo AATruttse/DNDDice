@@ -8,11 +8,11 @@
 
 pub static DND_DESC: &str = "3d6 for each stat without choice";
 
-pub static DNDREALMAN_DESC:     &str = "D&D for Real Men - Six 4d6 drop lowest with choice";
-pub static DNDCRAZYLOONIE_DESC: &str = "D&D for Crazy Loonies - 1d20 for each stat without choice";
-pub static DNDMUNCHKIN_DESC:    &str = "D&D for Munchkins - 25 for each stat. With choice:)";
-pub static DNDEVILCHAMPION_DESC: &str = "D&D for Evil Champions - Six 4d6, reroll 1's, drop lowest with choice";
-pub static DNDNEWBIE_DESC:      &str = "D&D for Newbies - 3d6 for each stat without choice";
+pub static DNDREALMAN_DESC:     &str = "D&D for Real Men:) - Six 4d6 drop lowest with choice";
+pub static DNDCRAZYLOONIE_DESC: &str = "D&D for Crazy Loonies:) - 1d20 for each stat without choice";
+pub static DNDMUNCHKIN_DESC:    &str = "D&D for Munchkins:) - 25 for each stat. With choice:)";
+pub static DNDEVILCHAMPION_DESC: &str = "D&D for Evil Champions:) - Six 4d6, reroll 1's, drop lowest with choice";
+pub static DNDNEWBIE_DESC:      &str = "D&D for Newbies:) - 3d6 for each stat without choice";
 
 pub static ADND1_DESC: &str = DND_DESC;
 pub static ADND2_DESC: &str = "Best of two 3d6 for each without choice";
@@ -44,6 +44,11 @@ pub static PFCLASSIC_DESC: &str = ADND3_DESC;
 pub static PFHEROIC_DESC: &str = "Six 2d6+6 with choice";
 
 pub static PF2_DESC: &str = ADND5_DESC;
+
+pub static SF_DESC: &str = ADND5_DESC;
+pub static SFFOCUSED_DESC: &str = "18,14,11,10,10,10 with choice";
+pub static SFSPLIT_DESC: &str = "16,16,11,10,10,10 with choice";
+pub static SFVERSATILE_DESC: &str = "14,14,14,11,10,10 with choice";
 
 pub static CP2013_1_DESC: &str = "9d10 character points";
 pub static CP2013_2_DESC: &str = "30+6d10 character points";

@@ -45,6 +45,11 @@ pub static PFHEROIC_HELP: &str = ADND3_HELP;
 
 pub static PF2_HELP: &str = ADND5_HELP;
 
+pub static SF_HELP: &str = ADND5_HELP;
+pub static SFFOCUSED_HELP: &str = "18,14,11,10,10,10. Assign to your character's six abilities as you wish.";
+pub static SFSPLIT_HELP: &str = "16,16,11,10,10,10. Assign to your character's six abilities as you wish.";
+pub static SFVERSATILE_HELP: &str = "14,14,14,11,10,10. Assign to your character's six abilities as you wish.";
+
 pub static CP2013_1_HELP: &str = "Roll 9d10, use result for Character Points.";
 pub static CP2013_2_HELP: &str = "Roll 30+6d10, use result for Character Points.";
 pub static CP2020_1_HELP: &str = CP2013_1_HELP;
