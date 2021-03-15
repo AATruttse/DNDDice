@@ -26,6 +26,7 @@ lazy_static! {
         m.insert("arsmagica", vec!["Int/Per","Str/Sta","Pre/Com","Dex/Qik"]);
         m.insert("warhammer", vec!["WS","BS","S","T","Ag","Int","Per","WP","Fel"]);
         m.insert("warhammer-reroll", vec!["WS","BS","S","T","Ag","Int","Per","WP","Fel", "reroll"]);
+        m.insert("runequest", vec!["STR","CON","SIZ","DEX","INT","POW","CHA"]);
 
         m
     };

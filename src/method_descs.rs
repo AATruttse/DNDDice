@@ -70,3 +70,6 @@ pub static WH40KCHOICEREROLL_DESC: &str = "2d10 for each characteristic with cho
 pub static SWN_DESC: &str = "3d6 for each stat without choice, then you can change one ability to 14";
 pub static SWNSTANDARD_DESC: &str = "14,12,11,10,9,7 with choice";
 
+pub static RQ6_DESC: &str = "3d6 for STR, CON, DEX, POW and CHA; 2d6+6 for SIZ and INT";
+pub static RQ6CHOICE_DESC: &str = "3d6 for STR, CON, DEX, POW and CHA with choice; 2d6+6 for SIZ and INT with choice";
+

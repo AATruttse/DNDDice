@@ -69,3 +69,6 @@ pub static WH40KCHOICEREROLL_HELP: &str = "Roll nine 2d10. Reroll one. Assign th
 
 pub static SWN_HELP: &str = "Roll 3d6, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma. Then you can change one ability to 14.";
 pub static SWNSTANDARD_HELP: &str = "14,12,11,10,9,7. Assign to your character's six abilities as you wish.";
+
+pub static RQ6_HELP: &str = "Roll 3d6, use the result for character's STR. Repeat for CON, DEX, POW and CHA; then roll 2d6+6 for SIZ and INT.";
+pub static RQ6CHOICE_HELP: &str = "Roll 3d6 five times, assign the results to STR, CON, DEX, POW and CHA as you wish; then roll 2d6+6 two times and assign the results to SIZ and INT as you wish.";

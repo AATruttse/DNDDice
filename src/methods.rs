@@ -412,6 +412,43 @@ fn method_wh40k4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
+/// Stat generation method for Runequest 6 - Method 1
+/// 3d6 for STR, CON, DEX, POW and CHA; 2d6+6 for SIZ and INT
+fn method_rq6_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 7);
+
+    for i in 0..7 {
+        stats[i] = match i {
+            2 | 4 => n_d_plus(2, 6, 6)?,
+            _ => n_d(3, 6)?
+        };
+    }
+
+    Ok(())
+}
+
+/// Stat generation method for Runequest 6 - Method 1
+/// 3d6 for STR, CON, DEX, POW and CHA; 2d6+6 for SIZ and INT
+fn method_rq6_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 7);
+
+    for i in 0..5 {
+        stats[i] = n_d(3, 6)?;
+    }
+
+    for i in 5..7 {
+        stats[i] = n_d_plus(2, 6, 6)?;
+    }
+
+    stats[0..5].sort();
+    stats[0..5].reverse();    
+
+    stats[5..7].sort();
+    stats[5..7].reverse();    
+
+    Ok(())
+}
+
 // BTreeMap with all methods
 lazy_static! {
     pub static ref METHODSMAP: GenMethodsMap = {
@@ -480,6 +517,10 @@ lazy_static! {
         
         m.insert("swn", Method::new_w_comment("d&d", true, SWN_DESC, SWN_HELP, SWN_COMMENT, method_adnd1));
         m.insert("swnstandard", Method::new("d&d", false, SWNSTANDARD_DESC, SWNSTANDARD_HELP,  |stats| method_array(&SWN_ARRAY, stats)));
+
+        m.insert("rq6", Method::new("runequest", true, RQ6_DESC, RQ6_HELP, method_rq6_1));
+        m.insert("rq6_choice", Method::new_w_comment("runequest", false, RQ6CHOICE_DESC, RQ6CHOICE_HELP, RQ6CHOICE_COMMENT, method_rq6_2));
+
 
         m
     };
