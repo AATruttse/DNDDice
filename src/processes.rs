@@ -6,13 +6,14 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use itertools::Itertools;
 use regex::Regex;
 
 use crate::arithmetic::Arythmetic;
 use crate::arithmetic::process_arithmetic;
 
 use crate::dices::IntValue;
-use crate::dices::n_d_drop_crop_plus;
+use crate::dices::n_d_reroll_drop_crop_plus;
 
 use crate::errors::cant_find_method;
 use crate::errors::DiceError;
@@ -79,9 +80,15 @@ pub fn process_dices(all_stats: &mut Vec<IntValue>) {
 /// process dice roll from keys
 fn process_dices_from_keys(all_stats: &mut Vec<IntValue>) {
 
+    let reroll : Vec<usize> = match OPT.reroll.is_empty() {
+        true => Vec::new(),
+        false => OPT.reroll.split(",").map(|s| s.parse().unwrap()).collect()
+    };
+
     let res = process_roll(
         OPT.dices_num,
         OPT.dice,
+        &reroll,
         OPT.plus,
         OPT.minus,
         OPT.drop,
@@ -99,7 +106,7 @@ fn process_dices_from_codes(all_stats: &mut Vec<IntValue>) {
     for dicecode in &OPT.dicecodes {
         if !dicecode.is_empty() {
             // parse dice codes with regular expression
-            let dice_regex: &str = r"([-+/*%^])?(?:(\d*)d(\d*)(?:(?:drop|d)(\d+)(?:crop|c)(\d+)|(?:(?:drop|d)(\d+)|(?:crop|c)(\d+)|(?:greatest|g)(\d+)|(?:lowest|l)(\d+)))?(?:(?:plus|p)(\d+))?(?:(?:minus|m)(\d+))?|(\d+))";
+            let dice_regex: &str = r"([-+/*%^])?(?:(\d*)d(\d*)(?:(?:reroll|r)((?:\d+)(?:(?:(?:,(?:\d+))+)?)))?(?:(?:drop|d)(\d+)(?:crop|c)(\d+)|(?:(?:drop|d)(\d+)|(?:crop|c)(\d+)|(?:greatest|g)(\d+)|(?:lowest|l)(\d+)))?(?:(?:plus|p)(\d+))?(?:(?:minus|m)(\d+))?|(\d+))";
             let re = Regex::new(
                 dice_regex).
                 unwrap();
@@ -152,7 +159,7 @@ fn process_dice(idx: usize, params: &[&'static str]) -> Result<(&'static str, In
         println!("dice: {} - {:?}", idx, params);
     }
 
-    if params.len() != 13
+    if params.len() != 14
     {
         return Err(DiceError::BadDecryption);
     }
@@ -162,21 +169,27 @@ fn process_dice(idx: usize, params: &[&'static str]) -> Result<(&'static str, In
         return Err(DiceError::BadCode);
     }
 
-
-    if !params[12].is_empty()
+    if !params[13].is_empty()
     {
-        let c: IntValue = params[12].parse().unwrap();
+        let c: IntValue = params[13].parse().unwrap();
         return Ok((params[1], c));
     }
 
+
     let n: usize = match params[2] {"" => 1, x => x.parse().unwrap()};
     let d: usize = match params[3] {"" => 6, x => x.parse().unwrap()};
-    let plus: usize = match params[10] {"" => 0, x => x.parse().unwrap()};
-    let minus: usize = match params[11] {"" => 0, x => x.parse().unwrap()};    
 
-    let drop: usize = match params[4] {
-        "" => match params[6] {
-            "" => match params[8] {
+    let reroll : Vec<usize> = match params[4].is_empty() {
+        true => Vec::new(),
+        false => params[4].split(",").map(|s| s.parse().unwrap()).collect()
+    };
+
+    let plus: usize = match params[11] {"" => 0, x => x.parse().unwrap()};
+    let minus: usize = match params[12] {"" => 0, x => x.parse().unwrap()};    
+
+    let drop: usize = match params[5] {
+        "" => match params[7] {
+            "" => match params[9] {
                 "" => 0,
                 x => {
                     let g: usize = x.parse().unwrap();
@@ -188,9 +201,9 @@ fn process_dice(idx: usize, params: &[&'static str]) -> Result<(&'static str, In
         x => x.parse().unwrap()
     };
 
-    let crop: usize = match params[5] {
-        "" => match params[7] {
-            "" => match params[9] {
+    let crop: usize = match params[6] {
+        "" => match params[8] {
+            "" => match params[10] {
                 "" => 0,
                 x => {
                     let l: usize = x.parse().unwrap();
@@ -202,13 +215,14 @@ fn process_dice(idx: usize, params: &[&'static str]) -> Result<(&'static str, In
         x => x.parse().unwrap()
     };        
 
-    Ok((params[1], process_roll(n, d, plus, minus, drop, crop)))
+    Ok((params[1], process_roll(n, d, &reroll, plus, minus, drop, crop)))
 }
 
 /// process dice roll with given parameters
 fn process_roll( 
     n: usize,
     d: usize,
+    reroll: &[usize],
     plus: usize,
     minus: usize,
     drop: usize,
@@ -219,29 +233,43 @@ fn process_roll(
     if OPT.debug || (OPT.verbose > 0 && !OPT.numbers_only) {
         let drop_str: String = match drop {
             0 => "".to_string(),
-            x => format!(" drop {}", x)};
+            x => format!(" drop {}", x)
+        };
 
         let crop_str: String = match crop {
             0 => "".to_string(),
-            x => format!(" crop {}", x)};
+            x => format!(" crop {}", x)
+        };
             
+        let reroll_str: String = match reroll.len() {
+            0 => "".to_string(),
+            _ => format!(" reroll {}", reroll.iter().join(","))
+        };
+
+        let add_space = match drop_str.len() + crop_str.len() + reroll_str.len() {
+            0 => "",
+            _ => " "
+        };
+
         let add_str: String = match add {
-            x if x > 0 => format!("+{}", x),
-            x if x < 0 => format!("-{}", -x),
+            x if x > 0 => format!("{}+{}", add_space, x),
+            x if x < 0 => format!("{}-{}", add_space,-x),
             _  => "".to_string()
         };
-                        
-        print!("{}d{}{}{}{}: ",
+        
+        print!("{}d{}{}{}{}{}: ",
          n,
          d,
-         add_str,
+         reroll_str,
          drop_str,
-         crop_str
+         crop_str,
+         add_str
         );
     }
     
-    let res = match n_d_drop_crop_plus(n,
+    let res = match n_d_reroll_drop_crop_plus(n,
         d,
+        reroll,
         add,
         drop,
         crop

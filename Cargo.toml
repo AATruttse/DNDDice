@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 custom_error = "1.8.0"
+itertools = "0.10.0"
 lazy_static = "1.4.0"
 rand = "0.8.3"
 regex = "1.4.0"

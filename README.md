@@ -29,8 +29,10 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
         --help-method                    Show help about generation method
     -m, --method                         Stat generation method (adnd1, adnd2, etc.) See --help-methods for full list
         --minus                          Result minus
+
     -N, --repetitions-num                Number of repetitions
         --plus                           Result plus
+    -r, --reroll <reroll>                Reroll dice [default: ]		
         --round-digits                   Round probabilities to number of digits [default: 2]
 
 ## ARGS:

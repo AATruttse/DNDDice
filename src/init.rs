@@ -43,6 +43,10 @@ pub struct Opt {
     #[structopt(short="d", long="dice", default_value = "6")]
     pub dice: usize,
 
+    /// Reroll dice
+    #[structopt(short="r", long="reroll", default_value = "")]
+    pub reroll: String,
+
     /// Result plus
     #[structopt(long="plus", default_value = "0")]
     pub plus: usize,
