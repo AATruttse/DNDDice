@@ -67,6 +67,10 @@ pub struct Opt {
     #[structopt(short, long, default_value = "")]
     pub method: String,
 
+    /// Show method description
+    #[structopt(long)]
+    pub show_method: bool,
+
     /// Show all statistics
     #[structopt(long)]
     pub stat: bool,    

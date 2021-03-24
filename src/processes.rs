@@ -38,30 +38,43 @@ pub fn process_method(all_stats: &mut Vec<IntValue>) {
                 expect(UNKNOWNSTATLIST_ERROR_MSG);
 
             stat.resize(statlist.len(), 0);
-            method.get_method()(&mut stat).unwrap();
 
-            if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
-                if method.is_ordered() && !OPT.numbers_only {
-                    for i in 0..statlist.len() {
-                        print!("{}: {}  ", statlist[i], stat[i]);
+            let n = method.get_num();
+
+            if OPT.show_method {
+                println!("{}", method.get_desc());
+            }
+
+            for i in 1..(n + 1) {
+                method.get_method()(&mut stat).unwrap();
+
+                if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
+                    if !OPT.numbers_only && n > 1 {
+                        print!("{}: ", i);
                     }
-                    println!("");
+
+                    if method.is_ordered() && !OPT.numbers_only {
+                        for i in 0..statlist.len() {
+                            print!("{}: {}  ", statlist[i], stat[i]);
+                        }
+                        println!("");
+                    }
+                    else {
+                        println!("{:?}", stat);
+                    }
                 }
-                else {
-                    println!("{:?}", stat);
-                }
-                if !OPT.numbers_only {
-                    println!("{}", method.get_comment());
-                }
+
+                all_stats.extend(stat.clone());
+            }
+
+            if (OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat()) &&  !OPT.numbers_only {
+                println!("{}", method.get_comment());
             }
         },
         None => {
             cant_find_method(&OPT.method)
         }
     }
-
-    all_stats.extend(stat.clone());
-
 }
 
 /// process any dice roll, uses all_stat for statistics

@@ -16,6 +16,7 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
         --no-help            No help messages
         --numbers-only       Show only numbers
         --probabilities      Show probabilities
+		--show-method        Show method description
         --stat               Show all statistics
         --sum                Show sum
     -V, --version            Prints version information
@@ -29,14 +30,13 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
         --help-method                    Show help about generation method
     -m, --method                         Stat generation method (adnd1, adnd2, etc.) See --help-methods for full list
         --minus                          Result minus
-
     -N, --repetitions-num                Number of repetitions
         --plus                           Result plus
     -r, --reroll <reroll>                Reroll dice [default: ]		
         --round-digits                   Round probabilities to number of digits [default: 2]
 
 ## ARGS:
-    <dicecodes>...    Dice codes (2d8plus1, 4d6drop1 etc.) See --help-dice-codes for format description
+    <dicecodes>...    Dice codes (2d8plus1, 4d6drop1, 2d4-1d6/1d3 etc.) See --help-dice-codes for format description
 
 # License
 

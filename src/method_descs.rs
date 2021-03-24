@@ -20,6 +20,11 @@ pub static ADND3_DESC: &str = "Six 3d6 with choice";
 pub static ADND4_DESC: &str = "Best six of 12 3d6 with choice";
 pub static ADND5_DESC: &str = "Six 4d6 drop lowest with choice";
 
+pub static ADND1_1_DESC: &str = ADND5_DESC;
+pub static ADND1_2_DESC: &str = ADND4_DESC;
+pub static ADND1_3_DESC: &str = "Best of six 3d6 for each ability";
+pub static ADND1_4_DESC: &str = "Best of 12 '3d6 without choice' sets";
+
 pub static DND3_DESC: &str = ADND5_DESC;
 pub static DND3ORGANIC_DESC: &str = "Six 4d6 drop lowest without choice, reroll one, switch any two";
 pub static DND3CA_DESC: &str = "Six 3d6 with choice, reroll very bad stats";

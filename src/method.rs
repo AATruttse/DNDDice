@@ -16,19 +16,22 @@ pub type GenMethod = fn (&mut Vec<IntValue>) -> Result<(), DiceError>;
 /// struct for generation method
 pub struct Method {
     /// used in this method statistics list
-    statlist:  &'static str,
+    statlist:   &'static str,
 
     /// is method gives ordered stats?
     is_ordered: bool,
 
     /// string with method's short description
-    desc:      &'static str,
+    desc:       &'static str,
     /// string with method's long description
-    desc_long: &'static str,
+    desc_long:  &'static str,
     /// string with comment to show to user
-    comment: &'static str,
+    comment:    &'static str,
+
     /// method's function ptr
-    method:    GenMethod
+    method:    GenMethod,
+    /// number of times the method's function is used
+    num:        usize
 }
 
 impl Method {
@@ -56,6 +59,10 @@ impl Method {
         self.method
     }
 
+    pub fn get_num(&self) -> usize {
+        self.num
+    }
+
     pub fn new(
         statlist:   &'static str,
         is_ordered: bool,
@@ -72,7 +79,8 @@ impl Method {
                 true => "",
                 false => ASYOUWISH_COMMENT
             },
-            method: method
+            method: method,
+            num: 1
         };
 
         new_method
@@ -83,18 +91,57 @@ impl Method {
         is_ordered: bool,
         desc:       &'static str,
         desc_long:  &'static str,
-        comment:  &'static str,
+        comment:    &'static str,
         method:     GenMethod
     ) -> Self {
-        let new_method = Method {
-            statlist: statlist,
-            is_ordered: is_ordered,
-            desc: desc,
-            desc_long: desc_long,
-            comment: comment,
-            method: method
-        };
+        let mut new_method = Method::new(statlist,
+            is_ordered,
+            desc,
+            desc_long,
+            method
+        );
 
+        new_method.comment = comment;
         new_method
-    }    
+    }
+    
+    pub fn new_w_num(
+        statlist:   &'static str,
+        is_ordered: bool,
+        desc:       &'static str,
+        desc_long:  &'static str,
+        method:     GenMethod,
+        num:        usize
+    ) -> Self {
+        let mut new_method = Method::new(statlist,
+            is_ordered,
+            desc,
+            desc_long,
+            method
+        );
+
+        new_method.num = num;
+        new_method
+    }
+    
+    pub fn new_w_num_comment(
+        statlist:   &'static str,
+        is_ordered: bool,
+        desc:       &'static str,
+        desc_long:  &'static str,
+        comment:    &'static str,
+        method:     GenMethod,
+        num:        usize
+    ) -> Self {
+        let mut new_method = Method::new_w_comment(statlist,
+            is_ordered,
+            desc,
+            desc_long,
+            comment,
+            method
+        );
+
+        new_method.num = num;
+        new_method
+    }        
 }

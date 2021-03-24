@@ -63,7 +63,7 @@ fn method_array(arr: &[IntValue], stats: &mut Vec<IntValue>) -> Result<(), DiceE
     Ok(())
 }
 
-/// Stat generation method for AD&D 2ne ed - Method 1
+/// Stat generation method for AD&D 2nd ed - Method 1
 /// 3d6 without choice
 fn method_adnd1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
@@ -75,7 +75,7 @@ fn method_adnd1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-/// Stat generation method for AD&D 2ne ed - Method 2
+/// Stat generation method for AD&D 2nd ed - Method 2
 /// Best of two 3d6 without choice
 fn method_adnd2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
@@ -87,7 +87,7 @@ fn method_adnd2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-/// Stat generation method for AD&D 2ne ed - Method 3
+/// Stat generation method for AD&D 2nd ed - Method 3
 /// 3d6 with choice
 fn method_adnd3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
@@ -102,7 +102,7 @@ fn method_adnd3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-/// Stat generation method for AD&D 2ne ed - Method 4
+/// Stat generation method for AD&D 2nd ed - Method 4
 /// Best 6 of 12 3d6 with choice
 fn method_adnd4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
@@ -119,7 +119,7 @@ fn method_adnd4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-/// Stat generation method for AD&D 2ne ed - Method 5
+/// Stat generation method for AD&D 2nd ed - Method 5
 /// 4d6 drop lowest with choice
 fn method_adnd5(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
@@ -130,6 +130,18 @@ fn method_adnd5(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
     stats[0..6].sort();
     stats[0..6].reverse();
+
+    Ok(())
+}
+
+/// Stat generation method for AD&D 1st ed - Method 3
+/// Brst of 6 3d6 for each ability
+fn method_adnd1_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = (0..6).map(|_| n_d(3, 6).unwrap()).fold(std::i32::MIN, |a,b| a.max(b));
+    }
 
     Ok(())
 }
@@ -467,6 +479,11 @@ lazy_static! {
         m.insert("adnd3", Method::new("d&d", false, ADND3_DESC, ADND3_HELP, method_adnd3));
         m.insert("adnd4", Method::new("d&d", false, ADND4_DESC, ADND4_HELP, method_adnd4));
         m.insert("adnd5", Method::new("d&d", false, ADND5_DESC, ADND5_HELP, method_adnd5));
+
+        m.insert("adnd1_1", Method::new("d&d", false, ADND1_1_DESC, ADND1_1_HELP, method_adnd5));
+        m.insert("adnd1_2", Method::new("d&d", false, ADND1_2_DESC, ADND1_2_HELP, method_adnd4));
+        m.insert("adnd1_3", Method::new("d&d", true, ADND1_3_DESC, ADND1_3_HELP, method_adnd1_3));
+        m.insert("adnd1_4", Method::new_w_num_comment("d&d", true, ADND1_4_DESC, ADND1_4_HELP, ADND1_4_COMMENT, method_adnd1, 12));
 
         m.insert("dnd3", Method::new("d&d", false, DND3_DESC, DND3_HELP, method_adnd5));
         m.insert("dnd3organic", Method::new("d&dreroll", true, DND3ORGANIC_DESC, DND3ORGANIC_HELP, method_dnd3_1));
