@@ -145,6 +145,9 @@ fn process_dices_from_codes(all_stats: &mut Vec<IntValue>) {
             let res = process_arithmetic(&dices_vec);
     
             if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
+                if !OPT.numbers_only {
+                    print!("{}: ", dicecode);
+                }
                 println!("{}", res);
             }
 

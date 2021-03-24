@@ -46,6 +46,7 @@ Examples:
 	d20 - one 20-sided dice
 	2d8 - two 8-sided dices
 	2d8reroll1 - two 8-sided dices, reroll all 1's
+	2d8r8 - two 8-sided dices, reroll all 8's
 	2d8reroll1,8 - two 8-sided dices, reroll all 1's and 8's
 	2d20drop1 - greatest of two 20-sided dices
 	2d20d1 - greatest of two 20-sided dices
