@@ -20,6 +20,17 @@ pub static ADND3_DESC: &str = "Six 3d6 with choice";
 pub static ADND4_DESC: &str = "Best six of 12 3d6 with choice";
 pub static ADND5_DESC: &str = "Six 4d6 drop lowest with choice";
 
+pub static ADND_CBON1_DESC: &str = "One of six '3d6 without choice' pregenerated sets for real necromancer";
+pub static ADND_CBON2_DESC: &str = "One of six 'Best of two 3d6 without choice' pregenerated sets for real necromancer";
+pub static ADND_CBON3_DESC: &str = "One of six 'Six 3d6 with choice' pregenerated sets for real necromancer";
+pub static ADND_CBON4_DESC: &str = "One of six 'Best six of 12 3d6 with choice' pregenerated sets for real necromancer";
+pub static ADND_CBON5_DESC: &str = "One of six 'Six 4d6 drop lowest with choice' pregenerated sets for real necromancer";
+pub static ADND_CBON6_DESC: &str = "One of six '8+7d6' pregenerated sets for real necromancer";
+pub static ADND_CBON7_DESC: &str = "Six 10+1d8 with choice";
+pub static ADND_CBON8_DESC: &str = "Six 10+1d8 with choice; +1 to INT&WIS";
+pub static ADND_CBON7WOCHOICE_DESC: &str = "Six 10+1d8 without choice";
+pub static ADND_CBON8WOCHOICE_DESC: &str = "Six 10+1d8 without choice; +1 to INT&WIS";
+
 pub static ADND1_1_DESC: &str = ADND5_DESC;
 pub static ADND1_2_DESC: &str = ADND4_DESC;
 pub static ADND1_3_DESC: &str = "Best of six 3d6 for each ability";

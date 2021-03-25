@@ -115,7 +115,7 @@ pub struct Opt {
     #[structopt(long)]
     pub no_help: bool,
 
-    /// Dice codes (2d8plus1, 4d6drop1 etc.)
+    /// Dice codes (2d8plus1, 4d6drop1, 2d4-1d6/1d3 etc.) See --help-dice-codes for format description
     #[structopt(default_value = "")]
     pub dicecodes: Vec<String>,
 }

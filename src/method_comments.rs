@@ -10,6 +10,8 @@ pub static ASYOUWISH_COMMENT: &str = "Assign the results as you wish.";
 
 pub static ADND1_4_COMMENT: &str = "Take the set of abilities which you like.";
 
+pub static ADND_CBON8_COMMENT: &str = "Assign the results as you wish. Add +1 on INT & WIS (18 maximum in each score).";
+
 pub static SWN_COMMENT: &str = "You can change one ability to 14.";
 pub static RQ6CHOICE_COMMENT: &str = "First five values for STR, CON, DEX, POW and CHA; last two for  SIZ and INT.";
 

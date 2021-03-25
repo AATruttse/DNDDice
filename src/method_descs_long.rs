@@ -20,6 +20,17 @@ pub static ADND3_HELP: &str = "Roll 3d6 six times. Assign the results to your ch
 pub static ADND4_HELP: &str = "Roll 3d6 twelve times. Assign the best six results to your character's six abilities as you wish.";
 pub static ADND5_HELP: &str = "Roll 4d6 and discard the lowest die. Repeat six times. Assign the results to your character's six abilities as you wish.";
 
+pub static ADND_CBON1_HELP: &str = "One of six '3d6 without choice' pregenerated sets for real necromancer";
+pub static ADND_CBON2_HELP: &str = "One of six 'Best of two 3d6 without choice' pregenerated sets for real necromancer";
+pub static ADND_CBON3_HELP: &str = "One of six 'Six 3d6 with choice' pregenerated sets for real necromancer";
+pub static ADND_CBON4_HELP: &str = "One of six 'Best six of 12 3d6 with choice' pregenerated sets for real necromancer";
+pub static ADND_CBON5_HELP: &str = "One of six 'Six 4d6 drop lowest with choice' pregenerated sets for real necromancer";
+pub static ADND_CBON6_HELP: &str = "One of six '8+7d6' pregenerated sets for real necromancer";
+pub static ADND_CBON7_HELP: &str = "Roll 10+1d8, Repeat six times. Assign the results to your character's six abilities as you wish.";
+pub static ADND_CBON8_HELP: &str = "Roll 10+1d8, Repeat six times. Assign the results to your character's six abilities as you wish. +1 to INT&WIS (max 18).";
+pub static ADND_CBON7WOCHOICE_HELP: &str = "Roll 10+1d8, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma.";
+pub static ADND_CBON8WOCHOICE_HELP: &str = "Roll 10+1d8, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma. +1 to INT&WIS (max 18).";
+
 pub static ADND1_1_HELP: &str = ADND5_HELP;
 pub static ADND1_2_HELP: &str = ADND4_HELP;
 pub static ADND1_3_HELP: &str = "Roll 3d6 six times, use the best result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma.";

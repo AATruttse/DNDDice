@@ -9,6 +9,8 @@
 use std::cmp::max;
 use std::collections::BTreeMap;
 
+use ndarray::{array, Array2};
+
 use crate::dices::IntValue;
 use crate::dices::n_d;
 use crate::dices::n_d_drop;
@@ -31,7 +33,6 @@ static SFFOCUSED_ARRAY: [IntValue; 6] = [18, 14, 11, 10, 10, 10];
 static SFSPLIT_ARRAY: [IntValue; 6] = [16, 16, 11, 10, 10, 10];
 static SFVERSATILE_ARRAY: [IntValue; 6] = [14, 14, 14, 11, 10, 10];
 static SWN_ARRAY: [IntValue; 6] = [14, 14, 14, 11, 10, 10];
-
 
 /// Type for generation methods' BTreeMap 
 type GenMethodsMap = BTreeMap<&'static str, Method>;
@@ -56,12 +57,22 @@ fn dnd3mod(stat: IntValue) -> IntValue {
 
 /// Returns given array as result
 fn method_array(arr: &[IntValue], stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
+    vec_checksize(stats, arr.len());
 
     *stats = arr.to_vec();
 
     Ok(())
 }
+
+/// Returns random array from given set as result
+fn method_rnd_array(arr: &Array2<IntValue>, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, arr.ncols());
+
+    *stats = arr.row(n_d_plus(1, arr.nrows(), -1)? as usize).to_vec();
+
+    Ok(())
+}
+
 
 /// Stat generation method for AD&D 2nd ed - Method 1
 /// 3d6 without choice
@@ -134,8 +145,51 @@ fn method_adnd5(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
+/// Stat generation method for AD&D 2nd ed from CBoN - Method 7
+/// Six 10+1d8 with choice
+fn method_adnd_cbon_7(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = n_d_plus(1, 8, 10)?;
+    }
+
+    stats[0..6].sort();
+    stats[0..6].reverse();
+
+    Ok(())
+}
+
+/// Stat generation method for AD&D 2nd ed from CBoN - Method 7 without choice
+/// Six 10+1d8 without choice
+fn method_adnd_cbon_7wochoice(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = n_d_plus(1, 8, 10)?;
+    }
+
+    Ok(())
+}
+
+/// Stat generation method for AD&D 2nd ed from CBoN - Method 8 without choice
+/// Six 10+1d8 without choice, +1 to INT&WIS (max 18)
+fn method_adnd_cbon_8wochoice(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = n_d_plus(1, 8, 10)?;
+    }
+
+    stats[3] = max(stats[3] + 1, 18);
+    stats[4] = max(stats[4] + 1, 18);
+
+    Ok(())
+}
+
+
 /// Stat generation method for AD&D 1st ed - Method 3
-/// Brst of 6 3d6 for each ability
+/// Best of 6 3d6 for each ability
 fn method_adnd1_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
@@ -461,8 +515,8 @@ fn method_rq6_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-// BTreeMap with all methods
 lazy_static! {
+    // BTreeMap with all methods
     pub static ref METHODSMAP: GenMethodsMap = {
         let mut m = GenMethodsMap::new();
 
@@ -479,6 +533,17 @@ lazy_static! {
         m.insert("adnd3", Method::new("d&d", false, ADND3_DESC, ADND3_HELP, method_adnd3));
         m.insert("adnd4", Method::new("d&d", false, ADND4_DESC, ADND4_HELP, method_adnd4));
         m.insert("adnd5", Method::new("d&d", false, ADND5_DESC, ADND5_HELP, method_adnd5));
+
+        m.insert("adnd_cbon1", Method::new("d&d", true, ADND_CBON1_DESC, ADND_CBON1_HELP,  |stats| method_rnd_array(&CBON_1_ARRAY, stats)));
+        m.insert("adnd_cbon2", Method::new("d&d", true, ADND_CBON2_DESC, ADND_CBON2_HELP,  |stats| method_rnd_array(&CBON_2_ARRAY, stats)));
+        m.insert("adnd_cbon3", Method::new("d&d", true, ADND_CBON3_DESC, ADND_CBON3_HELP,  |stats| method_rnd_array(&CBON_3_ARRAY, stats)));
+        m.insert("adnd_cbon4", Method::new("d&d", true, ADND_CBON4_DESC, ADND_CBON4_HELP,  |stats| method_rnd_array(&CBON_4_ARRAY, stats)));
+        m.insert("adnd_cbon5", Method::new("d&d", true, ADND_CBON5_DESC, ADND_CBON5_HELP,  |stats| method_rnd_array(&CBON_5_ARRAY, stats)));
+        m.insert("adnd_cbon6", Method::new("d&d", true, ADND_CBON6_DESC, ADND_CBON6_HELP,  |stats| method_rnd_array(&CBON_6_ARRAY, stats)));
+        m.insert("adnd_cbon7", Method::new("d&d", false, ADND_CBON7_DESC, ADND_CBON7_HELP, method_adnd_cbon_7));
+        m.insert("adnd_cbon8", Method::new_w_comment("d&d", false, ADND_CBON8_DESC, ADND_CBON8_HELP, ADND_CBON8_COMMENT, method_adnd_cbon_7));
+        m.insert("adnd_cbon7wochoice", Method::new("d&d", true, ADND_CBON7WOCHOICE_DESC, ADND_CBON7WOCHOICE_HELP, method_adnd_cbon_7wochoice));
+        m.insert("adnd_cbon8wochoice", Method::new("d&d", true, ADND_CBON8WOCHOICE_DESC, ADND_CBON8WOCHOICE_HELP, method_adnd_cbon_8wochoice));
 
         m.insert("adnd1_1", Method::new("d&d", false, ADND1_1_DESC, ADND1_1_HELP, method_adnd5));
         m.insert("adnd1_2", Method::new("d&d", false, ADND1_2_DESC, ADND1_2_HELP, method_adnd4));
@@ -541,6 +606,61 @@ lazy_static! {
 
         m
     };
+
+    // 2D Arrays for AD&D CBoN methods
+    static ref CBON_1_ARRAY : Array2<IntValue> = array![
+        [13, 11, 10, 10, 17, 5],
+        [10, 10, 11, 9, 16, 13],
+        [5, 14, 16, 9, 16, 10],
+        [7, 13, 16, 12, 16, 12],
+        [15, 6, 9, 9, 16, 7],
+        [7, 13, 15, 11, 16, 13]
+    ];
+
+    static ref CBON_2_ARRAY : Array2<IntValue> = array![
+        [17, 12, 11, 12, 17, 12],
+        [13, 14, 12, 10, 16, 12],
+        [12, 7, 13, 16, 16, 12],
+        [11, 11, 12, 14, 16, 13],
+        [8, 12, 8, 10, 18, 9],
+        [7, 13, 10, 17, 16, 11]
+    ];
+
+    static ref CBON_3_ARRAY : Array2<IntValue> = array![
+        [6, 9, 10, 17, 16, 6],
+        [10, 13, 14, 17, 16, 10],
+        [9, 13, 15, 17, 16, 11],
+        [6, 11, 14, 17, 16, 9],
+        [5, 9, 13, 16, 16, 6],
+        [8, 10, 11, 18, 16, 13]
+    ];        
+
+    static ref CBON_4_ARRAY : Array2<IntValue> = array![
+        [12, 14, 14, 16, 17, 12],
+        [14, 14, 15, 17, 16, 14],
+        [10, 14, 14, 17, 16, 12],
+        [11, 12, 12, 16, 16, 12],
+        [13, 13, 15, 18, 16, 13],
+        [11, 15, 13, 16, 17, 11]
+    ];
+    
+    static ref CBON_5_ARRAY : Array2<IntValue> = array![
+        [9, 11, 14, 17, 16, 11],
+        [10, 15, 16, 17, 16, 13],
+        [10, 11, 13, 18, 16, 10],
+        [12, 14, 15, 16, 16, 14],
+        [12, 14, 14, 17, 16, 13],
+        [11, 13, 15, 17, 17, 12]
+    ];
+    
+    static ref CBON_6_ARRAY : Array2<IntValue> = array![
+        [8, 10, 16, 17, 16, 8],
+        [8, 17, 8, 18, 16, 8],
+        [9, 11, 12, 13, 16, 10],
+        [8, 16, 11, 14, 16, 8],
+        [9, 15, 10, 14, 16, 11],
+        [10, 8, 15, 15, 17, 9]
+    ];    
 }
 
 
