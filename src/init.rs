@@ -27,6 +27,14 @@ pub struct Opt {
     #[structopt(long, default_value = "")]
     pub help_method: String,
 
+    /// Show help about generation method by tags (for example: "DnD,ordered"). See --help-tags to see tags' list
+    #[structopt(long="find-tags", default_value = "")]
+    pub find_tags: String,
+
+    /// Show tags' list.
+    #[structopt(long)]
+    pub help_tags: bool,
+
     /// Verbose mode (-v, -vv, etc.)
     #[structopt(short, parse(from_occurrences))]
     pub verbose: u8,
@@ -149,7 +157,9 @@ impl Opt {
     pub fn is_help(&self) -> bool {
         return  self.help_dice_codes ||
                 self.help_methods ||
-                !self.help_method.is_empty()
+                self.help_tags ||
+                !self.help_method.is_empty() ||
+                !self.find_tags.is_empty()
     }
 
 }

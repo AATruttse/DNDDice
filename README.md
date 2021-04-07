@@ -8,6 +8,7 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
     -h, --help               Prints help information
         --help-dice-codes    Show help about dice codes' format description
         --help-methods       Show help about generation methods. See --help-method=METHOD to see help about METHOD
+        --help-tags          Show tags' list
         --max                Show maximum
         --mean               Show mean
         --median             Show median
@@ -27,12 +28,14 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
     -d, --dice                           Dice sides [default: 6]
     -n, --dice-num                       Number of dices [default: 1]
     -D, --drop                           Number of lowest dices to be dropped
+        --find-tags                      Show help about generation method by tags (for example: "DnD,ordered"). See
+                                         --help-tags to see tags' list [default: ]    
         --help-method                    Show help about generation method
     -m, --method                         Stat generation method (adnd1, adnd2, etc.) See --help-methods for full list
         --minus                          Result minus
     -N, --repetitions-num                Number of repetitions
         --plus                           Result plus
-    -r, --reroll <reroll>                Reroll dice [default: ]		
+    -r, --reroll                         Reroll dice [default: ]		
         --round-digits                   Round probabilities to number of digits [default: 2]
 
 ## ARGS:

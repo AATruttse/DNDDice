@@ -7,6 +7,8 @@
 // except according to those terms.
 
 pub static METHODS_MESSAGE: &str = "Generation methods:";
+pub static TAGS_MESSAGE: &str = "Tags for generation methods:";
+pub static NO_TAGS_MESSAGE: &str = "There's no method with such tags.";
 
 pub static DICEERROR_DICES0: &str = "Can't throw 0 dices!";
 pub static DICEERROR_SIDES0: &str = "Can't throw 0-sided dice!";

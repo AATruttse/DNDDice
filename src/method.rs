@@ -6,9 +6,14 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use std::collections::BTreeSet;
+
 use crate::dices::IntValue;
 use crate::errors::DiceError;
 use crate::method_comments::ASYOUWISH_COMMENT;
+
+/// Type for method's tag list
+pub type Tags = BTreeSet<&'static str>;
 
 /// Type for generation method's function ptr
 pub type GenMethod = fn (&mut Vec<IntValue>) -> Result<(), DiceError>;
@@ -29,9 +34,12 @@ pub struct Method {
     comment:    &'static str,
 
     /// method's function ptr
-    method:    GenMethod,
+    method:     GenMethod,
     /// number of times the method's function is used
-    num:        usize
+    num:        usize,
+
+    /// method's tags
+    tags:       Tags
 }
 
 impl Method {
@@ -63,12 +71,32 @@ impl Method {
         self.num
     }
 
+    pub fn get_tags(&self) -> &Tags {
+        &self.tags
+    }    
+
+    /// checks if method corresponds to given tags' string
+    pub fn check_tags(&self, tag_string: &str) -> bool {
+        if tag_string.is_empty() {
+            return false;
+        }
+
+        for tag in tag_string.split(",") {
+            if !self.tags.contains(&*tag.to_lowercase()) {
+                return false;
+            }
+        }
+
+        true
+    }
+
     pub fn new(
         statlist:   &'static str,
         is_ordered: bool,
         desc:       &'static str,
         desc_long:  &'static str,
-        method:     GenMethod
+        method:     GenMethod,
+        tags:       &[&'static str]
     ) -> Self {
         let new_method = Method {
             statlist: statlist,
@@ -80,7 +108,8 @@ impl Method {
                 false => ASYOUWISH_COMMENT
             },
             method: method,
-            num: 1
+            num: 1,
+            tags: tags.iter().copied().collect()
         };
 
         new_method
@@ -92,13 +121,15 @@ impl Method {
         desc:       &'static str,
         desc_long:  &'static str,
         comment:    &'static str,
-        method:     GenMethod
+        method:     GenMethod,
+        tags:       &[&'static str]
     ) -> Self {
         let mut new_method = Method::new(statlist,
             is_ordered,
             desc,
             desc_long,
-            method
+            method,
+            tags
         );
 
         new_method.comment = comment;
@@ -111,13 +142,15 @@ impl Method {
         desc:       &'static str,
         desc_long:  &'static str,
         method:     GenMethod,
-        num:        usize
+        num:        usize,
+        tags:       &[&'static str]
     ) -> Self {
         let mut new_method = Method::new(statlist,
             is_ordered,
             desc,
             desc_long,
-            method
+            method,
+            tags
         );
 
         new_method.num = num;
@@ -131,14 +164,16 @@ impl Method {
         desc_long:  &'static str,
         comment:    &'static str,
         method:     GenMethod,
-        num:        usize
+        num:        usize,
+        tags:       &[&'static str]
     ) -> Self {
         let mut new_method = Method::new_w_comment(statlist,
             is_ordered,
             desc,
             desc_long,
             comment,
-            method
+            method,
+            tags
         );
 
         new_method.num = num;
