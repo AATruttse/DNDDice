@@ -31,6 +31,12 @@ pub static ADND_CBON8_DESC: &str = "Six 10+1d8 with choice; +1 to INT&WIS";
 pub static ADND_CBON7WOCHOICE_DESC: &str = "Six 10+1d8 without choice";
 pub static ADND_CBON8WOCHOICE_DESC: &str = "Six 10+1d8 without choice; +1 to INT&WIS";
 
+pub static ADND_DS_DESC: &str = "4d4+4 for each stat without choice";
+pub static ADND_DS1_DESC: &str = "Best of two 5d4 for each without choice";
+pub static ADND_DS2_DESC: &str = "5d4 with choice";
+pub static ADND_DS3_DESC: &str = "Best six of 12 5d4 with choice";
+pub static ADND_DS4_DESC: &str = "Six 6d4 drop lowest with choice";
+
 pub static ADND1_1_DESC: &str = ADND5_DESC;
 pub static ADND1_2_DESC: &str = ADND4_DESC;
 pub static ADND1_3_DESC: &str = "Best of six 3d6 for each ability";

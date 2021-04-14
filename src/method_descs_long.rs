@@ -31,6 +31,12 @@ pub static ADND_CBON8_HELP: &str = "Roll 10+1d8, Repeat six times. Assign the re
 pub static ADND_CBON7WOCHOICE_HELP: &str = "Roll 10+1d8, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma.";
 pub static ADND_CBON8WOCHOICE_HELP: &str = "Roll 10+1d8, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma. +1 to INT&WIS (max 18).";
 
+pub static ADND_DS_HELP: &str = "Roll 4d4+4, use the result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma.";
+pub static ADND_DS1_HELP: &str = "Roll two 5d4, use the best result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma.";
+pub static ADND_DS2_HELP: &str = "Roll 5d4 six times. Assign the results to your character's six abilities as you wish.";
+pub static ADND_DS3_HELP: &str = "Roll 5d4 twelve times. Assign the best six results to your character's six abilities as you wish.";
+pub static ADND_DS4_HELP: &str = "Roll 6d4 and discard the lowest die. Repeat six times. Assign the results to your character's six abilities as you wish.";
+
 pub static ADND1_1_HELP: &str = ADND5_HELP;
 pub static ADND1_2_HELP: &str = ADND4_HELP;
 pub static ADND1_3_HELP: &str = "Roll 3d6 six times, use the best result for character's Strength ability score. Repeat for Dexterity, Constitution, Intelligence, Wisdom, and Charisma.";

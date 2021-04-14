@@ -183,6 +183,78 @@ fn method_adnd_cbon_8wochoice(stats: &mut Vec<IntValue>) -> Result<(), DiceError
     Ok(())
 }
 
+/// Stat generation method for AD&D 2nd ed - Dark Sun Main Method
+/// 4d4+4 without choice
+fn method_adnd_ds(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = n_d_plus(4, 4, 4)?;
+    }
+
+    Ok(())
+}
+
+/// Stat generation method for AD&D 2nd ed - Dark Sun Optional Method 1
+/// Best of two 5d4 without choice
+fn method_adnd_ds1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = max(n_d(5, 4)?, n_d(5, 4)?);
+    }
+
+    Ok(())
+}
+
+/// Stat generation method for AD&D 2nd ed - Dark Sun Optional Method 2
+/// 5d4 with choice
+fn method_adnd_ds2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = n_d(5, 4)?;
+    }
+
+    stats[0..6].sort();
+    stats[0..6].reverse();
+
+    Ok(())
+}
+
+/// Stat generation method for AD&D 2nd ed - Dark Sun Optional Method 3
+/// Best 6 of 12 5d4 with choice
+fn method_adnd_ds3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    let mut dices: Vec<IntValue> = (0..12).collect();
+    for i in 0..12 {
+        dices[i] = n_d(5, 4)?;
+    }   
+    dices.sort();
+    dices.reverse();
+    
+    stats[0..6].clone_from_slice(&dices[0..6]);
+
+    Ok(())
+}
+
+/// Stat generation method for AD&D 2nd ed - Dark Sun Optional Method 4
+/// 6d4 drop lowest with choice
+fn method_adnd_ds4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, 6);
+
+    for i in 0..6 {
+        stats[i] = n_d_drop(6, 4, 1)?;
+    }
+
+    stats[0..6].sort();
+    stats[0..6].reverse();
+
+    Ok(())
+}
+
+
 
 /// Stat generation method for AD&D 1st ed - Method 3
 /// Best of 6 3d6 for each ability
@@ -540,6 +612,12 @@ lazy_static! {
         m.insert("adnd_cbon8", Method::new_w_comment("d&d", false, ADND_CBON8_DESC, ADND_CBON8_HELP, ADND_CBON8_COMMENT, method_adnd_cbon_7, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "choice"]));
         m.insert("adnd_cbon7wochoice", Method::new("d&d", true, ADND_CBON7WOCHOICE_DESC, ADND_CBON7WOCHOICE_HELP, method_adnd_cbon_7wochoice, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "ordered"]));
         m.insert("adnd_cbon8wochoice", Method::new("d&d", true, ADND_CBON8WOCHOICE_DESC, ADND_CBON8WOCHOICE_HELP, method_adnd_cbon_8wochoice, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "ordered"]));
+
+        m.insert("adnd_darksun", Method::new("d&d", true, ADND_DS_DESC, ADND_DS_HELP, method_adnd_ds, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "ordered"]));
+        m.insert("adnd_darksun1", Method::new("d&d", true, ADND_DS1_DESC, ADND_DS1_HELP, method_adnd_ds1, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "ordered"]));
+        m.insert("adnd_darksun2", Method::new("d&d", false, ADND_DS2_DESC, ADND_DS2_HELP, method_adnd_ds2, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
+        m.insert("adnd_darksun3", Method::new("d&d", false, ADND_DS3_DESC, ADND_DS3_HELP, method_adnd_ds3, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
+        m.insert("adnd_darksun4", Method::new("d&d", false, ADND_DS4_DESC, ADND_DS4_HELP, method_adnd_ds4, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
 
         m.insert("adnd1_1", Method::new("d&d", false, ADND1_1_DESC, ADND1_1_HELP, method_adnd5, &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "choice"]));
         m.insert("adnd1_2", Method::new("d&d", false, ADND1_2_DESC, ADND1_2_HELP, method_adnd4, &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "choice"]));
