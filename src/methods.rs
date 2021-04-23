@@ -637,11 +637,11 @@ lazy_static! {
         m.insert("dnd35highpow", Method::new("d&d", false, DND35HP_DESC, DND35HP_HELP, method_dnd3_4, &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
         m.insert("dnd35elite", Method::new("d&d", false, DND35ELITE_DESC, DND35ELITE_HELP, |stats| method_array(&DND35_ARRAY, stats), &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "pre-set", "choice"]));
 
-        m.insert("dnd4", Method::new("d&d", false, DND4_DESC, DND4_HELP, method_dnd4_1, &[]));
-        m.insert("dnd4standard", Method::new("d&d", false, DND4STANDARD_DESC, DND4STANDARD_HELP, |stats| method_array(&DND4_ARRAY, stats), &[]));
+        m.insert("dnd4", Method::new("d&d", false, DND4_DESC, DND4_HELP, method_dnd4_1, &["d&d", "dnd", "d&d4", "dnd4", "choice"]));
+        m.insert("dnd4standard", Method::new("d&d", false, DND4STANDARD_DESC, DND4STANDARD_HELP, |stats| method_array(&DND4_ARRAY, stats), &["d&d", "dnd", "d&d4", "dnd4", "pre-set", "choice"]));
 
-        m.insert("dnd5", Method::new("d&d", false, DND5_DESC, DND5_HELP, method_adnd5, &["d&d", "dnd", "d&d4", "dnd4", "choice"]));
-        m.insert("dnd5standard", Method::new("d&d", false, DND5STANDARD_DESC, DND5STANDARD_HELP, |stats| method_array(&DND35_ARRAY, stats), &["d&d", "dnd", "d&d4", "dnd4", "pre-set", "choice"]));
+        m.insert("dnd5", Method::new("d&d", false, DND5_DESC, DND5_HELP, method_adnd5, &["d&d", "dnd", "d&d5", "dnd5", "choice"]));
+        m.insert("dnd5standard", Method::new("d&d", false, DND5STANDARD_DESC, DND5STANDARD_HELP, |stats| method_array(&DND35_ARRAY, stats), &["d&d", "dnd", "d&d5", "dnd5", "pre-set", "choice"]));
 
         m.insert("pfstandard", Method::new("d&d", false, PFSTANDARD_DESC, PFSTANDARD_HELP, method_adnd5, &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
         m.insert("pfclassic", Method::new("d&d", false, PFCLASSIC_DESC, PFCLASSIC_HELP, method_adnd3, &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));

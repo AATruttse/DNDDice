@@ -6,6 +6,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+pub static DELIMITER: &str = "------------------";
+pub static TAB: &str = "--";
+
 pub static METHODS_MESSAGE: &str = "Generation methods:";
 pub static TAGS_MESSAGE: &str = "Tags for generation methods:";
 pub static NO_TAGS_MESSAGE: &str = "There's no method with such tags.";
@@ -17,6 +20,9 @@ pub static DICEERROR_BADCROP: &'static str = "Can't crop {crop} dices from {n} d
 
 pub static BADDICECODE_ERROR_MSG: &str = "Can't parse the dice code:";
 pub static DICECODEDECRYPTION_ERROR_MSG: &str = "Dice code decription internal error.";
+pub static LOGFILE_ERROR_MSG: &str = "Can't open log file";
+pub static LOGFILEWRITE_ERROR_MSG: &str = "Can't write log file";
+pub static LOGFILENONUTF8FILENAME_ERROR_MSG: &str = "[Non-UTF8 file name]";
 
 pub static UNKNOWNMETHOD_ERROR_MSG: &str = "Unknown method";
 pub static UNKNOWNSTATLIST_ERROR_MSG: &str = "Internal error: Unknown stat list for method.";

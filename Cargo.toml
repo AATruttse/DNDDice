@@ -1,12 +1,13 @@
 [package]
 name = "dnddice"
-version = "0.2.3"
+version = "0.2.4"
 authors = ["Anton A. Truttse (Dargot) <dargot@yandex.ru>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+chrono = "0.4.0"
 custom_error = "1.8.0"
 itertools = "0.10.0"
 lazy_static = "1.4.0"

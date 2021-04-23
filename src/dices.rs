@@ -10,7 +10,7 @@ use rand::Rng;
 use rand::distributions::{Uniform};
 
 use crate::errors::DiceError;
-use crate::init::OPT;
+use crate::render::render_roll;
 
 /// Result int type for all dices
 pub type IntValue = i32;
@@ -29,10 +29,8 @@ pub fn n_d_drop_crop_plus(n: usize, d: usize, plus: IntValue, drop: usize, crop:
     let mut rng = rand::thread_rng();
     let dice = Uniform::new(1, d + 1);
     let mut dices: Vec<usize> = (0..n).map(|_| rng.sample(&dice)).collect();
-
-    if OPT.debug || OPT.verbose > 1 {
-        println!("{:?}", dices);
-    }
+    
+    render_roll(&dices);
 
     if drop > 0 {
         if drop >= dices.len() {
@@ -131,9 +129,7 @@ pub fn n_d_reroll_drop_crop_plus(n: usize, d: usize, reroll: &[usize], plus: Int
     let dice = Uniform::new(1, d + 1);
     let mut dices: Vec<usize> = (0..n).map(|_| dice_reroll(&mut rng, &dice, reroll)).collect();
 
-    if OPT.debug || OPT.verbose > 1 {
-        println!("{:?}", dices);
-    }
+    render_roll(&dices);
 
     if drop > 0 {
         if drop >= dices.len() {

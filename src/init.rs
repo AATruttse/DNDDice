@@ -6,7 +6,13 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+
+use std::fs::{File, OpenOptions};
+
+use std::path::PathBuf;
 use structopt::StructOpt;
+
+use crate::strings::{LOGFILE_ERROR_MSG, LOGFILENONUTF8FILENAME_ERROR_MSG};
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "dnddice", about = "RPG dice thrower for command line. Author: Dargot, dargot@yandex.ru")]
@@ -39,6 +45,14 @@ pub struct Opt {
     #[structopt(short, parse(from_occurrences))]
     pub verbose: u8,
 
+    /// Log mode (-l, -ll, etc.)
+    #[structopt(short, parse(from_occurrences))]
+    pub log: u8,
+
+    /// Log file
+    #[structopt(long="log-file", parse(from_os_str), default_value = "dnddice.log")]
+    pub log_file: PathBuf,
+
     /// Number of repetitions
     #[structopt(short="N", long="repetitions-num", default_value = "1")]
     pub num: usize,
@@ -51,7 +65,7 @@ pub struct Opt {
     #[structopt(short="d", long="dice", default_value = "6")]
     pub dice: usize,
 
-    /// Reroll dice
+    /// Reroll dices' results
     #[structopt(short="r", long="reroll", default_value = "")]
     pub reroll: String,
 
@@ -74,6 +88,10 @@ pub struct Opt {
     /// Stat generation method (adnd1, adnd2, etc.) See --help-methods for full list.
     #[structopt(short, long, default_value = "")]
     pub method: String,
+
+    /// Method parameters
+    #[structopt(short="p", long="parameters", default_value = "")]
+    pub method_parameters: String,
 
     /// Show method description
     #[structopt(long)]
@@ -138,6 +156,28 @@ lazy_static! {
         }
         
         opt
+    };
+
+    pub static ref LOGFILE: Option<File> = match OPT.log {
+        x if x > 0 => {
+            match OpenOptions::new()
+                .append(true)
+                .create(true)
+                .open(&OPT.log_file) {
+                    Ok(f) => Some(f),
+                    Err(e) => {
+                        eprintln!("{} {}:",
+                                  LOGFILE_ERROR_MSG,
+                                  match OPT.log_file.to_str() {
+                                        Some(err_str) => err_str,
+                                        None => LOGFILENONUTF8FILENAME_ERROR_MSG
+                                });
+                        eprintln!("{}", e);
+                        None
+                    }
+            }
+        },
+        _ => None
     };
 }
 
