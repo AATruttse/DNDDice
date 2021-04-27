@@ -10,9 +10,24 @@ use itertools::Itertools;
 
 use crate::dices::IntValue;
 use crate::init::OPT;
+use crate::statlists::StatList;
 use crate::strings::TAB;
 
-pub fn render_roll(dices: &Vec<usize>) {
+/// show roll results
+pub fn render_roll(
+        is_several_dices: bool,
+        show_dice_code: bool,
+        res: IntValue 
+    ) {
+    if OPT.debug || (OPT.verbose > 0 || (!is_several_dices && !OPT.is_collect_stat())) {
+        println!("{}{}",
+         match show_dice_code && !OPT.numbers_only { true => ": ", _ => ""},
+         res);
+    }
+}
+
+/// show single dice results
+pub fn render_dices(dices: &Vec<usize>) {
     if OPT.debug || OPT.verbose > 1 {
         print!("{}{:?}{}",
             match OPT.numbers_only {false => " ", _ => ""},
@@ -21,7 +36,8 @@ pub fn render_roll(dices: &Vec<usize>) {
     }
 }
 
-pub fn render_dice_str (
+/// format dice codes
+pub fn format_dice_str (
     is_several_dices: bool,
     n: usize,
     d: usize,
@@ -71,4 +87,25 @@ pub fn render_dice_str (
             crop_str,
             add_str
         )
+}
+
+/// render stats generated in method
+pub fn render_stats(is_shownumber: bool,
+    is_ordered: bool,
+    i: usize,
+    stat : &Vec<IntValue>,
+    statlist: &StatList) {
+if !OPT.numbers_only && is_shownumber {
+    print!("{}: ", i);
+}
+
+if is_ordered && !OPT.numbers_only {
+    for i in 0..statlist.len() {
+        print!("{}: {}  ", statlist[i], stat[i]);
+    }
+    println!("");
+}
+else {
+    println!("{:?}", stat);
+}
 }

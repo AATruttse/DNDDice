@@ -18,7 +18,7 @@ use crate::errors::{cant_find_method, DiceError};
 use crate::init::OPT;
 use crate::log::{log, logln, log_method};
 use crate::methods::METHODSMAP;
-use crate::render::render_dice_str;
+use crate::render::{format_dice_str, render_roll, render_stats};
 use crate::statlists::{StatList, STATLISTSMAP};
 use crate::strings::{DELIMITER, DICECODES_HELP_MSG, UNKNOWNSTATLIST_ERROR_MSG};
 
@@ -46,7 +46,7 @@ pub fn process_method(all_stats: &mut Vec<IntValue>, is_first: bool, is_last: bo
                 }
 
                 if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
-                    show_stats(n > 1, method.is_ordered(), i, &stat, statlist);
+                    render_stats(n > 1, method.is_ordered(), i, &stat, statlist);
                 }
 
                 all_stats.extend(stat.clone());
@@ -83,28 +83,6 @@ fn show_title(is_first: bool, desc: &str) {
     }
 }
 
-
-/// show stats generated in method
-fn show_stats(is_shownumber: bool,
-        is_ordered: bool,
-        i: usize,
-        stat : &Vec<IntValue>,
-        statlist: &StatList) {
-    if !OPT.numbers_only && is_shownumber {
-        print!("{}: ", i);
-    }
-
-    if is_ordered && !OPT.numbers_only {
-        for i in 0..statlist.len() {
-            print!("{}: {}  ", statlist[i], stat[i]);
-        }
-        println!("");
-    }
-    else {
-        println!("{:?}", stat);
-    }
-}
-
 /// process any dice roll, uses all_stat for statistics
 pub fn process_dices(all_stats: &mut Vec<IntValue>) {
 
@@ -138,10 +116,6 @@ fn process_dices_from_keys(all_stats: &mut Vec<IntValue>) {
         OPT.crop
     ); 
     all_stats.push(res);
-
-    if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
-        println!("{}", res);
-    }    
 }
 
 /// process dice roll from dice codes
@@ -308,12 +282,16 @@ fn process_roll(
         }
     };
 
-    if OPT.debug || ((OPT.verbose > 0 || !is_several_dices) && !OPT.is_collect_stat()) {
+    render_roll(is_several_dices, show_dice_code, res);
+
+    /*
+    if OPT.debug || (OPT.verbose > 0 || (!is_several_dices && !OPT.is_collect_stat())) {
         println!("{}{}",
          match show_dice_code && !OPT.numbers_only { true => ": ", _ => ""},
          res);
     }
-
+    */
+    
     if OPT.log > 0 {
         logln(&res.to_string());
     }
@@ -331,10 +309,10 @@ fn log_and_show_dice(
     drop: usize,
     crop: usize) -> bool {
 
-    let dice_str = render_dice_str(is_several_dices, n, d, reroll, add, drop, crop);
+    let dice_str = format_dice_str(is_several_dices, n, d, reroll, add, drop, crop);
 
     let mut show_dice_code = false;
-    if OPT.debug || ((OPT.verbose > 0 || (!is_several_dices && is_several_codes))/* && !OPT.numbers_only*/) {
+    if OPT.debug || ((OPT.verbose > 0 || (!is_several_dices && is_several_codes))) {
         show_dice_code = true;
         print!("{}", dice_str);
     }
