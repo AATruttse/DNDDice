@@ -74,3 +74,35 @@ pub fn log_start() {
     logln(&time_str);
     logln(DELIMITER);
 }
+
+/// log roll results
+pub fn log_roll(
+    is_several_rolls: bool,
+    res: IntValue 
+) {
+    if OPT.log > 1 ||
+       (OPT.log > 0 && !is_several_rolls) {
+        let log_str = format!(": {}", res);
+        logln(&log_str);
+    }
+}
+
+/// logs dice from codes
+pub fn log_codes(
+    dices_num: usize,
+    dicecode: &str,
+    res: IntValue
+) {
+    if OPT.log > 0 && dices_num > 1 {
+        let log_str = format!("{}: {}", dicecode, res);
+        logln(&log_str);
+    }    
+}
+
+/// log single dice results
+pub fn log_dices(dices: &Vec<usize>) {
+    if OPT.log > 2 {
+        let log_str = format!(" {:?}", dices);
+        log(&log_str);
+    }
+}

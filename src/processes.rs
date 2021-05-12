@@ -16,9 +16,9 @@ use crate::dices::{IntValue, n_d_reroll_drop_crop_plus};
 use crate::errors::{cant_find_method, DiceError};
 
 use crate::init::OPT;
-use crate::log::{log, logln, log_method};
+use crate::log::{log, logln, log_codes, log_method, log_roll};
 use crate::methods::METHODSMAP;
-use crate::render::{format_dice_str, render_roll, render_stats};
+use crate::render::{format_dice_str, render_codes, render_roll, render_stats};
 use crate::statlists::{StatList, STATLISTSMAP};
 use crate::strings::{DELIMITER, DICECODES_HELP_MSG, UNKNOWNSTATLIST_ERROR_MSG};
 
@@ -36,7 +36,7 @@ pub fn process_method(all_stats: &mut Vec<IntValue>, is_first: bool, is_last: bo
 
             let n = method.get_num();
 
-            show_title(is_first, method.get_desc());
+            log_and_render_title(is_first, method.get_desc());
 
             for i in 1..(n + 1) {
                 method.get_method()(&mut stat).unwrap();
@@ -62,42 +62,21 @@ pub fn process_method(all_stats: &mut Vec<IntValue>, is_first: bool, is_last: bo
     }
 }
 
-/// show title
-fn show_title(is_first: bool, desc: &str) {
-    if OPT.log > 0 {
-        logln(DELIMITER);
-        log(&OPT.method);
-    }
-
-    if OPT.show_method { 
-        if is_first {
-            println!("{}", desc);
-        }
-        if OPT.log > 0 {
-            log(" - ");
-            logln(desc);
-        }
-    }
-    else {
-        logln("");
-    }
-}
-
 /// process any dice roll, uses all_stat for statistics
 pub fn process_dices(all_stats: &mut Vec<IntValue>) {
 
     if OPT.dicecodes.is_empty() ||
        OPT.dicecodes[0].is_empty()
     {
-        process_dices_from_keys(all_stats);
+        process_keys(all_stats);
     }
     else {
-        process_dices_from_codes(all_stats);
+        process_codes(all_stats);
     }
 }
 
-/// process dice roll from keys
-fn process_dices_from_keys(all_stats: &mut Vec<IntValue>) {
+/// process dice roll from command line keys
+fn process_keys(all_stats: &mut Vec<IntValue>) {
 
     let reroll : Vec<usize> = match OPT.reroll.is_empty() {
         true => Vec::new(),
@@ -105,7 +84,6 @@ fn process_dices_from_keys(all_stats: &mut Vec<IntValue>) {
     };
 
     let res = process_roll(
-        false,
         false,
         OPT.dices_num,
         OPT.dice,
@@ -119,9 +97,7 @@ fn process_dices_from_keys(all_stats: &mut Vec<IntValue>) {
 }
 
 /// process dice roll from dice codes
-fn process_dices_from_codes(all_stats: &mut Vec<IntValue>) {
-    let dicecodes_num = OPT.dicecodes.len();
-
+fn process_codes(all_stats: &mut Vec<IntValue>) {
     for dicecode in &OPT.dicecodes {
         if !dicecode.is_empty() {
             // parse dice codes with regular expression
@@ -134,12 +110,11 @@ fn process_dices_from_codes(all_stats: &mut Vec<IntValue>) {
             let dices = re.captures_iter(&dicecode).into_iter();
             let dices_num = re.captures_iter(&dicecode).into_iter().count();
 
-            // roll needed dices
+            // process all individual codes
             let dices_vec: Vec<Arythmetic> = dices.
                 enumerate().
                 map(|(num, it)| 
-                        match process_dice(dicecodes_num > 1,
-                                           dices_num > 1,
+                        match process_code(dices_num > 1,
                                            num,
                                            &it.iter().
                                                 map(|p| p.map_or("", |m| m.as_str())).
@@ -167,25 +142,18 @@ fn process_dices_from_codes(all_stats: &mut Vec<IntValue>) {
 
             // process parsed dice codes
             let res = process_arithmetic(&dices_vec);
-    
-            if OPT.debug || 
-               (OPT.verbose == 0 && dices_num > 1 && !OPT.is_collect_stat()) ||
-               (OPT.verbose > 0 && dices_num > 1) {
-                if !OPT.numbers_only {
-                    print!("{}: ", dicecode);
-                }
-                println!("{}", res);
-            }
+
+            render_codes(dices_num, dicecode, res);
+            log_codes(dices_num, dicecode, res);
 
             all_stats.push(res);
         }
     }
 }
 
-/// process single dice roll from parsed regular expression
-fn process_dice(
-     is_several_codes: bool,
-     is_several_dices: bool,
+/// process single code from parsed regular expression
+fn process_code(
+     is_several_rolls: bool,
      idx: usize,
      params: &[&'static str])
       -> Result<(&'static str, IntValue), DiceError> {
@@ -249,13 +217,12 @@ fn process_dice(
         x => x.parse().unwrap()
     };        
 
-    Ok((params[1], process_roll(is_several_codes, is_several_dices, n, d, &reroll, plus, minus, drop, crop)))
+    Ok((params[1], process_roll(is_several_rolls, n, d, &reroll, plus, minus, drop, crop)))
 }
 
 /// process dice roll with given parameters
 fn process_roll(
-    is_several_codes: bool,
-    is_several_dices: bool, 
+    is_several_rolls: bool, 
     n: usize,
     d: usize,
     reroll: &[usize],
@@ -266,7 +233,7 @@ fn process_roll(
 
     let add = plus as IntValue - minus as IntValue;
 
-    let show_dice_code = log_and_show_dice(is_several_codes, is_several_dices, n, d, reroll, add, drop, crop);
+    let show_dice_code = log_and_render_roll(is_several_rolls, n, d, reroll, add, drop, crop);
     
     let res = match n_d_reroll_drop_crop_plus(n,
         d,
@@ -282,26 +249,15 @@ fn process_roll(
         }
     };
 
-    render_roll(is_several_dices, show_dice_code, res);
-
-    /*
-    if OPT.debug || (OPT.verbose > 0 || (!is_several_dices && !OPT.is_collect_stat())) {
-        println!("{}{}",
-         match show_dice_code && !OPT.numbers_only { true => ": ", _ => ""},
-         res);
-    }
-    */
-    
-    if OPT.log > 0 {
-        logln(&res.to_string());
-    }
+    render_roll(is_several_rolls, show_dice_code, res);
+    log_roll(is_several_rolls, res);
 
     res
 }
 
-fn log_and_show_dice(
-    is_several_codes: bool,
-    is_several_dices: bool,
+/// logs and shows dice code
+fn log_and_render_roll(
+    is_several_rolls: bool,
     n: usize,
     d: usize,
     reroll: &[usize],
@@ -309,17 +265,41 @@ fn log_and_show_dice(
     drop: usize,
     crop: usize) -> bool {
 
-    let dice_str = format_dice_str(is_several_dices, n, d, reroll, add, drop, crop);
+    let dice_str = format_dice_str(is_several_rolls, n, d, reroll, add, drop, crop);
 
     let mut show_dice_code = false;
-    if OPT.debug || ((OPT.verbose > 0 || (!is_several_dices && is_several_codes))) {
+    if OPT.debug ||
+        (OPT.verbose > 0 && !is_several_rolls) ||
+        OPT.verbose > 1 {
         show_dice_code = true;
         print!("{}", dice_str);
     }
 
-    if OPT.log > 0 {
+    if (OPT.log > 0 && !is_several_rolls) ||
+        OPT.log > 1 {
         log(&dice_str);
     }
 
     return show_dice_code;
+}
+
+/// log and show title
+fn log_and_render_title(is_first: bool, desc: &str) {
+    if OPT.log > 0 {
+        logln(DELIMITER);
+        log(&OPT.method);
+    }
+
+    if OPT.show_method { 
+        if is_first {
+            println!("{}", desc);
+        }
+        if OPT.log > 0 {
+            log(" - ");
+            logln(desc);
+        }
+    }
+    else {
+        logln("");
+    }
 }

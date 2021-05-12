@@ -15,11 +15,15 @@ use crate::strings::TAB;
 
 /// show roll results
 pub fn render_roll(
-        is_several_dices: bool,
+        is_several_rolls: bool,
         show_dice_code: bool,
         res: IntValue 
     ) {
-    if OPT.debug || (OPT.verbose > 0 || (!is_several_dices && !OPT.is_collect_stat())) {
+    if OPT.debug ||
+       OPT.verbose > 1 ||
+       (!is_several_rolls &&
+            (!OPT.is_collect_stat() || OPT.verbose > 0)
+        ) {
         println!("{}{}",
          match show_dice_code && !OPT.numbers_only { true => ": ", _ => ""},
          res);
@@ -28,7 +32,7 @@ pub fn render_roll(
 
 /// show single dice results
 pub fn render_dices(dices: &Vec<usize>) {
-    if OPT.debug || OPT.verbose > 1 {
+    if OPT.debug || OPT.verbose > 2 {
         print!("{}{:?}{}",
             match OPT.numbers_only {false => " ", _ => ""},
             dices,
@@ -38,7 +42,7 @@ pub fn render_dices(dices: &Vec<usize>) {
 
 /// format dice codes
 pub fn format_dice_str (
-    is_several_dices: bool,
+    is_several_rolls: bool,
     n: usize,
     d: usize,
     reroll: &[usize],
@@ -46,7 +50,7 @@ pub fn format_dice_str (
     drop: usize,
     crop: usize) -> String {
         if OPT.numbers_only {
-            return match is_several_dices {
+            return match is_several_rolls {
                 true => TAB.to_string(),
                 _ => "".to_string()
             };
@@ -79,7 +83,7 @@ pub fn format_dice_str (
         };
     
         format!("{}{}d{}{}{}{}{}",
-            match is_several_dices {true => TAB, _ => ""},
+            match is_several_rolls {true => TAB, _ => ""},
             n,
             d,
             reroll_str,
@@ -95,17 +99,35 @@ pub fn render_stats(is_shownumber: bool,
     i: usize,
     stat : &Vec<IntValue>,
     statlist: &StatList) {
-if !OPT.numbers_only && is_shownumber {
-    print!("{}: ", i);
+    if !OPT.numbers_only && is_shownumber {
+        print!("{}: ", i);
+    }
+
+    if is_ordered && !OPT.numbers_only {
+        for i in 0..statlist.len() {
+            print!("{}: {}  ", statlist[i], stat[i]);
+        }
+        println!("");
+    }
+    else {
+        println!("{:?}", stat);
+    }
 }
 
-if is_ordered && !OPT.numbers_only {
-    for i in 0..statlist.len() {
-        print!("{}: {}  ", statlist[i], stat[i]);
-    }
-    println!("");
-}
-else {
-    println!("{:?}", stat);
-}
+/// render dice from codes
+pub fn render_codes(
+    dices_num: usize,
+    dicecode: &str,
+    res: IntValue
+) {
+    if OPT.debug || 
+       (dices_num > 1 &&
+            (OPT.verbose > 0 ||
+            (OPT.verbose == 0 && dices_num > 1)))
+    {
+        if !OPT.numbers_only && OPT.verbose > 0 {
+            print!("{}: ", dicecode);
+        }
+        println!("{}", res);
+    }    
 }
