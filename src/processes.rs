@@ -7,6 +7,7 @@
 // except according to those terms.
 
 // use itertools::Itertools;
+use num::iter::range;
 use regex::Regex;
 
 use crate::arithmetic::{Arythmetic, process_arithmetic};
@@ -101,7 +102,7 @@ fn process_codes(all_stats: &mut Vec<IntValue>) {
     for dicecode in &OPT.dicecodes {
         if !dicecode.is_empty() {
             // parse dice codes with regular expression
-            let dice_regex: &str = r"([-+/*%^])?(?:(\d*)d(\d*)(?:(?:reroll|r)((?:\d+)(?:(?:(?:,(?:\d+))+)?)))?(?:(?:drop|d)(\d+)(?:crop|c)(\d+)|(?:(?:drop|d)(\d+)|(?:crop|c)(\d+)|(?:greatest|g)(\d+)|(?:lowest|l)(\d+)))?(?:(?:plus|p)(\d+))?(?:(?:minus|m)(\d+))?|(\d+))";
+            let dice_regex: &str = r"([-+/*%^])?(?:(\d*)d(\d*)(?:(?:reroll|r)((?:\d+)(?:(?:(?:(?:,|..)(?:\d+))+)?)))?(?:(?:drop|d)(\d+)(?:crop|c)(\d+)|(?:(?:drop|d)(\d+)|(?:crop|c)(\d+)|(?:greatest|g)(\d+)|(?:lowest|l)(\d+)))?(?:(?:plus|p)(\d+))?(?:(?:minus|m)(\d+))?|(\d+))";
             let re = Regex::new(
                 dice_regex).
                 unwrap();
@@ -181,9 +182,9 @@ fn process_code(
     let n: usize = match params[2] {"" => 1, x => x.parse().unwrap()};
     let d: usize = match params[3] {"" => 6, x => x.parse().unwrap()};
 
-    let reroll : Vec<usize> = match params[4].is_empty() {
-        true => Vec::new(),
-        false => params[4].split(",").map(|s| s.parse().unwrap()).collect()
+    let reroll = match parse_reroll_code(params[4]) {
+        Some(r) => r,
+        None => return Err(DiceError::BadCode)
     };
 
     let plus: usize = match params[11] {"" => 0, x => x.parse().unwrap()};
@@ -253,6 +254,32 @@ fn process_roll(
     log_roll(is_several_rolls, res);
 
     res
+}
+
+/// parse reroll string
+fn parse_reroll_code (reroll_str: &str) -> Option<Vec<usize>> {
+    let rerolls : Vec<&str> = match reroll_str.is_empty() {
+        true => Vec::new(),
+        false => reroll_str.split(",").collect()
+    };
+   
+    let mut reroll : Vec<usize> = Vec::with_capacity(rerolls.len());
+    for r in rerolls {
+        match r.split_once("..") {
+            Some ((first, last)) => match (first.parse::<usize>(), last.parse::<usize>()) {
+                (Ok(f), Ok(l)) => reroll.extend(range(f, l+1)),
+                _ => return None
+            },
+            None => match r.parse::<usize>() {
+                Ok(num) => reroll.push(num),
+                Err(_) => {
+                    return None;
+                }
+            }
+        }
+    }
+
+    Some(reroll)
 }
 
 /// logs and shows dice code

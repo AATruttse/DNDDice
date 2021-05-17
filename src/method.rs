@@ -90,6 +90,7 @@ impl Method {
         true
     }
 
+    /// creates new method
     pub fn new(
         statlist:   &'static str,
         is_ordered: bool,
@@ -115,6 +116,7 @@ impl Method {
         new_method
     }
 
+    /// creates new method with given comment
     pub fn new_w_comment(
         statlist:   &'static str,
         is_ordered: bool,
@@ -136,6 +138,7 @@ impl Method {
         new_method
     }
     
+    /// creates new method that rolls several times
     pub fn new_w_num(
         statlist:   &'static str,
         is_ordered: bool,
@@ -157,6 +160,7 @@ impl Method {
         new_method
     }
     
+    /// creates new method that rolls several times with comment
     pub fn new_w_num_comment(
         statlist:   &'static str,
         is_ordered: bool,

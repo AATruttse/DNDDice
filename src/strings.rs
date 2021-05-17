@@ -31,7 +31,7 @@ pub static ZEROSTAT_ERROR_MSG: &str = "Can't calculate statistics from zero-leng
 pub static DICECODES_HELP_MSG: &str = "Dice codes format:
 DiceCodes = DiceCode{ DiceCode}
 DiceCode = SingleDice{(+|-|*|/|%|^)SingleDice}
-SingleDice = [NUM1]d[NUM2][(drop|d)NUM3(crop|c)NUM4|((drop|d)NUM3|(crop|c)NUM4|(greatest|g)NUM5|(lowest|l)NUM6)][(plus|p)NUM7][(minus|m)NUM8][(reroll|r)NUM9]|NUM10
+SingleDice = [NUM1]d[NUM2][(drop|d)NUM3(crop|c)NUM4|((drop|d)NUM3|(crop|c)NUM4|(greatest|g)NUM5|(lowest|l)NUM6)][(plus|p)NUM7][(minus|m)NUM8][(reroll|r)REROLL]|NUM9
 
 Where:
 	NUM1 is number of dices (default = 1);
@@ -42,11 +42,10 @@ Where:
 	NUM6 is number of lowest dice to be kept;
 	NUM7 is value to be added to sum;
 	NUM8 is value to be subtracted to sum;
-	NUM9 is dice result's comma-separated list to be rerolled;
-	NUM10 is constant
+	NUM9 is constant
+	REROLL is dice result's to be rerolled in comma-separated list of results and double-point separated ranges;
 
 Examples:
-    10 - 10
 	d - one 6-sided dice
 	1d - one 6-sided dice
 	2d - two 6-sided dices
@@ -56,6 +55,8 @@ Examples:
 	2d8reroll1 - two 8-sided dices, reroll all 1's
 	2d8r8 - two 8-sided dices, reroll all 8's
 	2d8reroll1,8 - two 8-sided dices, reroll all 1's and 8's
+	2d8r1..3 - two 8-sided dices, reroll all results in range between 1 and 3 (1's, 2's and 3's)
+	2d8r1,2..4,5,8 - two 8-sided dices, reroll all 1's, 5's, 8's and results in range between 2 and 4 (2's, 3's and 4's)
 	2d20drop1 - greatest of two 20-sided dices
 	2d20d1 - greatest of two 20-sided dices
 	2d20crop1 - lowest of two 20-sided dices
@@ -83,5 +84,5 @@ Examples:
 		then roll the same set of dice (third!) and power the result to the result of fourth roll of the same set of dices
 		then add former and latter results.
 
-	And remember, you can use all dice codes with space divisor! For example: 2d8 3d8c1 4d8d2
+	And remember, you can use all dice codes successively with space divisor! For example: 2d8 3d8c1 4d8d2
 	";

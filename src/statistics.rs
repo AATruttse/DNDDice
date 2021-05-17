@@ -79,7 +79,7 @@ impl Statistics {
 
     fn calc_mean(&mut self, data: &[IntValue]) {
         if data.len() == 0 {
-            panic!(ZEROSTAT_ERROR_MSG);
+            panic!("{}", ZEROSTAT_ERROR_MSG);
         }
 
         self.mean = data.iter().sum::<IntValue>() as StatValue / data.len() as StatValue;
@@ -87,7 +87,7 @@ impl Statistics {
 
     fn calc_sum(&mut self, data: &[IntValue]) {
         if data.len() == 0 {
-            panic!(ZEROSTAT_ERROR_MSG);
+            panic!("{}", ZEROSTAT_ERROR_MSG);
         }
 
         self.sum = data.iter().sum::<IntValue>();
@@ -95,7 +95,7 @@ impl Statistics {
 
     fn calc_median(&mut self, data: &[IntValue]) {
         if data.len() == 0 {
-            panic!(ZEROSTAT_ERROR_MSG);
+            panic!("{}", ZEROSTAT_ERROR_MSG);
         }
 
         let mut vec: Vec<IntValue> = data.to_vec();
@@ -107,7 +107,7 @@ impl Statistics {
 
     fn calc_bins(&mut self, data: &[IntValue]) {
         if data.len() == 0 {
-            panic!(ZEROSTAT_ERROR_MSG);
+            panic!("{}", ZEROSTAT_ERROR_MSG);
         }
   
         for &value in data {

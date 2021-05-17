@@ -1,6 +1,6 @@
 [package]
 name = "dnddice"
-version = "0.2.4"
+version = "0.2.5"
 authors = ["Anton A. Truttse (Dargot) <dargot@yandex.ru>"]
 edition = "2018"
 
@@ -12,6 +12,7 @@ custom_error = "1.8.0"
 itertools = "0.10.0"
 lazy_static = "1.4.0"
 ndarray = "0.14.0"
+num = "0.4.0"
 rand = "0.8.3"
 regex = "1.4.0"
 structopt = "0.3"

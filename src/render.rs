@@ -123,7 +123,7 @@ pub fn render_codes(
     if OPT.debug || 
        (dices_num > 1 &&
             (OPT.verbose > 0 ||
-            (OPT.verbose == 0 && dices_num > 1)))
+            (OPT.verbose == 0 && !OPT.is_collect_stat() && dices_num > 1)))
     {
         if !OPT.numbers_only && OPT.verbose > 0 {
             print!("{}: ", dicecode);

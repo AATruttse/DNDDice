@@ -59,7 +59,6 @@ fn calc_arithmetic(ar: &[Arythmetic], order: usize) -> IntValue {
     for i in 0..ar.len() {
         if i == (ar.len()-1) || ops_order(ar[i+1].0) == order {
             let chain = &ar[idx..i+1];
-//            chains.push(chain);
             results.push(match chain.len() {
                     1 => chain[0],
                     _ => (chain[0].0, calc_arithmetic(chain, order+1))
@@ -69,15 +68,11 @@ fn calc_arithmetic(ar: &[Arythmetic], order: usize) -> IntValue {
         }
     }
 
-//    println!("Chains: {:?}", chains);    
-//    println!("Results: {:?}", results);
     // process local operations one by one    
     let mut result = results[0].1;
     for pair in results.windows(2) {
         result = OPSMAP.get(pair[1].0).expect(DICECODEDECRYPTION_ERROR_MSG)(result, pair[1].1);
     }
-
-    //println!("{}", result);
 
     result
 }
