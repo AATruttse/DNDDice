@@ -69,100 +69,103 @@ fn method_rnd_array(arr: &Array2<IntValue>, stats: &mut Vec<IntValue>) -> Result
     Ok(())
 }
 
+/// N dices without choice
+fn method_nd_wochoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, statnum);
 
-/// Stat generation method for AD&D 2nd ed - Method 1
-/// 3d6 without choice
-fn method_adnd1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    for i in 0..6 {
-        stats[i] = n_d(3, 6)?;
+    for i in 0..statnum {
+        stats[i] = n_d(n, d)?;
     }
 
     Ok(())
 }
 
-/// Stat generation method for AD&D 2nd ed - Method 2
-/// Best of two 3d6 without choice
-fn method_adnd2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
+/// N dices with choice
+fn method_nd_wchoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, statnum);
 
-    for i in 0..6 {
-        stats[i] = max(n_d(3, 6)?, n_d(3, 6)?);
+    for i in 0..statnum {
+        stats[i] = n_d(n, d)?;
+    }
+
+    stats[0..statnum].sort();
+    stats[0..statnum].reverse();    
+
+    Ok(())
+}
+
+/// Best of 2 N dices without choice
+fn method_best_nd_wochoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, statnum);
+
+    for i in 0..statnum {
+        stats[i] = max(n_d(n, d)?, n_d(n, d)?);
     }
 
     Ok(())
 }
 
-/// Stat generation method for AD&D 2nd ed - Method 3
-/// 3d6 with choice
-fn method_adnd3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
+/// Best statnum of double statnum N dices with choice
+fn method_bestlist_nd_wchoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, statnum);
 
-    for i in 0..6 {
-        stats[i] = n_d(3, 6)?;
-    }
-
-    stats[0..6].sort();
-    stats[0..6].reverse();
-
-    Ok(())
-}
-
-/// Stat generation method for AD&D 2nd ed - Method 4
-/// Best 6 of 12 3d6 with choice
-fn method_adnd4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    let mut dices: Vec<IntValue> = (0..12).collect();
-    for i in 0..12 {
-        dices[i] = n_d(3, 6)?;
+    let mut dices: Vec<IntValue> = (0..(statnum as IntValue)*2).collect();
+    for i in 0..statnum*2 {
+        dices[i] = n_d(n, d)?;
     }   
     dices.sort();
     dices.reverse();
     
-    stats[0..6].clone_from_slice(&dices[0..6]);
+    stats[0..statnum].clone_from_slice(&dices[0..statnum]);
 
     Ok(())
 }
 
-/// Stat generation method for AD&D 2nd ed - Method 5
-/// 4d6 drop lowest with choice
-fn method_adnd5(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
+/// N dices plus without choice
+fn method_nd_plus_wochoice(statnum: usize, n: usize, d: usize, plus: IntValue, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, statnum);
 
-    for i in 0..6 {
-        stats[i] = n_d_drop(4, 6, 1)?;
+    for i in 0..statnum {
+        stats[i] = n_d_plus(n, d, plus)?;
     }
 
-    stats[0..6].sort();
-    stats[0..6].reverse();
-
     Ok(())
 }
 
-/// Stat generation method for AD&D 2nd ed from CBoN - Method 7
-/// Six 10+1d8 with choice
-fn method_adnd_cbon_7(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
+/// N dices plus with choice
+fn method_nd_plus_wchoice(statnum: usize, n: usize, d: usize, plus: IntValue, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, statnum);
 
-    for i in 0..6 {
-        stats[i] = n_d_plus(1, 8, 10)?;
+    for i in 0..statnum {
+        stats[i] = n_d_plus(n, d, plus)?;
     }
 
-    stats[0..6].sort();
-    stats[0..6].reverse();
+    stats[0..statnum].sort();
+    stats[0..statnum].reverse();    
 
     Ok(())
 }
 
-/// Stat generation method for AD&D 2nd ed from CBoN - Method 7 without choice
-/// Six 10+1d8 without choice
-fn method_adnd_cbon_7wochoice(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
+/// N dices drop 1 with choice
+fn method_nddrop1_wchoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, statnum);
 
-    for i in 0..6 {
-        stats[i] = n_d_plus(1, 8, 10)?;
+    for i in 0..statnum {
+        stats[i] = n_d_drop(n, d, 1)?;
+    }
+
+    stats[0..statnum].sort();
+    stats[0..statnum].reverse();     
+
+    Ok(())
+}
+
+/// N dices drop 1 without choice
+fn method_nddrop1_wochoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+    vec_checksize(stats, statnum);
+
+    for i in 0..statnum {
+        stats[i] = n_d_drop(n, d, 1)?;
     }
 
     Ok(())
@@ -183,79 +186,6 @@ fn method_adnd_cbon_8wochoice(stats: &mut Vec<IntValue>) -> Result<(), DiceError
     Ok(())
 }
 
-/// Stat generation method for AD&D 2nd ed - Dark Sun Main Method
-/// 4d4+4 without choice
-fn method_adnd_ds(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    for i in 0..6 {
-        stats[i] = n_d_plus(4, 4, 4)?;
-    }
-
-    Ok(())
-}
-
-/// Stat generation method for AD&D 2nd ed - Dark Sun Optional Method 1
-/// Best of two 5d4 without choice
-fn method_adnd_ds1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    for i in 0..6 {
-        stats[i] = max(n_d(5, 4)?, n_d(5, 4)?);
-    }
-
-    Ok(())
-}
-
-/// Stat generation method for AD&D 2nd ed - Dark Sun Optional Method 2
-/// 5d4 with choice
-fn method_adnd_ds2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    for i in 0..6 {
-        stats[i] = n_d(5, 4)?;
-    }
-
-    stats[0..6].sort();
-    stats[0..6].reverse();
-
-    Ok(())
-}
-
-/// Stat generation method for AD&D 2nd ed - Dark Sun Optional Method 3
-/// Best 6 of 12 5d4 with choice
-fn method_adnd_ds3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    let mut dices: Vec<IntValue> = (0..12).collect();
-    for i in 0..12 {
-        dices[i] = n_d(5, 4)?;
-    }   
-    dices.sort();
-    dices.reverse();
-    
-    stats[0..6].clone_from_slice(&dices[0..6]);
-
-    Ok(())
-}
-
-/// Stat generation method for AD&D 2nd ed - Dark Sun Optional Method 4
-/// 6d4 drop lowest with choice
-fn method_adnd_ds4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    for i in 0..6 {
-        stats[i] = n_d_drop(6, 4, 1)?;
-    }
-
-    stats[0..6].sort();
-    stats[0..6].reverse();
-
-    Ok(())
-}
-
-
-
 /// Stat generation method for AD&D 1st ed - Method 3
 /// Best of 6 3d6 for each ability
 fn method_adnd1_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
@@ -263,18 +193,6 @@ fn method_adnd1_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
     for i in 0..6 {
         stats[i] = (0..6).map(|_| n_d(3, 6).unwrap()).fold(std::i32::MIN, |a,b| a.max(b));
-    }
-
-    Ok(())
-}
-
-/// Stat generation method for D&D - Method for Crazy Loonies
-/// d20 without choice
-fn method_dndloonie(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    for i in 0..6 {
-        stats[i] = n_d(1, 20)?;
     }
 
     Ok(())
@@ -288,16 +206,6 @@ fn method_dndevilchampion(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     for i in 0..6 {
         stats[i] = n_d_reroll_drop(4, 6, &ONE_ARRAY, 1)?;
     }
-
-    Ok(())
-}
-
-/// Stat generation method for CP2020 - Method 1
-/// 9d10 character points
-fn method_cp1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 1);
-
-    stats[0] = n_d(9, 10)?;
 
     Ok(())
 }
@@ -319,16 +227,6 @@ fn method_cp2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-/// Stat generation method for CP2013 - Method 1
-/// 9d10 character points
-fn method_cp3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 1);
-
-    stats[0] = n_d_plus(6, 10, 30)?;
-
-    Ok(())
-}
-
 /// Stat generation method for CP2020 - Method 3
 /// 1d10 reroll 1,2 without choice
 fn method_cp4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
@@ -338,33 +236,6 @@ fn method_cp4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
         while stats[i] < 3 {
             stats[i] = n_d(1, 10)?;
         }
-    }
-
-    Ok(())
-}
-
-/// Stat generation method for Cyberspace - Method 1
-/// 1d100 with choice
-fn method_cyberspace1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 11);
-
-    for i in 0..11 {
-            stats[i] = n_d(1, 100)?;
-    }
-
-    stats[0..11].sort();
-    stats[0..11].reverse();
-
-    Ok(())
-}
-
-/// Stat generation method for Cyberspace - Method 2
-/// 1d100 without choice
-fn method_cyberspace2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 11);
-
-    for i in 0..11 {
-            stats[i] = n_d(1, 100)?;
     }
 
     Ok(())
@@ -392,33 +263,6 @@ fn method_arm2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 
     for i in 0..4 {
         stats[i] = n_d(1, 10)? - n_d(1, 10)?;
-    }
-
-    Ok(())
-}
-
-/// Stat generation method for Pathfinder - Heroic method
-/// 2d6+6 with choice
-fn method_pf1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 6);
-
-    for i in 0..6 {
-        stats[i] = n_d_plus(2, 6, 6)?;
-    }
-
-    stats[0..6].sort();
-    stats[0..6].reverse();
-
-    Ok(())
-}
-
-/// Stat generation method for D&D 3rd ed - Organic method
-/// 4d6 drop lowest  without choice, reroll one, switch any two.
-fn method_dnd3_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 7);
-
-    for i in 0..7 {
-        stats[i] = n_d_drop(4, 6, 1)?;
     }
 
     Ok(())
@@ -492,60 +336,6 @@ fn method_dnd4_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     Ok(())
 }
 
-/// Stat generation method for WH40K - Method 1
-/// 2d10 for each characteristic without choice
-fn method_wh40k1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 9);
-
-    for i in 0..9 {
-        stats[i] = n_d(2, 10)?;
-    }
-
-    Ok(())
-}
-
-/// Stat generation method for WH40K - Method 2
-/// 2d10 for each characteristic without choice, reroll one
-fn method_wh40k2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 10);
-
-    for i in 0..10 {
-        stats[i] = n_d(2, 10)?;
-    }
-
-    Ok(())
-}
-
-/// Stat generation method for WH40K - Method 3
-/// 2d10 for each characteristic with choice
-fn method_wh40k3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 9);
-
-    for i in 0..9 {
-        stats[i] = n_d(2, 10)?;
-    }
-
-    stats[0..9].sort();
-    stats[0..9].reverse();
-
-    Ok(())
-}
-
-/// Stat generation method for WH40K - Method 4
-/// 2d10 for each characteristic with choice, reroll one
-fn method_wh40k4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
-    vec_checksize(stats, 10);
-
-    for i in 0..10 {
-        stats[i] = n_d(2, 10)?;
-    }
-
-    stats[0..10].sort();
-    stats[0..10].reverse();
-
-    Ok(())
-}
-
 /// Stat generation method for Runequest 6 - Method 1
 /// 3d6 for STR, CON, DEX, POW and CHA; 2d6+6 for SIZ and INT
 fn method_rq6_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
@@ -588,19 +378,19 @@ lazy_static! {
     pub static ref METHODSMAP: GenMethodsMap = {
         let mut m = GenMethodsMap::new();
 
-        m.insert("dnd", Method::new("d&d", true, DND_DESC, DND_HELP, method_adnd1, &["d&d", "dnd", "ordered"]));
+        m.insert("dnd", Method::new("d&d", true, DND_DESC, DND_HELP, |stats| method_nd_wochoice(6, 3, 6, stats), &["d&d", "dnd", "ordered"]));
 
-        m.insert("dndrealman", Method::new("d&d", false, DNDREALMAN_DESC,  DNDREALMAN_HELP, method_adnd5, &["d&d", "dnd", "choice", "humor"]));
-        m.insert("dndcrazieloonie", Method::new("d&d", true, DNDCRAZYLOONIE_DESC, DNDCRAZYLOONIE_HELP, method_dndloonie, &["d&d", "dnd", "ordered", "humor"]));
+        m.insert("dndrealman", Method::new("d&d", false, DNDREALMAN_DESC,  DNDREALMAN_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "choice", "humor"]));
+        m.insert("dndcrazieloonie", Method::new("d&d", true, DNDCRAZYLOONIE_DESC, DNDCRAZYLOONIE_HELP, |stats| method_nd_wochoice(6, 1, 20, stats), &["d&d", "dnd", "ordered", "humor"]));
         m.insert("dndmunchkin", Method::new("d&d", true, DNDMUNCHKIN_DESC, DNDMUNCHKIN_HELP,  |stats| method_array(&ALL25_ARRAY, stats), &["d&d", "dnd", "ordered", "pre-set", "humor"]));
         m.insert("dndevilchampion", Method::new("d&d", false, DNDEVILCHAMPION_DESC, DNDEVILCHAMPION_HELP, method_dndevilchampion, &["d&d", "dnd", "choice", "humor"]));
-        m.insert("dndnewbie", Method::new("d&d", true, DNDNEWBIE_DESC, DNDNEWBIE_HELP, method_adnd1, &["d&d", "dnd", "ordered", "humor"]));
+        m.insert("dndnewbie", Method::new("d&d", true, DNDNEWBIE_DESC, DNDNEWBIE_HELP, |stats| method_nd_wochoice(6, 3, 6, stats), &["d&d", "dnd", "ordered", "humor"]));
         
-        m.insert("adnd1", Method::new("d&d", true, ADND1_DESC, ADND1_HELP, method_adnd1, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "ordered"]));
-        m.insert("adnd2", Method::new("d&d", true, ADND2_DESC, ADND2_HELP, method_adnd2, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "ordered"]));
-        m.insert("adnd3", Method::new("d&d", false, ADND3_DESC, ADND3_HELP, method_adnd3, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
-        m.insert("adnd4", Method::new("d&d", false, ADND4_DESC, ADND4_HELP, method_adnd4, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
-        m.insert("adnd5", Method::new("d&d", false, ADND5_DESC, ADND5_HELP, method_adnd5, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
+        m.insert("adnd1", Method::new("d&d", true, ADND1_DESC, ADND1_HELP, |stats| method_nd_wochoice(6, 3, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "ordered"]));
+        m.insert("adnd2", Method::new("d&d", true, ADND2_DESC, ADND2_HELP, |stats| method_best_nd_wochoice(6, 3, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "ordered"]));
+        m.insert("adnd3", Method::new("d&d", false, ADND3_DESC, ADND3_HELP, |stats| method_nd_wchoice(6, 3, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
+        m.insert("adnd4", Method::new("d&d", false, ADND4_DESC, ADND4_HELP, |stats| method_bestlist_nd_wchoice(6, 3, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
+        m.insert("adnd5", Method::new("d&d", false, ADND5_DESC, ADND5_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
 
         m.insert("adnd_cbon1", Method::new("d&d", true, ADND_CBON1_DESC, ADND_CBON1_HELP,  |stats| method_rnd_array(&CBON_1_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
         m.insert("adnd_cbon2", Method::new("d&d", true, ADND_CBON2_DESC, ADND_CBON2_HELP,  |stats| method_rnd_array(&CBON_2_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
@@ -608,30 +398,30 @@ lazy_static! {
         m.insert("adnd_cbon4", Method::new("d&d", true, ADND_CBON4_DESC, ADND_CBON4_HELP,  |stats| method_rnd_array(&CBON_4_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
         m.insert("adnd_cbon5", Method::new("d&d", true, ADND_CBON5_DESC, ADND_CBON5_HELP,  |stats| method_rnd_array(&CBON_5_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
         m.insert("adnd_cbon6", Method::new("d&d", true, ADND_CBON6_DESC, ADND_CBON6_HELP,  |stats| method_rnd_array(&CBON_6_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
-        m.insert("adnd_cbon7", Method::new("d&d", false, ADND_CBON7_DESC, ADND_CBON7_HELP, method_adnd_cbon_7, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "choice"]));
-        m.insert("adnd_cbon8", Method::new_w_comment("d&d", false, ADND_CBON8_DESC, ADND_CBON8_HELP, ADND_CBON8_COMMENT, method_adnd_cbon_7, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "choice"]));
-        m.insert("adnd_cbon7wochoice", Method::new("d&d", true, ADND_CBON7WOCHOICE_DESC, ADND_CBON7WOCHOICE_HELP, method_adnd_cbon_7wochoice, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "ordered"]));
+        m.insert("adnd_cbon7", Method::new("d&d", false, ADND_CBON7_DESC, ADND_CBON7_HELP, |stats| method_nd_plus_wchoice(6, 1, 8, 10, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "choice"]));
+        m.insert("adnd_cbon8", Method::new_w_comment("d&d", false, ADND_CBON8_DESC, ADND_CBON8_HELP, ADND_CBON8_COMMENT, |stats| method_nd_plus_wchoice(6, 1, 8, 10, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "choice"]));
+        m.insert("adnd_cbon7wochoice", Method::new("d&d", true, ADND_CBON7WOCHOICE_DESC, ADND_CBON7WOCHOICE_HELP, |stats| method_nd_plus_wochoice(6, 1, 8, 10, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "ordered"]));
         m.insert("adnd_cbon8wochoice", Method::new("d&d", true, ADND_CBON8WOCHOICE_DESC, ADND_CBON8WOCHOICE_HELP, method_adnd_cbon_8wochoice, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "ordered"]));
 
-        m.insert("adnd_darksun", Method::new("d&d", true, ADND_DS_DESC, ADND_DS_HELP, method_adnd_ds, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "ordered"]));
-        m.insert("adnd_darksun1", Method::new("d&d", true, ADND_DS1_DESC, ADND_DS1_HELP, method_adnd_ds1, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "ordered"]));
-        m.insert("adnd_darksun2", Method::new("d&d", false, ADND_DS2_DESC, ADND_DS2_HELP, method_adnd_ds2, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
-        m.insert("adnd_darksun3", Method::new("d&d", false, ADND_DS3_DESC, ADND_DS3_HELP, method_adnd_ds3, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
-        m.insert("adnd_darksun4", Method::new("d&d", false, ADND_DS4_DESC, ADND_DS4_HELP, method_adnd_ds4, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
+        m.insert("adnd_darksun", Method::new("d&d", true, ADND_DS_DESC, ADND_DS_HELP, |stats| method_nd_plus_wochoice(6, 4, 4, 4, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "ordered"]));
+        m.insert("adnd_darksun1", Method::new("d&d", true, ADND_DS1_DESC, ADND_DS1_HELP, |stats| method_best_nd_wochoice(6, 5, 4, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "ordered"]));
+        m.insert("adnd_darksun2", Method::new("d&d", false, ADND_DS2_DESC, ADND_DS2_HELP, |stats| method_nd_wchoice(6, 5, 4, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
+        m.insert("adnd_darksun3", Method::new("d&d", false, ADND_DS3_DESC, ADND_DS3_HELP, |stats| method_bestlist_nd_wchoice(6, 5, 4, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
+        m.insert("adnd_darksun4", Method::new("d&d", false, ADND_DS4_DESC, ADND_DS4_HELP, |stats| method_nddrop1_wchoice(6, 6, 4, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
 
-        m.insert("adnd1_1", Method::new("d&d", false, ADND1_1_DESC, ADND1_1_HELP, method_adnd5, &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "choice"]));
-        m.insert("adnd1_2", Method::new("d&d", false, ADND1_2_DESC, ADND1_2_HELP, method_adnd4, &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "choice"]));
+        m.insert("adnd1_1", Method::new("d&d", false, ADND1_1_DESC, ADND1_1_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "choice"]));
+        m.insert("adnd1_2", Method::new("d&d", false, ADND1_2_DESC, ADND1_2_HELP, |stats| method_bestlist_nd_wchoice(6, 3, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "choice"]));
         m.insert("adnd1_3", Method::new("d&d", true, ADND1_3_DESC, ADND1_3_HELP, method_adnd1_3, &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "ordered"]));
-        m.insert("adnd1_4", Method::new_w_num_comment("d&d", true, ADND1_4_DESC, ADND1_4_HELP, ADND1_4_COMMENT, method_adnd1, 12, &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "multiple", "ordered"]));
+        m.insert("adnd1_4", Method::new_w_num_comment("d&d", true, ADND1_4_DESC, ADND1_4_HELP, ADND1_4_COMMENT, |stats| method_nd_wochoice(6, 3, 6, stats), 12, &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "multiple", "ordered"]));
 
-        m.insert("dnd3", Method::new("d&d", false, DND3_DESC, DND3_HELP, method_adnd5, &["d&d", "dnd", "d20", "d&d3", "dnd3", "choice"]));
-        m.insert("dnd3organic", Method::new_w_comment("d&dreroll", true, DND3ORGANIC_DESC, DND3ORGANIC_HELP, DND3_ORGANIC_COMMENT, method_dnd3_1, &["d&d", "dnd", "d20", "d&d3", "dnd3", "reroll", "ordered"]));
+        m.insert("dnd3", Method::new("d&d", false, DND3_DESC, DND3_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "d20", "d&d3", "dnd3", "choice"]));
+        m.insert("dnd3organic", Method::new_w_comment("d&dreroll", true, DND3ORGANIC_DESC, DND3ORGANIC_HELP, DND3_ORGANIC_COMMENT, |stats| method_nddrop1_wochoice(7, 4, 6, stats), &["d&d", "dnd", "d20", "d&d3", "dnd3", "reroll", "ordered"]));
         m.insert("dnd3customavg", Method::new("d&d", false, DND3CA_DESC, DND3CA_HELP, method_dnd3_2, &["d&d", "dnd", "d20", "d&d3", "dnd3", "choice"]));
         m.insert("dnd3randomavg", Method::new("d&d", true, DND3RA_DESC, DND3RA_HELP, method_dnd3_3, &["d&d", "dnd", "d20", "d&d3", "dnd3", "ordered"]));
         m.insert("dnd3highpow", Method::new("d&d", false, DND3HP_DESC, DND3HP_HELP, method_dnd3_4, &["d&d", "dnd", "d20", "d&d3", "dnd3", "choice"]));
 
-        m.insert("dnd35", Method::new("d&d", false, DND35_DESC, DND35_HELP, method_adnd5, &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
-        m.insert("dnd35organic", Method::new_w_comment("d&dreroll", true, DND35ORGANIC_DESC, DND35ORGANIC_HELP, DND35_ORGANIC_COMMENT, method_dnd3_1, &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "reroll", "ordered"]));
+        m.insert("dnd35", Method::new("d&d", false, DND35_DESC, DND35_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
+        m.insert("dnd35organic", Method::new_w_comment("d&dreroll", true, DND35ORGANIC_DESC, DND35ORGANIC_HELP, DND35_ORGANIC_COMMENT, |stats| method_nddrop1_wochoice(7, 4, 6, stats), &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "reroll", "ordered"]));
         m.insert("dnd35customavg", Method::new("d&d", false, DND35CA_DESC, DND35CA_HELP, method_dnd3_2, &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
         m.insert("dnd35randomavg", Method::new("d&d", true, DND35RA_DESC, DND35RA_HELP, method_dnd3_3, &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "ordered"]));
         m.insert("dnd35highpow", Method::new("d&d", false, DND35HP_DESC, DND35HP_HELP, method_dnd3_4, &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
@@ -640,38 +430,38 @@ lazy_static! {
         m.insert("dnd4", Method::new("d&d", false, DND4_DESC, DND4_HELP, method_dnd4_1, &["d&d", "dnd", "d&d4", "dnd4", "choice"]));
         m.insert("dnd4standard", Method::new("d&d", false, DND4STANDARD_DESC, DND4STANDARD_HELP, |stats| method_array(&DND4_ARRAY, stats), &["d&d", "dnd", "d&d4", "dnd4", "pre-set", "choice"]));
 
-        m.insert("dnd5", Method::new("d&d", false, DND5_DESC, DND5_HELP, method_adnd5, &["d&d", "dnd", "d&d5", "dnd5", "choice"]));
+        m.insert("dnd5", Method::new("d&d", false, DND5_DESC, DND5_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "d&d5", "dnd5", "choice"]));
         m.insert("dnd5standard", Method::new("d&d", false, DND5STANDARD_DESC, DND5STANDARD_HELP, |stats| method_array(&DND35_ARRAY, stats), &["d&d", "dnd", "d&d5", "dnd5", "pre-set", "choice"]));
 
-        m.insert("pfstandard", Method::new("d&d", false, PFSTANDARD_DESC, PFSTANDARD_HELP, method_adnd5, &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
-        m.insert("pfclassic", Method::new("d&d", false, PFCLASSIC_DESC, PFCLASSIC_HELP, method_adnd3, &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
-        m.insert("pfheroic", Method::new("d&d", false, PFHEROIC_DESC, PFHEROIC_HELP, method_pf1, &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
+        m.insert("pfstandard", Method::new("d&d", false, PFSTANDARD_DESC, PFSTANDARD_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
+        m.insert("pfclassic", Method::new("d&d", false, PFCLASSIC_DESC, PFCLASSIC_HELP, |stats| method_nd_wchoice(6, 3, 6, stats), &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
+        m.insert("pfheroic", Method::new("d&d", false, PFHEROIC_DESC, PFHEROIC_HELP, |stats| method_nd_plus_wchoice(6, 2, 6, 6, stats), &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
 
-        m.insert("pathfinder2", Method::new("d&d", false, PF2_DESC, PF2_HELP, method_adnd5, &["pathfinder", "pathfinder2", "pf", "pf2", "choice"]));
+        m.insert("pathfinder2", Method::new("d&d", false, PF2_DESC, PF2_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["pathfinder", "pathfinder2", "pf", "pf2", "choice"]));
 
-        m.insert("starfinder", Method::new("d&d", false, SF_DESC, SF_HELP, method_adnd5, &["starfinder", "sf", "choice"]));
+        m.insert("starfinder", Method::new("d&d", false, SF_DESC, SF_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["starfinder", "sf", "choice"]));
         m.insert("sffocused", Method::new("d&d", false, SFFOCUSED_DESC, SFFOCUSED_HELP, |stats| method_array(&SFFOCUSED_ARRAY, stats), &["starfinder", "sf", "pre-set", "choice"]));
         m.insert("sfsplit", Method::new("d&d", false, SFSPLIT_DESC, SFSPLIT_HELP, |stats| method_array(&SFSPLIT_ARRAY, stats), &["starfinder", "sf", "pre-set", "choice"]));
         m.insert("sfversatile", Method::new("d&d", false, SFVERSATILE_DESC, SFVERSATILE_HELP, |stats| method_array(&SFVERSATILE_ARRAY, stats), &["starfinder", "sf", "pre-set", "choice"]));
 
-        m.insert("cp2013_1", Method::new("cyberpunk-cp", true, CP2013_1_DESC, CP2013_1_HELP, method_cp1, &["cyberpunk", "cp", "cyberpunk2013", "cp2013", "character_points", "choice"]));
-        m.insert("cp2013_2", Method::new("cyberpunk-cp", true, CP2013_2_DESC, CP2013_2_HELP, method_cp3, &["cyberpunk", "cp", "cyberpunk2013", "cp2013", "character_points", "choice"]));
-        m.insert("cp2020_1", Method::new("cyberpunk-cp", true, CP2020_1_DESC, CP2020_1_HELP, method_cp1, &["cyberpunk", "cp", "cyberpunk2020", "cp2020", "character_points", "choice"]));
+        m.insert("cp2013_1", Method::new("cyberpunk-cp", true, CP2013_1_DESC, CP2013_1_HELP, |stats| method_nd_wochoice(1, 9, 10, stats), &["cyberpunk", "cp", "cyberpunk2013", "cp2013", "character_points", "choice"]));
+        m.insert("cp2013_2", Method::new("cyberpunk-cp", true, CP2013_2_DESC, CP2013_2_HELP, |stats| method_nd_plus_wochoice(1, 6, 10, 30, stats), &["cyberpunk", "cp", "cyberpunk2013", "cp2013", "character_points", "choice"]));
+        m.insert("cp2020_1", Method::new("cyberpunk-cp", true, CP2020_1_DESC, CP2020_1_HELP, |stats| method_nd_wochoice(1, 9, 10, stats), &["cyberpunk", "cp", "cyberpunk2020", "cp2020", "character_points", "choice"]));
         m.insert("cp2020_2", Method::new("cyberpunk-stat", false, CP2020_2_DESC, CP2020_2_HELP, method_cp2, &["cyberpunk", "cp", "cyberpunk2020", "cp2020", "choice"]));
         m.insert("cp2020_3", Method::new("cyberpunk-stat", true, CP2020_3_DESC, CP2020_3_HELP, method_cp4, &["cyberpunk", "cp", "cyberpunk2020", "cp2020", "ordered"]));
 
-        m.insert("cyberspace1", Method::new("cyberspace", false, CYBERSPACE_1_DESC, CYBERSPACE_1_HELP, method_cyberspace1, &["cyberpunk", "cp", "cyberspace", "choice"]));
-        m.insert("cyberspace2", Method::new("cyberspace", true, CYBERSPACE_2_DESC, CYBERSPACE_2_HELP, method_cyberspace2, &["cyberpunk", "cp", "cyberspace", "ordered"]));
+        m.insert("cyberspace1", Method::new("cyberspace", false, CYBERSPACE_1_DESC, CYBERSPACE_1_HELP, |stats| method_nd_wchoice(11, 1, 100, stats), &["cyberpunk", "cp", "cyberspace", "choice"]));
+        m.insert("cyberspace2", Method::new("cyberspace", true, CYBERSPACE_2_DESC, CYBERSPACE_2_HELP, |stats| method_nd_wochoice(11, 1, 100, stats), &["cyberpunk", "cp", "cyberspace", "ordered"]));
 
         m.insert("arsmagica1", Method::new("arsmagica", false, ARM1_DESC, ARM1_HELP, method_arm1, &["arsmagica", "arm", "choice"]));
         m.insert("arsmagica2", Method::new("arsmagica", true, ARM2_DESC, ARM2_HELP, method_arm2, &["arsmagica", "arm", "ordered"]));
 
-        m.insert("wh40k", Method::new("warhammer", true, WH40K_DESC, WH40K_HELP, method_wh40k1, &["wh", "warhammer", "wh40k", "warhammer40k", "ordered"]));
-        m.insert("wh40k_reroll", Method::new("warhammer-reroll", true, WH40KREROLL_DESC, WH40KREROLL_HELP, method_wh40k2, &["wh", "warhammer", "wh40k", "warhammer40k", "reroll", "ordered"]));
-        m.insert("wh40k_choice", Method::new("warhammer", false, WH40KCHOICE_DESC, WH40KCHOICE_HELP, method_wh40k3, &["wh", "warhammer", "wh40k", "warhammer40k", "choice"]));
-        m.insert("wh40k_choicereroll", Method::new("warhammer-reroll", false, WH40KCHOICEREROLL_DESC, WH40KCHOICEREROLL_HELP, method_wh40k4, &["wh", "warhammer", "wh40k", "warhammer40k", "reroll", "choice"]));
+        m.insert("wh40k", Method::new("warhammer", true, WH40K_DESC, WH40K_HELP, |stats| method_nd_wochoice(9, 2, 10, stats), &["wh", "warhammer", "wh40k", "warhammer40k", "ordered"]));
+        m.insert("wh40k_reroll", Method::new("warhammer-reroll", true, WH40KREROLL_DESC, WH40KREROLL_HELP, |stats| method_nd_wochoice(10, 2, 10, stats), &["wh", "warhammer", "wh40k", "warhammer40k", "reroll", "ordered"]));
+        m.insert("wh40k_choice", Method::new("warhammer", false, WH40KCHOICE_DESC, WH40KCHOICE_HELP, |stats| method_nd_wchoice(9, 2, 10, stats), &["wh", "warhammer", "wh40k", "warhammer40k", "choice"]));
+        m.insert("wh40k_choicereroll", Method::new("warhammer-reroll", false, WH40KCHOICEREROLL_DESC, WH40KCHOICEREROLL_HELP, |stats| method_nd_wchoice(10, 2, 10, stats), &["wh", "warhammer", "wh40k", "warhammer40k", "reroll", "choice"]));
         
-        m.insert("swn", Method::new_w_comment("d&d", true, SWN_DESC, SWN_HELP, SWN_COMMENT, method_adnd1, &["swn", "osr", "ordered"]));
+        m.insert("swn", Method::new_w_comment("d&d", true, SWN_DESC, SWN_HELP, SWN_COMMENT, |stats| method_nd_wochoice(6, 3, 6, stats), &["swn", "osr", "ordered"]));
         m.insert("swnstandard", Method::new("d&d", false, SWNSTANDARD_DESC, SWNSTANDARD_HELP,  |stats| method_array(&SWN_ARRAY, stats), &["swn", "osr", "pre-set", "choice"]));
 
         m.insert("rq6", Method::new("runequest", true, RQ6_DESC, RQ6_HELP, method_rq6_1, &["runequest", "rq", "runequest6", "rq6", "ordered"]));
@@ -745,5 +535,3 @@ lazy_static! {
         [10, 8, 15, 15, 17, 9]
     ];    
 }
-
-

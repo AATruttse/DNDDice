@@ -51,10 +51,10 @@ fn main() {
     let n = max(1, OPT.num);
     for _i in 0..n {
         if !OPT.method.is_empty() {
-            process_method(&mut all_stats, _i == 0, _i == n-1);
+            process_method(&mut all_stats, _i, n);
         }
         else {
-            process_dices(&mut all_stats);
+            process_dices(&mut all_stats, _i, n);
         }
     }
 

@@ -30,13 +30,41 @@ pub fn render_roll(
     }
 }
 
-/// show single dice results
+/// show single roll dices results
 pub fn render_dices(dices: &Vec<usize>) {
     if OPT.debug || OPT.verbose > 2 {
         print!("{}{:?}{}",
             match OPT.numbers_only {false => " ", _ => ""},
             dices,
             match OPT.numbers_only {true => " ", _ => ""});
+    }
+}
+
+/// show single roll results
+pub fn render_dices_res(result: IntValue) {
+    if !OPT.method.is_empty() && OPT.verbose > 0 {
+        println!(": {}", result);
+    }
+}
+
+/// show single roll title
+pub fn render_dices_title(n: usize,
+    d: usize,
+    reroll: &[usize],
+    add: IntValue,
+    drop: usize,
+    crop: usize) {
+    if !OPT.method.is_empty() && OPT.verbose > 0 {
+        let code_str = format_dice_str(
+            false,
+            n,
+            d,
+            reroll,
+            add,
+            drop,
+            crop
+        );
+        print!("{}", code_str);
     }
 }
 

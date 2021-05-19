@@ -57,6 +57,10 @@ pub struct Opt {
     #[structopt(short="N", long="repetitions-num", default_value = "1")]
     pub num: usize,
 
+    /// Show number
+    #[structopt(long)]
+    pub show_number: bool,
+
     /// Number of dices
     #[structopt(short="n", long="dice-num", default_value = "1")]
     pub dices_num: usize,

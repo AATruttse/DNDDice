@@ -24,7 +24,7 @@ use crate::statlists::{StatList, STATLISTSMAP};
 use crate::strings::{DELIMITER, DICECODES_HELP_MSG, UNKNOWNSTATLIST_ERROR_MSG};
 
 /// process stat generation method, uses all_stat for statistics
-pub fn process_method(all_stats: &mut Vec<IntValue>, is_first: bool, is_last: bool) {
+pub fn process_method(all_stats: &mut Vec<IntValue>, idx: usize, num: usize) {
     let mut stat : Vec<IntValue> = Vec::<IntValue>::new();
 
     match METHODSMAP.get(&OPT.method[..]) {
@@ -35,9 +35,9 @@ pub fn process_method(all_stats: &mut Vec<IntValue>, is_first: bool, is_last: bo
 
             stat.resize(statlist.len(), 0);
 
-            let n = method.get_num();
+            log_and_render_title(idx, num, method.get_desc());
 
-            log_and_render_title(is_first, method.get_desc());
+            let n = method.get_num();
 
             for i in 1..(n + 1) {
                 method.get_method()(&mut stat).unwrap();
@@ -53,7 +53,7 @@ pub fn process_method(all_stats: &mut Vec<IntValue>, is_first: bool, is_last: bo
                 all_stats.extend(stat.clone());
             }
 
-            if (OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat()) && !OPT.numbers_only && is_last {
+            if (OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat()) && !OPT.numbers_only && idx == num - 1 {
                 println!("{}", method.get_comment());
             }
         },
@@ -64,7 +64,16 @@ pub fn process_method(all_stats: &mut Vec<IntValue>, is_first: bool, is_last: bo
 }
 
 /// process any dice roll, uses all_stat for statistics
-pub fn process_dices(all_stats: &mut Vec<IntValue>) {
+pub fn process_dices(all_stats: &mut Vec<IntValue>, idx: usize, num: usize) {
+
+    let idx_str = format!("{}) ", idx + 1);
+    if num > 1 {
+        log(&idx_str);
+    }
+
+    if OPT.show_number {
+        print!("{}", idx_str);
+    }
 
     if OPT.dicecodes.is_empty() ||
        OPT.dicecodes[0].is_empty()
@@ -79,9 +88,12 @@ pub fn process_dices(all_stats: &mut Vec<IntValue>) {
 /// process dice roll from command line keys
 fn process_keys(all_stats: &mut Vec<IntValue>) {
 
-    let reroll : Vec<usize> = match OPT.reroll.is_empty() {
-        true => Vec::new(),
-        false => OPT.reroll.split(",").map(|s| s.parse().unwrap()).collect()
+    let reroll = match parse_reroll_code(&OPT.reroll) {
+        Some(r) => r,
+        None => {
+            eprintln!("{}", DiceError::BadRerollCode);
+            std::process::exit(1);  
+        }
     };
 
     let res = process_roll(
@@ -311,14 +323,19 @@ fn log_and_render_roll(
 }
 
 /// log and show title
-fn log_and_render_title(is_first: bool, desc: &str) {
+pub fn log_and_render_title(idx: usize, num: usize, desc: &str) {
     if OPT.log > 0 {
         logln(DELIMITER);
+        
+        if num > 1 {
+            let idx_str = format!("{}) ", idx + 1);
+            log(&idx_str);
+        }
         log(&OPT.method);
     }
 
     if OPT.show_method { 
-        if is_first {
+        if idx == 0 {
             println!("{}", desc);
         }
         if OPT.log > 0 {
@@ -328,5 +345,9 @@ fn log_and_render_title(is_first: bool, desc: &str) {
     }
     else {
         logln("");
+    }
+
+    if OPT.show_number {
+        print!("{}) ", idx + 1);
     }
 }

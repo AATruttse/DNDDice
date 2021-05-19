@@ -10,8 +10,8 @@ use rand::Rng;
 use rand::distributions::{Uniform};
 
 use crate::errors::DiceError;
-use crate::log::log_dices;
-use crate::render::render_dices;
+use crate::log::{log_dices, log_dices_res, log_dices_title};
+use crate::render::{render_dices, render_dices_res, render_dices_title};
 
 /// Result int type for all dices
 pub type IntValue = i32;
@@ -86,6 +86,9 @@ pub fn n_d_reroll_drop_crop_plus(n: usize, d: usize, reroll: &[usize], plus: Int
         return Err(DiceError::Sides0);
     }    
 
+    render_dices_title(n, d, reroll, plus, drop, crop);
+    log_dices_title(n, d, reroll, plus, drop, crop);
+
     let mut rng = rand::thread_rng();
     let dice = Uniform::new(1, d + 1);
 
@@ -124,7 +127,12 @@ pub fn n_d_reroll_drop_crop_plus(n: usize, d: usize, reroll: &[usize], plus: Int
 
 
     let sum : usize = dices.iter().sum();
-    Ok(plus + sum as IntValue)
+    let result = plus + sum as IntValue;
+
+    render_dices_res(result);
+    log_dices_res(result);
+
+    Ok(result)
 }
 
 

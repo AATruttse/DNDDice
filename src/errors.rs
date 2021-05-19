@@ -20,6 +20,7 @@ custom_error!{pub DiceError
     BadDrop{n:usize, drop:usize} = "Can't drop {drop} dices from {n} dices!",
     BadCrop{n:usize, crop:usize} = "Can't crop {crop} dices from {n} dices!",
     BadCode                      = "Can't parse the dice code: ",
+    BadRerollCode                = "Reroll code error",
     BadDecryption                = "Dice code decription internal error!",
     BadOperator {op: &'static str} = "Unknown operator {op} in dice code ",
 }

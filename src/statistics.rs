@@ -154,6 +154,7 @@ impl Statistics {
     }
 }
 
+/// shows statistics result
 pub fn show_stats(stats: &Vec<IntValue>) {
     let statistics : Statistics = Statistics::new(&stats);
 

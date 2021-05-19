@@ -12,6 +12,7 @@ use chrono::{Local};
 
 use crate::dices::IntValue;
 use crate::init::{LOGFILE, OPT};
+use crate::render::format_dice_str;
 use crate::statlists::StatList;
 use crate::strings::{DELIMITER, LOGFILENONUTF8FILENAME_ERROR_MSG, LOGFILEWRITE_ERROR_MSG};
 
@@ -99,10 +100,39 @@ pub fn log_codes(
     }    
 }
 
-/// log single dice results
+/// log single roll dices results
 pub fn log_dices(dices: &Vec<usize>) {
     if OPT.log > 2 {
         let log_str = format!(" {:?}", dices);
         log(&log_str);
+    }
+}
+
+/// log single roll result
+pub fn log_dices_res(result: IntValue) {
+    if !OPT.method.is_empty() && OPT.log > 1 {
+        let res_str = format!(": {}", result);
+        logln(&res_str);
+    }
+}
+
+/// log single roll title
+pub fn log_dices_title(n: usize,
+    d: usize,
+    reroll: &[usize],
+    add: IntValue,
+    drop: usize,
+    crop: usize) {
+    if !OPT.method.is_empty() && OPT.log > 1 {
+        let code_str = format_dice_str(
+            false,
+            n,
+            d,
+            reroll,
+            add,
+            drop,
+            crop
+        );
+        log(&code_str);
     }
 }
