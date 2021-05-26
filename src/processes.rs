@@ -24,10 +24,10 @@ use crate::statlists::{StatList, STATLISTSMAP};
 use crate::strings::{DELIMITER, DICECODES_HELP_MSG, UNKNOWNSTATLIST_ERROR_MSG};
 
 /// process stat generation method, uses all_stat for statistics
-pub fn process_method(all_stats: &mut Vec<IntValue>, idx: usize, num: usize) {
+pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usize, num: usize) {
     let mut stat : Vec<IntValue> = Vec::<IntValue>::new();
 
-    match METHODSMAP.get(&OPT.method[..]) {
+    match METHODSMAP.get(method_name) {
         Some(method) => {
             let statlist: &StatList = STATLISTSMAP.
                 get(method.get_statlist()).
@@ -81,7 +81,7 @@ pub fn process_dices(all_stats: &mut Vec<IntValue>, idx: usize, num: usize) {
         process_keys(all_stats);
     }
     else {
-        process_codes(all_stats);
+        process_codes(&OPT.dicecodes, all_stats);
     }
 }
 
@@ -110,8 +110,8 @@ fn process_keys(all_stats: &mut Vec<IntValue>) {
 }
 
 /// process dice roll from dice codes
-fn process_codes(all_stats: &mut Vec<IntValue>) {
-    for dicecode in &OPT.dicecodes {
+fn process_codes(dicecodes: &'static Vec<String>, all_stats: &mut Vec<IntValue>) {
+    for dicecode in dicecodes {
         if !dicecode.is_empty() {
             // parse dice codes with regular expression
             let dice_regex: &str = r"([-+/*%^])?(?:(\d*)d(\d*)(?:(?:reroll|r)((?:\d+)(?:(?:(?:(?:,|..)(?:\d+))+)?)))?(?:(?:drop|d)(\d+)(?:crop|c)(\d+)|(?:(?:drop|d)(\d+)|(?:crop|c)(\d+)|(?:greatest|g)(\d+)|(?:lowest|l)(\d+)))?(?:(?:plus|p)(\d+))?(?:(?:minus|m)(\d+))?|(\d+))";

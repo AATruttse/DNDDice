@@ -12,10 +12,12 @@ extern crate lazy_static;
 extern crate regex;
 
 pub mod arithmetic;
+pub mod commands;
 pub mod dices;
 pub mod errors;
 pub mod help;
 pub mod init;
+pub mod interactive;
 pub mod log;
 pub mod method;
 pub mod method_comments;
@@ -29,10 +31,13 @@ pub mod statlists;
 pub mod strings;
 
 use std::cmp::max;
+use std::io;
+use std::io::prelude::BufRead;
 
 use crate::dices::IntValue;
 use crate::help::help;
 use crate::init::OPT;
+use crate::interactive::process_input;
 use crate::log::log_start;
 use crate::processes::{process_dices, process_method};
 use crate::statistics::show_stats;
@@ -46,17 +51,26 @@ fn main() {
         log_start();
     }
 
-    let mut all_stats: Vec<IntValue> = Vec::new();
+    if !OPT.is_stdin() {
+        let mut all_stats: Vec<IntValue> = Vec::new();
 
-    let n = max(1, OPT.num);
-    for _i in 0..n {
-        if !OPT.method.is_empty() {
-            process_method(&mut all_stats, _i, n);
+        let n = max(1, OPT.num);
+        for _i in 0..n {
+            if !OPT.method.is_empty() {
+                process_method(&OPT.method, &mut all_stats, _i, n);
+            }
+            else {
+                process_dices(&mut all_stats, _i, n);
+            }
         }
-        else {
-            process_dices(&mut all_stats, _i, n);
-        }
+
+        show_stats(&all_stats);
+        std::process::exit(0); 
     }
 
-    show_stats(&all_stats);
+
+    let stdin = io::stdin();
+    for line in stdin.lock().lines() {
+        process_input(&line.unwrap());
+    }   
 }

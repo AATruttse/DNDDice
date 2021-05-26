@@ -21,6 +21,10 @@ pub struct Opt {
     #[structopt(long)]
     pub debug: bool,
 
+    /// Command-line mode
+    #[structopt(short="c", long)]
+    pub command_line: bool,
+    
     /// Show help about dice codes' format description
     #[structopt(long)]
     pub help_dice_codes: bool,
@@ -57,7 +61,7 @@ pub struct Opt {
     #[structopt(short="N", long="repetitions-num", default_value = "1")]
     pub num: usize,
 
-    /// Show number
+    /// Show repetition number
     #[structopt(long)]
     pub show_number: bool,
 
@@ -205,6 +209,11 @@ impl Opt {
                 !self.help_method.is_empty() ||
                 !self.find_tags.is_empty()
     }
+
+    /// checks, if stdin inpur is processed
+    pub fn is_stdin(&self) -> bool {
+        self.command_line
+    }    
 
 }
 
