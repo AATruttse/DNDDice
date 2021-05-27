@@ -9,12 +9,10 @@
 use std::collections::BTreeMap;
 
 use crate::dices::IntValue;
-use crate::processes::{process_dices, process_method};
+use crate::errors::cant_find_method;
+use crate::help::{help_dicecodes, help_method, help_methods, help_tags, find_tags};
+use crate::processes::{process_method};
 use crate::strings::{BADCOMMAND_ERROR_MSG, COMMAND_HELP_MSG};
-
-static EXIT_COMMANDS: (&str, &str) = ("q", "quit");
-static HELP_COMMANDS: (&str, &str) = ("h", "help");
-static METHOD_COMMANDS: (&str, &str) = ("m", "method");
 
 /// Type for interactive-mode command's execution functions
 pub type CommandFunc = fn (&Vec<&str>);
@@ -22,8 +20,55 @@ pub type CommandFunc = fn (&Vec<&str>);
 /// Type for  interactive-mode command's execution functions' BTreeMap 
 type CommandFuncsMap = BTreeMap<&'static str, CommandFunc>;
 
+const COMMANDS: &'static [(&str, &str, CommandFunc, &str)] = &[
+    ("h", "help", command_help, " 			- this help"),
+    ("hd", "help-dice-codes", command_helpdicecodes, " 	- see help about dice codes' format description"),
+    ("hm", "help-method", command_helpmethod, " METHODNAME	- see help about generation method METHODNAME"),
+    ("hms", "help-methods", command_helpmethods, " 		- see help about generation methods"),
+    ("ht", "help-tags", command_helptags, " 		- see tags' list"),
+    ("ft", "find-tags", command_findtags, " TAG1,TAG2,... - see help about generation method by tags (for example: \"DnD,ordered\"). See .help-tags to see tags' list"),
+    ("m", "method", command_method, " METHODNAME NUM	- execute generation method METHODNAME NUM times"),
+    ("q", "quit", command_quit, " 			- exit program")
+];
+
 fn command_help(_args: &Vec<&str>) {
     println!("{}", COMMAND_HELP_MSG);
+
+    for comm in COMMANDS {
+        println!(".{} or .{}{}", comm.1, comm.0, comm.3);
+    }
+}
+
+
+fn command_helpmethod(_args: &Vec<&str>) {
+    if _args.len() < 1 || _args[0].len() == 0 {
+        show_bad_command();
+        return;
+    }
+
+    help_method(_args[0], false);
+}
+
+
+fn command_helpmethods(_args: &Vec<&str>) {
+    help_methods();
+}
+
+fn command_helpdicecodes(_args: &Vec<&str>) {
+    help_dicecodes();
+}
+
+fn command_helptags(_args: &Vec<&str>) {
+    help_tags();
+}
+
+fn command_findtags(_args: &Vec<&str>) {
+    if _args.len() < 1 || _args[0].len() == 0 {
+        show_bad_command();
+        return;
+    }
+
+    find_tags(_args[0]);
 }
 
 fn command_quit(_args: &Vec<&str>) {
@@ -31,7 +76,6 @@ fn command_quit(_args: &Vec<&str>) {
 }
 
 fn command_method(_args: &Vec<&str>) {
-
     if _args.len() < 1 || _args[0].len() == 0 {
         show_bad_command();
         return;
@@ -51,7 +95,12 @@ fn command_method(_args: &Vec<&str>) {
     let mut all_stats: Vec<IntValue> = Vec::new();
 
     for _i in 0..n {
-        process_method(_args[0], &mut all_stats, _i, n);
+        match process_method(_args[0], &mut all_stats, _i, n){
+            Some(_) => {},
+            None => {
+                cant_find_method(_args[0], false);
+            }
+        }
     }    
 }
 
@@ -65,9 +114,9 @@ lazy_static! {
     pub static ref COMMANDS_LONG_MAP: CommandFuncsMap = {
         let mut c = CommandFuncsMap::new();
 
-        c.insert(EXIT_COMMANDS.1, command_quit);
-        c.insert(HELP_COMMANDS.1, command_help);
-        c.insert(METHOD_COMMANDS.1, command_method);
+        for comm in COMMANDS {
+            c.insert(comm.1, comm.2);
+        }        
             
         c
     };
@@ -75,9 +124,9 @@ lazy_static! {
     pub static ref COMMANDS_SHORT_MAP: CommandFuncsMap = {
         let mut c = CommandFuncsMap::new();
 
-        c.insert(EXIT_COMMANDS.0, command_quit);
-        c.insert(HELP_COMMANDS.0, command_help);            
-        c.insert(METHOD_COMMANDS.0, command_method);
+        for comm in COMMANDS {
+            c.insert(comm.0, comm.2);
+        }        
 
         c
     };    

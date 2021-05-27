@@ -29,7 +29,7 @@ pub fn help() {
     }
 
     if !OPT.help_method.is_empty() {
-        help_method(&OPT.help_method);
+        help_method(&OPT.help_method, true);
     }
 
     if !OPT.find_tags.is_empty() {
@@ -41,7 +41,7 @@ pub fn help() {
 }
 
 ///shows help about dice codes 
-fn help_dicecodes() {
+pub fn help_dicecodes() {
     println!("{}", DICECODES_HELP_MSG);
 }
 
@@ -63,20 +63,20 @@ pub fn help_tags() {
 }
 
 ///shows help about methods 
-fn help_method(name: &str) {
+pub fn help_method(name: &str, need_exit: bool) {
     match METHODSMAP.get(name) {
         Some(method) => {
             println!("{}", method.get_desc_long());
             println!("Tags: {:?}", method.get_tags())
         },
         None => {
-            cant_find_method(name)
+            cant_find_method(name, need_exit)
         }
     }
 }
 
 ///find methods by tags 
-fn find_tags(tags: &str) {
+pub fn find_tags(tags: &str) {
     let mut is_found = false;
     for (key, val) in METHODSMAP.iter().filter(|(_, m)| m.check_tags(tags)) {
         println!("  {} - {}", key, val.get_desc());

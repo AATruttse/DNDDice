@@ -35,6 +35,7 @@ use std::io;
 use std::io::prelude::BufRead;
 
 use crate::dices::IntValue;
+use crate::errors::cant_find_method;
 use crate::help::help;
 use crate::init::OPT;
 use crate::interactive::process_input;
@@ -57,7 +58,10 @@ fn main() {
         let n = max(1, OPT.num);
         for _i in 0..n {
             if !OPT.method.is_empty() {
-                process_method(&OPT.method, &mut all_stats, _i, n);
+                match process_method(&OPT.method, &mut all_stats, _i, n) {
+                    Some(_) => {},
+                    None => cant_find_method(&OPT.method, true)
+                };
             }
             else {
                 process_dices(&mut all_stats, _i, n);

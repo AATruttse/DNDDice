@@ -14,7 +14,7 @@ use crate::arithmetic::{Arythmetic, process_arithmetic};
 
 use crate::dices::{IntValue, n_d_reroll_drop_crop_plus};
 
-use crate::errors::{cant_find_method, DiceError};
+use crate::errors::DiceError;
 
 use crate::init::OPT;
 use crate::log::{log, logln, log_codes, log_method, log_roll};
@@ -24,8 +24,12 @@ use crate::statlists::{StatList, STATLISTSMAP};
 use crate::strings::{DELIMITER, DICECODES_HELP_MSG, UNKNOWNSTATLIST_ERROR_MSG};
 
 /// process stat generation method, uses all_stat for statistics
-pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usize, num: usize) {
+pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usize, num: usize) -> Option<()> {
     let mut stat : Vec<IntValue> = Vec::<IntValue>::new();
+
+    if OPT.debug {
+        println!("Method: {}", method_name);
+    }
 
     match METHODSMAP.get(method_name) {
         Some(method) => {
@@ -58,9 +62,15 @@ pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usi
             }
         },
         None => {
-            cant_find_method(&OPT.method)
+            if OPT.debug {
+                println!("Can't found method {}", method_name);
+            }
+            return None
+            //cant_find_method(&OPT.method)
         }
     }
+
+    Some(())
 }
 
 /// process any dice roll, uses all_stat for statistics

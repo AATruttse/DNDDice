@@ -88,8 +88,4 @@ Examples:
 	";
 
 	pub static BADCOMMAND_ERROR_MSG: &str = "Bad command.";
-	pub static COMMAND_HELP_MSG: &str = "Available commands:
-	.help or .h 			- this help
-	.method or .m METHODNAME NUM	- execute generation method METHODNAME NUM times
-	.quit or .q 			- exit program
-	";
+	pub static COMMAND_HELP_MSG: &str = "Available commands:";

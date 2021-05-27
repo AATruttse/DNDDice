@@ -26,12 +26,14 @@ custom_error!{pub DiceError
 }
 
 // Shows errors that there isn't known method str and known method list
-pub fn cant_find_method(method: &str) {
+pub fn cant_find_method(method: &str, need_exit: bool) {
     eprintln!("{} {}.", UNKNOWNMETHOD_ERROR_MSG, method);
     if !OPT.no_help {
         help_methods();
     }
 
-    std::process::exit(1);    
-
+    if need_exit
+    {
+        std::process::exit(1);
+    }
 }

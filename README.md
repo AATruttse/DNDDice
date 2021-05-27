@@ -4,6 +4,7 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
     dnddice.exe [FLAGS] [OPTIONS] [dicecodes]...
 
 ## FLAGS:
+    -c, --command-line       Command-line mode
         --debug              Activate debug mode
     -h, --help               Prints help information
         --help-dice-codes    Show help about dice codes' format description
