@@ -11,7 +11,7 @@ use std::collections::BTreeMap;
 use crate::dices::IntValue;
 use crate::strings::DICECODEDECRYPTION_ERROR_MSG;
 
-pub type Arythmetic = (&'static str, IntValue);
+pub type Arythmetic<'a> = (&'a str, IntValue);
 
 /// Type for arithmetic operation's ptr
 type ArithmeticOp = fn (IntValue, IntValue) -> IntValue;

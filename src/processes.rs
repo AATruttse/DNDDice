@@ -120,7 +120,7 @@ fn process_keys(all_stats: &mut Vec<IntValue>) {
 }
 
 /// process dice roll from dice codes
-fn process_codes(dicecodes: &'static Vec<String>, all_stats: &mut Vec<IntValue>) {
+pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>) {
     for dicecode in dicecodes {
         if !dicecode.is_empty() {
             // parse dice codes with regular expression
@@ -141,7 +141,7 @@ fn process_codes(dicecodes: &'static Vec<String>, all_stats: &mut Vec<IntValue>)
                                            num,
                                            &it.iter().
                                                 map(|p| p.map_or("", |m| m.as_str())).
-                                                collect::<Vec<&str>>()[..]) {
+                                                collect::<Vec<&str>>()) {
                             Ok(x) => x,
                             Err(e) => {
                                 match e {  
@@ -175,11 +175,11 @@ fn process_codes(dicecodes: &'static Vec<String>, all_stats: &mut Vec<IntValue>)
 }
 
 /// process single code from parsed regular expression
-fn process_code(
+fn process_code<'a>(
      is_several_rolls: bool,
      idx: usize,
-     params: &[&'static str])
-      -> Result<(&'static str, IntValue), DiceError> {
+     params: &Vec<&'a str>)
+      -> Result<(&'a str, IntValue), DiceError> {
     if OPT.debug {
         println!("dice: {} - {:?}", idx, params);
     }

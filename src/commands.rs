@@ -11,7 +11,7 @@ use std::collections::BTreeMap;
 use crate::dices::IntValue;
 use crate::errors::cant_find_method;
 use crate::help::{help_dicecodes, help_method, help_methods, help_tags, find_tags};
-use crate::processes::{process_method};
+use crate::processes::{process_codes, process_method};
 use crate::strings::{BADCOMMAND_ERROR_MSG, COMMAND_HELP_MSG};
 
 /// Type for interactive-mode command's execution functions
@@ -20,6 +20,7 @@ pub type CommandFunc = fn (&Vec<&str>);
 /// Type for  interactive-mode command's execution functions' BTreeMap 
 type CommandFuncsMap = BTreeMap<&'static str, CommandFunc>;
 
+/// Array for interactive mode commands - short, long, function, help message
 const COMMANDS: &'static [(&str, &str, CommandFunc, &str)] = &[
     ("h", "help", command_help, " 			- this help"),
     ("hd", "help-dice-codes", command_helpdicecodes, " 	- see help about dice codes' format description"),
@@ -102,6 +103,21 @@ fn command_method(_args: &Vec<&str>) {
             }
         }
     }    
+}
+
+pub fn command_codes(input: &str, n: usize) {
+
+    let mut input_string: String = input.to_owned();
+
+    while input_string.find("  ") != None {
+        input_string = input_string.replace("  ", " ");
+    }
+
+    let codes: Vec<String> = input_string.split(' ').map(|code| code.to_owned()).collect();
+
+    let mut all_stats: Vec<IntValue> = Vec::new();
+    process_codes(&codes, &mut all_stats);
+
 }
 
 pub fn show_bad_command() {
