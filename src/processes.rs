@@ -6,7 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-// use itertools::Itertools;
 use num::iter::range;
 use regex::Regex;
 
@@ -14,14 +13,14 @@ use crate::arithmetic::{Arythmetic, process_arithmetic};
 
 use crate::dices::{IntValue, n_d_reroll_drop_crop_plus};
 
-use crate::errors::DiceError;
+use crate::errors::{DiceError, process_dice_code_error};
 
 use crate::init::OPT;
 use crate::log::{log, logln, log_codes, log_method, log_roll};
 use crate::methods::METHODSMAP;
 use crate::render::{format_dice_str, render_codes, render_roll, render_stats};
 use crate::statlists::{StatList, STATLISTSMAP};
-use crate::strings::{DELIMITER, DICECODES_HELP_MSG, UNKNOWNSTATLIST_ERROR_MSG};
+use crate::strings::{DELIMITER, UNKNOWNSTATLIST_ERROR_MSG};
 
 /// process stat generation method, uses all_stat for statistics
 pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usize, num: usize) -> Option<()> {
@@ -91,7 +90,10 @@ pub fn process_dices(all_stats: &mut Vec<IntValue>, idx: usize, num: usize) {
         process_keys(all_stats);
     }
     else {
-        process_codes(&OPT.dicecodes, all_stats);
+        match process_codes(&OPT.dicecodes, all_stats) {
+            Ok(_) => {},
+            Err(e) => process_dice_code_error(&OPT.dicecodes, e, true)
+        }
     }
 }
 
@@ -120,7 +122,7 @@ fn process_keys(all_stats: &mut Vec<IntValue>) {
 }
 
 /// process dice roll from dice codes
-pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>) {
+pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>)-> Result<(), DiceError> {
     for dicecode in dicecodes {
         if !dicecode.is_empty() {
             // parse dice codes with regular expression
@@ -133,31 +135,17 @@ pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>) {
             let dices = re.captures_iter(&dicecode).into_iter();
             let dices_num = re.captures_iter(&dicecode).into_iter().count();
 
-            // process all individual codes
+            // parse individual dice codes
             let dices_vec: Vec<Arythmetic> = dices.
                 enumerate().
                 map(|(num, it)| 
-                        match process_code(dices_num > 1,
-                                           num,
-                                           &it.iter().
-                                                map(|p| p.map_or("", |m| m.as_str())).
-                                                collect::<Vec<&str>>()) {
-                            Ok(x) => x,
-                            Err(e) => {
-                                match e {  
-                                    DiceError::BadCode => {
-                                        eprintln!("{} {}!", e, dicecode);
-                                        if !OPT.no_help {
-                                            println!("{}", DICECODES_HELP_MSG);
-                                        }
-                                    }
-                                    _ => eprintln!("{}", e)
-                                };
-                                std::process::exit(1);                                
-                            }
-                        }
-                    ).
-                collect();
+                    process_code(dices_num > 1,
+                                 num,
+                                 &it.iter().
+                                    map(|p| p.map_or("", |m| m.as_str())).
+                                    collect::<Vec<&str>>())
+                ).
+            collect::<Result<Vec<Arythmetic>, DiceError>>()?;
 
             if OPT.debug {
                 println!("{:?}", dices_vec);
@@ -172,6 +160,8 @@ pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>) {
             all_stats.push(res);
         }
     }
+
+    Ok(())
 }
 
 /// process single code from parsed regular expression

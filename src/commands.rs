@@ -9,7 +9,7 @@
 use std::collections::BTreeMap;
 
 use crate::dices::IntValue;
-use crate::errors::cant_find_method;
+use crate::errors::{cant_find_method, process_dice_code_error};
 use crate::help::{help_dicecodes, help_method, help_methods, help_tags, find_tags};
 use crate::processes::{process_codes, process_method};
 use crate::strings::{BADCOMMAND_ERROR_MSG, COMMAND_HELP_MSG};
@@ -22,16 +22,17 @@ type CommandFuncsMap = BTreeMap<&'static str, CommandFunc>;
 
 /// Array for interactive mode commands - short, long, function, help message
 const COMMANDS: &'static [(&str, &str, CommandFunc, &str)] = &[
-    ("h", "help", command_help, " 			- this help"),
-    ("hd", "help-dice-codes", command_helpdicecodes, " 	- see help about dice codes' format description"),
-    ("hm", "help-method", command_helpmethod, " METHODNAME	- see help about generation method METHODNAME"),
-    ("hms", "help-methods", command_helpmethods, " 		- see help about generation methods"),
-    ("ht", "help-tags", command_helptags, " 		- see tags' list"),
-    ("ft", "find-tags", command_findtags, " TAG1,TAG2,... - see help about generation method by tags (for example: \"DnD,ordered\"). See .help-tags to see tags' list"),
-    ("m", "method", command_method, " METHODNAME NUM	- execute generation method METHODNAME NUM times"),
-    ("q", "quit", command_quit, " 			- exit program")
+    ("h",   "help",             command_help,           " 			- this help"),
+    ("hd",  "help-dice-codes",  command_helpdicecodes,  " 	- see help about dice codes' format description"),
+    ("hm",  "help-method",      command_helpmethod,     " METHODNAME	- see help about generation method METHODNAME"),
+    ("hms", "help-methods",     command_helpmethods,    " 		- see help about generation methods"),
+    ("ht",  "help-tags",        command_helptags,       " 		- see tags' list"),
+    ("ft",  "find-tags",        command_findtags,       " TAG1,TAG2,... - see help about generation method by tags (for example: \"DnD,ordered\"). See .help-tags to see tags' list"),
+    ("m",   "method",           command_method,         " METHODNAME NUM	- execute generation method METHODNAME NUM times"),
+    ("q",   "quit",             command_quit,           " 			- exit program")
 ];
 
+/// command processing for help command
 fn command_help(_args: &Vec<&str>) {
     println!("{}", COMMAND_HELP_MSG);
 
@@ -40,7 +41,7 @@ fn command_help(_args: &Vec<&str>) {
     }
 }
 
-
+/// command processing for help-method command
 fn command_helpmethod(_args: &Vec<&str>) {
     if _args.len() < 1 || _args[0].len() == 0 {
         show_bad_command();
@@ -50,19 +51,22 @@ fn command_helpmethod(_args: &Vec<&str>) {
     help_method(_args[0], false);
 }
 
-
+/// command processing for help-methods command
 fn command_helpmethods(_args: &Vec<&str>) {
     help_methods();
 }
 
+/// command processing for help-dice-codes command
 fn command_helpdicecodes(_args: &Vec<&str>) {
     help_dicecodes();
 }
 
+/// command processing for help-tags command
 fn command_helptags(_args: &Vec<&str>) {
     help_tags();
 }
 
+/// command processing for find-tags command
 fn command_findtags(_args: &Vec<&str>) {
     if _args.len() < 1 || _args[0].len() == 0 {
         show_bad_command();
@@ -72,10 +76,12 @@ fn command_findtags(_args: &Vec<&str>) {
     find_tags(_args[0]);
 }
 
+/// command processing for quit command
 fn command_quit(_args: &Vec<&str>) {
     std::process::exit(0);
 }
 
+/// command processing for method command
 fn command_method(_args: &Vec<&str>) {
     if _args.len() < 1 || _args[0].len() == 0 {
         show_bad_command();
@@ -105,6 +111,7 @@ fn command_method(_args: &Vec<&str>) {
     }    
 }
 
+/// command processing for raw dice codes
 pub fn command_codes(input: &str, n: usize) {
 
     let mut input_string: String = input.to_owned();
@@ -116,10 +123,13 @@ pub fn command_codes(input: &str, n: usize) {
     let codes: Vec<String> = input_string.split(' ').map(|code| code.to_owned()).collect();
 
     let mut all_stats: Vec<IntValue> = Vec::new();
-    process_codes(&codes, &mut all_stats);
-
+    match process_codes(&codes, &mut all_stats) {
+        Ok(_) => {},
+        Err(e) => process_dice_code_error(&codes, e, false)
+    }
 }
 
+/// show bad command
 pub fn show_bad_command() {
     println!("{}", BADCOMMAND_ERROR_MSG);
     command_help(&Vec::new());

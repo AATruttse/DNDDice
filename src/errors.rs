@@ -11,7 +11,7 @@ use custom_error::custom_error;
 use crate::help::help_methods;
 use crate::init::OPT;
 
-use crate::strings::UNKNOWNMETHOD_ERROR_MSG;
+use crate::strings::{DICECODES_HELP_MSG, UNKNOWNMETHOD_ERROR_MSG};
 
 // Custom errors type for dice throwing functions
 custom_error!{pub DiceError
@@ -35,5 +35,21 @@ pub fn cant_find_method(method: &str, need_exit: bool) {
     if need_exit
     {
         std::process::exit(1);
+    }
+}
+
+pub fn process_dice_code_error(dicecodes: &Vec<String>, err: DiceError, need_exit: bool) {
+    match err {  
+        DiceError::BadCode => {
+            eprintln!("{} {}!", err, dicecodes.join(" "));
+            if !OPT.no_help {
+                println!("{}", DICECODES_HELP_MSG);
+            }
+        }
+        _ => eprintln!("{}", err)
+    };
+
+    if need_exit {
+        std::process::exit(1);  
     }
 }
