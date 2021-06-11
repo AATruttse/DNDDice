@@ -14,7 +14,7 @@ use crate::dices::IntValue;
 use crate::init::{LOGFILE, OPT};
 use crate::render::format_dice_str;
 use crate::statlists::StatList;
-use crate::strings::{DELIMITER, LOGFILENONUTF8FILENAME_ERROR_MSG, LOGFILEWRITE_ERROR_MSG};
+use crate::strings::{DELIMITER, NONUTF8FILENAME_ERROR_MSG, LOGFILEWRITE_ERROR_MSG};
 
 /// Log message to log file
 pub fn log(log_str: &str) {
@@ -27,7 +27,7 @@ pub fn log(log_str: &str) {
                         LOGFILEWRITE_ERROR_MSG,
                         match OPT.log_file.to_str() {
                             Some(x) => x,
-                            None => LOGFILENONUTF8FILENAME_ERROR_MSG
+                            None => NONUTF8FILENAME_ERROR_MSG
                         });
                     eprintln!("{}", e);
                 },

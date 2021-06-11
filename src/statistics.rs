@@ -10,6 +10,7 @@ use std::collections::BTreeMap;
 
 use crate::dices::IntValue;
 use crate::init::OPT;
+use crate::output::{output, outputln};
 use crate::strings::ZEROSTAT_ERROR_MSG;
 
 /// Float type for statistics
@@ -160,53 +161,55 @@ pub fn show_stats(stats: &Vec<IntValue>) {
 
     if OPT.sum {
         if !OPT.numbers_only {
-            print!("Sum: ");    
+            output("Sum: ");    
         }
-        println!("{}", statistics.get_sum());
+        outputln(&statistics.get_sum().to_string());
     }
 
     if OPT.stat || OPT.min {
         if !OPT.numbers_only {
-            print!("Min value: ");    
+            output("Min value: ");    
         }
-        println!("{}", statistics.get_min());
+        outputln(&statistics.get_min().to_string());
     }
 
     if OPT.stat || OPT.max {
         if !OPT.numbers_only {
-            print!("Max value: ");    
+            output("Max value: ");    
         }
-        println!("{}", statistics.get_max());
+        outputln(&statistics.get_max().to_string());
     }
 
     if OPT.stat || OPT.mean {
         if !OPT.numbers_only {
-            print!("Mean value: ");    
+            output("Mean value: ");    
         }
-        println!("{:.digits$}", statistics.get_mean(), digits=OPT.round_digits as usize);
+        let mean_str = format!("{:.digits$}", statistics.get_mean(), digits=OPT.round_digits as usize);
+        outputln(&mean_str);
     }
 
     if OPT.stat || OPT.median {
         if !OPT.numbers_only {
-            print!("Median value: ");    
+            output("Median value: ");    
         }
-        println!("{}", statistics.get_median());
+        outputln(&statistics.get_median().to_string());
     }
 
     if OPT.stat || OPT.mode {
         if !OPT.numbers_only {
-            print!("Mode value: ");    
+            output("Mode value: ");    
         }
-        println!("{}", statistics.get_mode());
+        outputln(&statistics.get_mode().to_string());
     }
 
     if OPT.stat || OPT.probabilities {
         if !OPT.numbers_only {
-            println!("Probabilities: ");    
+            outputln("Probabilities: ");    
         }
 
         for (key, val) in statistics.get_probabilities() {
-            println!("{} - {:.digits$}", key, val, digits=OPT.round_digits as usize);
+            let prob_str = format!("{} - {:.digits$}", key, val, digits=OPT.round_digits as usize);
+            outputln(&prob_str);
         }
     }
 }

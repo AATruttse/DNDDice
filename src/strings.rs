@@ -22,7 +22,9 @@ pub static BADDICECODE_ERROR_MSG: &str = "Can't parse the dice codes:";
 pub static DICECODEDECRYPTION_ERROR_MSG: &str = "Dice code decription internal error.";
 pub static LOGFILE_ERROR_MSG: &str = "Can't open log file";
 pub static LOGFILEWRITE_ERROR_MSG: &str = "Can't write log file";
-pub static LOGFILENONUTF8FILENAME_ERROR_MSG: &str = "[Non-UTF8 file name]";
+pub static OUTPUTFILE_ERROR_MSG: &str = "Can't open output file";
+pub static OUTPUTFILEWRITE_ERROR_MSG: &str = "Can't write output file";
+pub static NONUTF8FILENAME_ERROR_MSG: &str = "[Non-UTF8 file name]";
 
 pub static UNKNOWNMETHOD_ERROR_MSG: &str = "Unknown method";
 pub static UNKNOWNSTATLIST_ERROR_MSG: &str = "Internal error: Unknown stat list for method.";
@@ -89,4 +91,5 @@ Examples:
 
 	pub static BADCOMMAND_ERROR_MSG: &str = "Bad command.";
 	pub static COMMAND_HELP_MSG: &str = "Available commands:
-DICECODE{ DICECODE}		- roll dices. Examples: 2d8plus1, 4d6drop1, 2d4-1d6/1d3 etc. See --help-dice-codes for format description";
+DICECODE{ DICECODE}		- roll dices. Examples: 2d8plus1, 4d6drop1, 2d4-1d6/1d3 etc. See --help-dice-codes for format description
+.NUM DICECODE{ DICECODE}	- roll given dices NUM times";

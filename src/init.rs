@@ -12,7 +12,7 @@ use std::fs::{File, OpenOptions};
 use std::path::PathBuf;
 use structopt::StructOpt;
 
-use crate::strings::{LOGFILE_ERROR_MSG, LOGFILENONUTF8FILENAME_ERROR_MSG};
+use crate::strings::{LOGFILE_ERROR_MSG, OUTPUTFILE_ERROR_MSG, NONUTF8FILENAME_ERROR_MSG};
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "dnddice", about = "RPG dice thrower for command line. Author: Dargot, dargot@yandex.ru")]
@@ -56,6 +56,14 @@ pub struct Opt {
     /// Log file
     #[structopt(long="log-file", parse(from_os_str), default_value = "dnddice.log")]
     pub log_file: PathBuf,
+
+    /// Output file
+    #[structopt(short="o", long="output-file", parse(from_os_str), default_value = "")]
+    pub output_file: PathBuf,
+    
+    /// Silent mode - no output to stdout
+    #[structopt(short="s", long="silent")]
+    pub silent_mode: bool,
 
     /// Number of repetitions
     #[structopt(short="N", long="repetitions-num", default_value = "1")]
@@ -178,7 +186,7 @@ lazy_static! {
                                   LOGFILE_ERROR_MSG,
                                   match OPT.log_file.to_str() {
                                         Some(err_str) => err_str,
-                                        None => LOGFILENONUTF8FILENAME_ERROR_MSG
+                                        None => NONUTF8FILENAME_ERROR_MSG
                                 });
                         eprintln!("{}", e);
                         None
@@ -187,6 +195,30 @@ lazy_static! {
         },
         _ => None
     };
+
+    pub static ref OUTPUTFILE: Option<File> = match OPT.output_file.to_str() {
+        Some(outfile_str) => {
+            if outfile_str.is_empty() {
+                return None;
+            }
+
+            match OpenOptions::new()
+                .append(true)
+                .create(true)
+                .open(&OPT.output_file) {
+                    Ok(f) => Some(f),
+                    Err(e) => {
+                        eprintln!("{} {}:", OUTPUTFILE_ERROR_MSG, outfile_str);
+                        eprintln!("{}", e);
+                        None
+                    }
+            }
+        },
+        None => {
+            eprintln!("{} {}", OUTPUTFILE_ERROR_MSG, NONUTF8FILENAME_ERROR_MSG);
+            None
+        }
+    };    
 }
 
 impl Opt {

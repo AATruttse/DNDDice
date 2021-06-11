@@ -36,7 +36,10 @@ pub fn process_input(input: &str) {
     
         match get_command_func(command) {
             Some(func) => func(&args.split(" ").collect::<Vec<&str>>()),
-            None => show_bad_command()
+            None => match command.parse::<usize>() {
+                Ok(num) => command_codes(args, num),
+                Err(_) => show_bad_command()
+            }
         }
     }
     else {

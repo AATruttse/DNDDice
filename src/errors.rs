@@ -10,7 +10,7 @@ use custom_error::custom_error;
 
 use crate::help::help_methods;
 use crate::init::OPT;
-
+use crate::output::println;
 use crate::strings::{DICECODES_HELP_MSG, UNKNOWNMETHOD_ERROR_MSG};
 
 // Custom errors type for dice throwing functions
@@ -43,7 +43,7 @@ pub fn process_dice_code_error(dicecodes: &Vec<String>, err: DiceError, need_exi
         DiceError::BadCode => {
             eprintln!("{} {}!", err, dicecodes.join(" "));
             if !OPT.no_help {
-                println!("{}", DICECODES_HELP_MSG);
+                println(DICECODES_HELP_MSG);
             }
         }
         _ => eprintln!("{}", err)

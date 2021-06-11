@@ -24,6 +24,7 @@ pub mod method_comments;
 pub mod method_descs;
 pub mod method_descs_long;
 pub mod methods;
+pub mod output;
 pub mod processes;
 pub mod render;
 pub mod statistics;
@@ -56,15 +57,15 @@ fn main() {
         let mut all_stats: Vec<IntValue> = Vec::new();
 
         let n = max(1, OPT.num);
-        for _i in 0..n {
+        for i in 0..n {
             if !OPT.method.is_empty() {
-                match process_method(&OPT.method, &mut all_stats, _i, n) {
+                match process_method(&OPT.method, &mut all_stats, i, n) {
                     Some(_) => {},
                     None => cant_find_method(&OPT.method, true)
                 };
             }
             else {
-                process_dices(&mut all_stats, _i, n);
+                process_dices(&mut all_stats, i, n);
             }
         }
 

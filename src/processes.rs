@@ -18,6 +18,7 @@ use crate::errors::{DiceError, process_dice_code_error};
 use crate::init::OPT;
 use crate::log::{log, logln, log_codes, log_method, log_roll};
 use crate::methods::METHODSMAP;
+use crate::output::{output, outputln};
 use crate::render::{format_dice_str, render_codes, render_roll, render_stats};
 use crate::statlists::{StatList, STATLISTSMAP};
 use crate::strings::{DELIMITER, UNKNOWNSTATLIST_ERROR_MSG};
@@ -57,7 +58,7 @@ pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usi
             }
 
             if (OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat()) && !OPT.numbers_only && idx == num - 1 {
-                println!("{}", method.get_comment());
+                outputln(method.get_comment());
             }
         },
         None => {
@@ -65,7 +66,6 @@ pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usi
                 println!("Can't found method {}", method_name);
             }
             return None
-            //cant_find_method(&OPT.method)
         }
     }
 
@@ -75,14 +75,7 @@ pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usi
 /// process any dice roll, uses all_stat for statistics
 pub fn process_dices(all_stats: &mut Vec<IntValue>, idx: usize, num: usize) {
 
-    let idx_str = format!("{}) ", idx + 1);
-    if num > 1 {
-        log(&idx_str);
-    }
-
-    if OPT.show_number {
-        print!("{}", idx_str);
-    }
+    log_and_show_dice_num(idx, num);
 
     if OPT.dicecodes.is_empty() ||
        OPT.dicecodes[0].is_empty()
@@ -149,7 +142,11 @@ pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>)-> R
 
             if OPT.debug {
                 println!("{:?}", dices_vec);
-            }                
+            }
+            
+            if dices_vec.is_empty() {
+                return Err(DiceError::BadCode);
+            }
 
             // process parsed dice codes
             let res = process_arithmetic(&dices_vec);
@@ -311,7 +308,7 @@ fn log_and_render_roll(
         (OPT.verbose > 0 && !is_several_rolls) ||
         OPT.verbose > 1 {
         show_dice_code = true;
-        print!("{}", dice_str);
+        output(&dice_str);
     }
 
     if (OPT.log > 0 && !is_several_rolls) ||
@@ -336,7 +333,7 @@ pub fn log_and_render_title(idx: usize, num: usize, desc: &str) {
 
     if OPT.show_method { 
         if idx == 0 {
-            println!("{}", desc);
+            outputln(desc);
         }
         if OPT.log > 0 {
             log(" - ");
@@ -348,6 +345,18 @@ pub fn log_and_render_title(idx: usize, num: usize, desc: &str) {
     }
 
     if OPT.show_number {
-        print!("{}) ", idx + 1);
+        let idx_str = format!("{}) ", idx + 1);
+        output(&idx_str);
+    }
+}
+
+pub fn log_and_show_dice_num(idx: usize, num: usize) {
+    let idx_str = format!("{}) ", idx + 1);
+    if num > 1 {
+        log(&idx_str);
+    }
+
+    if OPT.show_number {
+        output(&idx_str);
     }
 }

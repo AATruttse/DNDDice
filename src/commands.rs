@@ -11,7 +11,7 @@ use std::collections::BTreeMap;
 use crate::dices::IntValue;
 use crate::errors::{cant_find_method, process_dice_code_error};
 use crate::help::{help_dicecodes, help_method, help_methods, help_tags, find_tags};
-use crate::processes::{process_codes, process_method};
+use crate::processes::{log_and_show_dice_num, process_codes, process_method};
 use crate::strings::{BADCOMMAND_ERROR_MSG, COMMAND_HELP_MSG};
 
 /// Type for interactive-mode command's execution functions
@@ -123,9 +123,13 @@ pub fn command_codes(input: &str, n: usize) {
     let codes: Vec<String> = input_string.split(' ').map(|code| code.to_owned()).collect();
 
     let mut all_stats: Vec<IntValue> = Vec::new();
-    match process_codes(&codes, &mut all_stats) {
-        Ok(_) => {},
-        Err(e) => process_dice_code_error(&codes, e, false)
+
+    for i in 0..n {
+        log_and_show_dice_num(i, n);
+        match process_codes(&codes, &mut all_stats) {
+            Ok(_) => {},
+            Err(e) => process_dice_code_error(&codes, e, false)
+        }
     }
 }
 
