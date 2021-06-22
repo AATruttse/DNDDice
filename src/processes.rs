@@ -13,7 +13,7 @@ use crate::arithmetic::{Arythmetic, process_arithmetic};
 
 use crate::dices::{IntValue, n_d_reroll_drop_crop_plus};
 
-use crate::errors::{DiceError, process_dice_code_error};
+use crate::errors::{DiceError, errorln, process_dice_code_error};
 
 use crate::init::OPT;
 use crate::log::{log, logln, log_codes, log_method, log_roll};
@@ -96,7 +96,7 @@ fn process_keys(all_stats: &mut Vec<IntValue>) {
     let reroll = match parse_reroll_code(&OPT.reroll) {
         Some(r) => r,
         None => {
-            eprintln!("{}", DiceError::BadRerollCode);
+           errorln(&DiceError::BadRerollCode.to_string());
             std::process::exit(1);  
         }
     };
@@ -254,7 +254,7 @@ fn process_roll(
     ) {
         Ok(x) => x,
         Err(e) => {
-            eprintln!("{}", e);
+            errorln(&e.to_string());
             std::process::exit(1);
         }
     };

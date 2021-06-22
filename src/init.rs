@@ -12,6 +12,7 @@ use std::fs::{File, OpenOptions};
 use std::path::PathBuf;
 use structopt::StructOpt;
 
+use crate::errors::errorln;
 use crate::strings::{LOGFILE_ERROR_MSG, OUTPUTFILE_ERROR_MSG, NONUTF8FILENAME_ERROR_MSG};
 
 #[derive(Debug, StructOpt)]
@@ -208,14 +209,16 @@ lazy_static! {
                 .open(&OPT.output_file) {
                     Ok(f) => Some(f),
                     Err(e) => {
-                        eprintln!("{} {}:", OUTPUTFILE_ERROR_MSG, outfile_str);
-                        eprintln!("{}", e);
+                        let err_str = format!("{} {}:", OUTPUTFILE_ERROR_MSG, outfile_str);
+                        errorln(&err_str);
+                        errorln(&e.to_string());
                         None
                     }
             }
         },
         None => {
-            eprintln!("{} {}", OUTPUTFILE_ERROR_MSG, NONUTF8FILENAME_ERROR_MSG);
+            let err_str = format!("{} {}", OUTPUTFILE_ERROR_MSG, NONUTF8FILENAME_ERROR_MSG);
+            errorln(&err_str);
             None
         }
     };    

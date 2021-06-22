@@ -8,6 +8,7 @@
 
 use std::io::{BufWriter, Write};
 
+use crate::errors::errorln;
 use crate::init::{OUTPUTFILE, OPT};
 use crate::strings::{NONUTF8FILENAME_ERROR_MSG, OUTPUTFILEWRITE_ERROR_MSG};
 
@@ -18,13 +19,14 @@ fn output_file(output_str: &str) {
             let mut f = BufWriter::new(x);
             match f.write_all(output_str.as_bytes()) {
                 Err(e) => {
-                    eprintln!("{} {}:",
+                    let err_str = format!("{} {}:",
                     OUTPUTFILEWRITE_ERROR_MSG,
                         match OPT.output_file.to_str() {
                             Some(x) => x,
                             None => NONUTF8FILENAME_ERROR_MSG
                         });
-                    eprintln!("{}", e);
+                    errorln(&err_str);
+                    errorln(&e.to_string());
                 },
                 _ => ()
             };
