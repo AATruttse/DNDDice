@@ -25,6 +25,7 @@ pub static LOGFILEWRITE_ERROR_MSG: &str = "Can't write log file";
 pub static OUTPUTFILE_ERROR_MSG: &str = "Can't open output file";
 pub static OUTPUTFILEWRITE_ERROR_MSG: &str = "Can't write output file";
 pub static NONUTF8FILENAME_ERROR_MSG: &str = "[Non-UTF8 file name]";
+pub static ADVDISADV_ERROR_MSG: &str = "Can't process roll with advantage and disadvantage simultaneously";
 
 pub static UNKNOWNMETHOD_ERROR_MSG: &str = "Unknown method";
 pub static UNKNOWNSTATLIST_ERROR_MSG: &str = "Internal error: Unknown stat list for method.";
@@ -33,7 +34,7 @@ pub static ZEROSTAT_ERROR_MSG: &str = "Can't calculate statistics from zero-leng
 pub static DICECODES_HELP_MSG: &str = "Dice codes format:
 DiceCodes = DiceCode{ DiceCode}
 DiceCode = SingleDice{(+|-|*|/|%|^)SingleDice}
-SingleDice = [NUM1]d[NUM2][(drop|d)NUM3(crop|c)NUM4|((drop|d)NUM3|(crop|c)NUM4|(greatest|g)NUM5|(lowest|l)NUM6)][(plus|p)NUM7][(minus|m)NUM8][(reroll|r)REROLL]|NUM9
+SingleDice = [NUM1]d[NUM2][(reroll|r)REROLL][(drop|d)NUM3(crop|c)NUM4|((drop|d)NUM3|(crop|c)NUM4|(greatest|g)NUM5|(lowest|l)NUM6)][(plus|p)NUM7][(minus|m)NUM8]|NUM9
 
 Where:
 	NUM1 is number of dices (default = 1);

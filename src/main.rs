@@ -30,6 +30,7 @@ pub mod render;
 pub mod statistics;
 pub mod statlists;
 pub mod strings;
+pub mod tests;
 
 use std::cmp::max;
 use std::io;
