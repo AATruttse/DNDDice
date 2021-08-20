@@ -378,94 +378,233 @@ lazy_static! {
     pub static ref METHODSMAP: GenMethodsMap = {
         let mut m = GenMethodsMap::new();
 
-        m.insert("dnd", Method::new("d&d", true, DND_DESC, DND_HELP, |stats| method_nd_wochoice(6, 3, 6, stats), &["d&d", "dnd", "ordered"]));
-
-        m.insert("dndrealman", Method::new("d&d", false, DNDREALMAN_DESC,  DNDREALMAN_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "choice", "humor"]));
-        m.insert("dndcrazieloonie", Method::new("d&d", true, DNDCRAZYLOONIE_DESC, DNDCRAZYLOONIE_HELP, |stats| method_nd_wochoice(6, 1, 20, stats), &["d&d", "dnd", "ordered", "humor"]));
-        m.insert("dndmunchkin", Method::new("d&d", true, DNDMUNCHKIN_DESC, DNDMUNCHKIN_HELP,  |stats| method_array(&ALL25_ARRAY, stats), &["d&d", "dnd", "ordered", "pre-set", "humor"]));
-        m.insert("dndevilchampion", Method::new("d&d", false, DNDEVILCHAMPION_DESC, DNDEVILCHAMPION_HELP, method_dndevilchampion, &["d&d", "dnd", "choice", "humor"]));
-        m.insert("dndnewbie", Method::new("d&d", true, DNDNEWBIE_DESC, DNDNEWBIE_HELP, |stats| method_nd_wochoice(6, 3, 6, stats), &["d&d", "dnd", "ordered", "humor"]));
+        m.insert("dnd", Method::new(
+            "d&d", true, DND_DESC, DND_HELP, |stats| method_nd_wochoice(6, 3, 6, stats),
+            &["d&d", "dnd", "ordered"]));
+        m.insert("dndrealman", Method::new(
+            "d&d", false, DNDREALMAN_DESC,  DNDREALMAN_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats),
+            &["d&d", "dnd", "choice", "humor"]));
+        m.insert("dndcrazieloonie", Method::new(
+            "d&d", true, DNDCRAZYLOONIE_DESC, DNDCRAZYLOONIE_HELP, |stats| method_nd_wochoice(6, 1, 20, stats),
+            &["d&d", "dnd", "ordered", "humor"]));
+        m.insert("dndmunchkin", Method::new(
+            "d&d", true, DNDMUNCHKIN_DESC, DNDMUNCHKIN_HELP, |stats| method_array(&ALL25_ARRAY, stats),
+            &["d&d", "dnd", "ordered", "pre-set", "humor"]));
+        m.insert("dndevilchampion", Method::new(
+            "d&d", false, DNDEVILCHAMPION_DESC, DNDEVILCHAMPION_HELP, method_dndevilchampion,
+            &["d&d", "dnd", "choice", "humor"]));
+        m.insert("dndnewbie", Method::new(
+            "d&d", true, DNDNEWBIE_DESC, DNDNEWBIE_HELP, |stats| method_nd_wochoice(6, 3, 6, stats),
+            &["d&d", "dnd", "ordered", "humor"]));
         
-        m.insert("adnd1", Method::new("d&d", true, ADND1_DESC, ADND1_HELP, |stats| method_nd_wochoice(6, 3, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "ordered"]));
-        m.insert("adnd2", Method::new("d&d", true, ADND2_DESC, ADND2_HELP, |stats| method_best_nd_wochoice(6, 3, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "ordered"]));
-        m.insert("adnd3", Method::new("d&d", false, ADND3_DESC, ADND3_HELP, |stats| method_nd_wchoice(6, 3, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
-        m.insert("adnd4", Method::new("d&d", false, ADND4_DESC, ADND4_HELP, |stats| method_bestlist_nd_wchoice(6, 3, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
-        m.insert("adnd5", Method::new("d&d", false, ADND5_DESC, ADND5_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
+        m.insert("adnd1", Method::new(
+            "d&d", true, ADND1_DESC, ADND1_HELP, |stats| method_nd_wochoice(6, 3, 6, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "ordered"]));
+        m.insert("adnd2", Method::new(
+            "d&d", true, ADND2_DESC, ADND2_HELP, |stats| method_best_nd_wochoice(6, 3, 6, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "ordered"]));
+        m.insert("adnd3", Method::new(
+            "d&d", false, ADND3_DESC, ADND3_HELP, |stats| method_nd_wchoice(6, 3, 6, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
+        m.insert("adnd4", Method::new(
+            "d&d", false, ADND4_DESC, ADND4_HELP, |stats| method_bestlist_nd_wchoice(6, 3, 6, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
+        m.insert("adnd5", Method::new(
+            "d&d", false, ADND5_DESC, ADND5_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "choice"]));
 
-        m.insert("adnd_cbon1", Method::new("d&d", true, ADND_CBON1_DESC, ADND_CBON1_HELP,  |stats| method_rnd_array(&CBON_1_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
-        m.insert("adnd_cbon2", Method::new("d&d", true, ADND_CBON2_DESC, ADND_CBON2_HELP,  |stats| method_rnd_array(&CBON_2_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
-        m.insert("adnd_cbon3", Method::new("d&d", true, ADND_CBON3_DESC, ADND_CBON3_HELP,  |stats| method_rnd_array(&CBON_3_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
-        m.insert("adnd_cbon4", Method::new("d&d", true, ADND_CBON4_DESC, ADND_CBON4_HELP,  |stats| method_rnd_array(&CBON_4_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
-        m.insert("adnd_cbon5", Method::new("d&d", true, ADND_CBON5_DESC, ADND_CBON5_HELP,  |stats| method_rnd_array(&CBON_5_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
-        m.insert("adnd_cbon6", Method::new("d&d", true, ADND_CBON6_DESC, ADND_CBON6_HELP,  |stats| method_rnd_array(&CBON_6_ARRAY, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
-        m.insert("adnd_cbon7", Method::new("d&d", false, ADND_CBON7_DESC, ADND_CBON7_HELP, |stats| method_nd_plus_wchoice(6, 1, 8, 10, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "choice"]));
-        m.insert("adnd_cbon8", Method::new_w_comment("d&d", false, ADND_CBON8_DESC, ADND_CBON8_HELP, ADND_CBON8_COMMENT, |stats| method_nd_plus_wchoice(6, 1, 8, 10, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "choice"]));
-        m.insert("adnd_cbon7wochoice", Method::new("d&d", true, ADND_CBON7WOCHOICE_DESC, ADND_CBON7WOCHOICE_HELP, |stats| method_nd_plus_wochoice(6, 1, 8, 10, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "ordered"]));
-        m.insert("adnd_cbon8wochoice", Method::new("d&d", true, ADND_CBON8WOCHOICE_DESC, ADND_CBON8WOCHOICE_HELP, method_adnd_cbon_8wochoice, &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "ordered"]));
+        m.insert("adnd_cbon1", Method::new(
+            "d&d", true, ADND_CBON1_DESC, ADND_CBON1_HELP,  |stats| method_rnd_array(&CBON_1_ARRAY, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
+        m.insert("adnd_cbon2", Method::new(
+            "d&d", true, ADND_CBON2_DESC, ADND_CBON2_HELP,  |stats| method_rnd_array(&CBON_2_ARRAY, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
+        m.insert("adnd_cbon3", Method::new(
+            "d&d", true, ADND_CBON3_DESC, ADND_CBON3_HELP,  |stats| method_rnd_array(&CBON_3_ARRAY, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
+        m.insert("adnd_cbon4", Method::new(
+            "d&d", true, ADND_CBON4_DESC, ADND_CBON4_HELP,  |stats| method_rnd_array(&CBON_4_ARRAY, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
+        m.insert("adnd_cbon5", Method::new(
+            "d&d", true, ADND_CBON5_DESC, ADND_CBON5_HELP,  |stats| method_rnd_array(&CBON_5_ARRAY, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
+        m.insert("adnd_cbon6", Method::new(
+            "d&d", true, ADND_CBON6_DESC, ADND_CBON6_HELP,  |stats| method_rnd_array(&CBON_6_ARRAY, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "pre-set", "random_pre-set", "ordered"]));
+        m.insert("adnd_cbon7", Method::new(
+            "d&d", false, ADND_CBON7_DESC, ADND_CBON7_HELP, |stats| method_nd_plus_wchoice(6, 1, 8, 10, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "choice"]));
+        m.insert("adnd_cbon8", Method::new_w_comment(
+            "d&d", false, ADND_CBON8_DESC, ADND_CBON8_HELP, ADND_CBON8_COMMENT, |stats| method_nd_plus_wchoice(6, 1, 8, 10, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "choice"]));
+        m.insert("adnd_cbon7wochoice", Method::new(
+            "d&d", true, ADND_CBON7WOCHOICE_DESC, ADND_CBON7WOCHOICE_HELP, |stats| method_nd_plus_wochoice(6, 1, 8, 10, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "ordered"]));
+        m.insert("adnd_cbon8wochoice", Method::new(
+            "d&d", true, ADND_CBON8WOCHOICE_DESC, ADND_CBON8WOCHOICE_HELP, method_adnd_cbon_8wochoice,
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "cbon", "ordered"]));
 
-        m.insert("adnd_darksun", Method::new("d&d", true, ADND_DS_DESC, ADND_DS_HELP, |stats| method_nd_plus_wochoice(6, 4, 4, 4, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "ordered"]));
-        m.insert("adnd_darksun1", Method::new("d&d", true, ADND_DS1_DESC, ADND_DS1_HELP, |stats| method_best_nd_wochoice(6, 5, 4, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "ordered"]));
-        m.insert("adnd_darksun2", Method::new("d&d", false, ADND_DS2_DESC, ADND_DS2_HELP, |stats| method_nd_wchoice(6, 5, 4, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
-        m.insert("adnd_darksun3", Method::new("d&d", false, ADND_DS3_DESC, ADND_DS3_HELP, |stats| method_bestlist_nd_wchoice(6, 5, 4, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
-        m.insert("adnd_darksun4", Method::new("d&d", false, ADND_DS4_DESC, ADND_DS4_HELP, |stats| method_nddrop1_wchoice(6, 6, 4, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
+        m.insert("adnd_darksun", Method::new(
+            "d&d", true, ADND_DS_DESC, ADND_DS_HELP, |stats| method_nd_plus_wochoice(6, 4, 4, 4, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "ordered"]));
+        m.insert("adnd_darksun1", Method::new(
+            "d&d", true, ADND_DS1_DESC, ADND_DS1_HELP, |stats| method_best_nd_wochoice(6, 5, 4, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "ordered"]));
+        m.insert("adnd_darksun2", Method::new(
+            "d&d", false, ADND_DS2_DESC, ADND_DS2_HELP, |stats| method_nd_wchoice(6, 5, 4, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
+        m.insert("adnd_darksun3", Method::new(
+            "d&d", false, ADND_DS3_DESC, ADND_DS3_HELP, |stats| method_bestlist_nd_wchoice(6, 5, 4, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
+        m.insert("adnd_darksun4", Method::new(
+            "d&d", false, ADND_DS4_DESC, ADND_DS4_HELP, |stats| method_nddrop1_wchoice(6, 6, 4, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd2", "ad&d2", "darksun", "choice"]));
 
-        m.insert("adnd1_1", Method::new("d&d", false, ADND1_1_DESC, ADND1_1_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "choice"]));
-        m.insert("adnd1_2", Method::new("d&d", false, ADND1_2_DESC, ADND1_2_HELP, |stats| method_bestlist_nd_wchoice(6, 3, 6, stats), &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "choice"]));
-        m.insert("adnd1_3", Method::new("d&d", true, ADND1_3_DESC, ADND1_3_HELP, method_adnd1_3, &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "ordered"]));
-        m.insert("adnd1_4", Method::new_w_num_comment("d&d", true, ADND1_4_DESC, ADND1_4_HELP, ADND1_4_COMMENT, |stats| method_nd_wochoice(6, 3, 6, stats), 12, &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "multiple", "ordered"]));
+        m.insert("adnd1_1", Method::new(
+            "d&d", false, ADND1_1_DESC, ADND1_1_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "choice"]));
+        m.insert("adnd1_2", Method::new(
+            "d&d", false, ADND1_2_DESC, ADND1_2_HELP, |stats| method_bestlist_nd_wchoice(6, 3, 6, stats),
+            &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "choice"]));
+        m.insert("adnd1_3", Method::new(
+            "d&d", true, ADND1_3_DESC, ADND1_3_HELP, method_adnd1_3,
+            &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "ordered"]));
+        m.insert("adnd1_4", Method::new_w_num_comment(
+            "d&d", true, ADND1_4_DESC, ADND1_4_HELP, ADND1_4_COMMENT, |stats| method_nd_wochoice(6, 3, 6, stats), 12,
+            &["d&d", "dnd", "adnd", "ad&d", "adnd1", "ad&d1", "multiple", "ordered"]));
 
-        m.insert("dnd3", Method::new("d&d", false, DND3_DESC, DND3_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "d20", "d&d3", "dnd3", "choice"]));
-        m.insert("dnd3organic", Method::new_w_comment("d&dreroll", true, DND3ORGANIC_DESC, DND3ORGANIC_HELP, DND3_ORGANIC_COMMENT, |stats| method_nddrop1_wochoice(7, 4, 6, stats), &["d&d", "dnd", "d20", "d&d3", "dnd3", "reroll", "ordered"]));
-        m.insert("dnd3customavg", Method::new("d&d", false, DND3CA_DESC, DND3CA_HELP, method_dnd3_2, &["d&d", "dnd", "d20", "d&d3", "dnd3", "choice"]));
-        m.insert("dnd3randomavg", Method::new("d&d", true, DND3RA_DESC, DND3RA_HELP, method_dnd3_3, &["d&d", "dnd", "d20", "d&d3", "dnd3", "ordered"]));
-        m.insert("dnd3highpow", Method::new("d&d", false, DND3HP_DESC, DND3HP_HELP, method_dnd3_4, &["d&d", "dnd", "d20", "d&d3", "dnd3", "choice"]));
+        m.insert("dnd3", Method::new(
+            "d&d", false, DND3_DESC, DND3_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats),
+            &["d&d", "dnd", "d20", "d&d3", "dnd3", "choice"]));
+        m.insert("dnd3organic", Method::new_w_comment(
+            "d&dreroll", true, DND3ORGANIC_DESC, DND3ORGANIC_HELP, DND3_ORGANIC_COMMENT, |stats| method_nddrop1_wochoice(7, 4, 6, stats),
+            &["d&d", "dnd", "d20", "d&d3", "dnd3", "reroll", "ordered"]));
+        m.insert("dnd3customavg", Method::new(
+            "d&d", false, DND3CA_DESC, DND3CA_HELP, method_dnd3_2,
+            &["d&d", "dnd", "d20", "d&d3", "dnd3", "choice"]));
+        m.insert("dnd3randomavg", Method::new(
+            "d&d", true, DND3RA_DESC, DND3RA_HELP, method_dnd3_3,
+            &["d&d", "dnd", "d20", "d&d3", "dnd3", "ordered"]));
+        m.insert("dnd3highpow", Method::new(
+            "d&d", false, DND3HP_DESC, DND3HP_HELP, method_dnd3_4,
+            &["d&d", "dnd", "d20", "d&d3", "dnd3", "choice"]));
 
-        m.insert("dnd35", Method::new("d&d", false, DND35_DESC, DND35_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
-        m.insert("dnd35organic", Method::new_w_comment("d&dreroll", true, DND35ORGANIC_DESC, DND35ORGANIC_HELP, DND35_ORGANIC_COMMENT, |stats| method_nddrop1_wochoice(7, 4, 6, stats), &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "reroll", "ordered"]));
-        m.insert("dnd35customavg", Method::new("d&d", false, DND35CA_DESC, DND35CA_HELP, method_dnd3_2, &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
-        m.insert("dnd35randomavg", Method::new("d&d", true, DND35RA_DESC, DND35RA_HELP, method_dnd3_3, &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "ordered"]));
-        m.insert("dnd35highpow", Method::new("d&d", false, DND35HP_DESC, DND35HP_HELP, method_dnd3_4, &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
-        m.insert("dnd35elite", Method::new("d&d", false, DND35ELITE_DESC, DND35ELITE_HELP, |stats| method_array(&DND35_ARRAY, stats), &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "pre-set", "choice"]));
+        m.insert("dnd35", Method::new(
+            "d&d", false, DND35_DESC, DND35_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats),
+            &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
+        m.insert("dnd35organic", Method::new_w_comment(
+            "d&dreroll", true, DND35ORGANIC_DESC, DND35ORGANIC_HELP, DND35_ORGANIC_COMMENT, |stats| method_nddrop1_wochoice(7, 4, 6, stats),
+            &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "reroll", "ordered"]));
+        m.insert("dnd35customavg", Method::new(
+            "d&d", false, DND35CA_DESC, DND35CA_HELP, method_dnd3_2,
+            &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
+        m.insert("dnd35randomavg", Method::new(
+            "d&d", true, DND35RA_DESC, DND35RA_HELP, method_dnd3_3,
+            &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "ordered"]));
+        m.insert("dnd35highpow", Method::new(
+            "d&d", false, DND35HP_DESC, DND35HP_HELP, method_dnd3_4,
+            &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "choice"]));
+        m.insert("dnd35elite", Method::new(
+            "d&d", false, DND35ELITE_DESC, DND35ELITE_HELP, |stats| method_array(&DND35_ARRAY, stats),
+            &["d&d", "dnd", "d20", "d&d3.5", "dnd3.5", "pre-set", "choice"]));
 
-        m.insert("dnd4", Method::new("d&d", false, DND4_DESC, DND4_HELP, method_dnd4_1, &["d&d", "dnd", "d&d4", "dnd4", "choice"]));
-        m.insert("dnd4standard", Method::new("d&d", false, DND4STANDARD_DESC, DND4STANDARD_HELP, |stats| method_array(&DND4_ARRAY, stats), &["d&d", "dnd", "d&d4", "dnd4", "pre-set", "choice"]));
+        m.insert("dnd4", Method::new(
+            "d&d", false, DND4_DESC, DND4_HELP, method_dnd4_1,
+            &["d&d", "dnd", "d&d4", "dnd4", "choice"]));
+        m.insert("dnd4standard", Method::new(
+            "d&d", false, DND4STANDARD_DESC, DND4STANDARD_HELP, |stats| method_array(&DND4_ARRAY, stats),
+            &["d&d", "dnd", "d&d4", "dnd4", "pre-set", "choice"]));
 
-        m.insert("dnd5", Method::new("d&d", false, DND5_DESC, DND5_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "d&d5", "dnd5", "choice"]));
-        m.insert("dnd5standard", Method::new("d&d", false, DND5STANDARD_DESC, DND5STANDARD_HELP, |stats| method_array(&DND35_ARRAY, stats), &["d&d", "dnd", "d&d5", "dnd5", "pre-set", "choice"]));
+        m.insert("dnd5", Method::new(
+            "d&d", false, DND5_DESC, DND5_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats),
+            &["d&d", "dnd", "d&d5", "dnd5", "choice"]));
+        m.insert("dnd5standard", Method::new(
+            "d&d", false, DND5STANDARD_DESC, DND5STANDARD_HELP, |stats| method_array(&DND35_ARRAY, stats),
+            &["d&d", "dnd", "d&d5", "dnd5", "pre-set", "choice"]));
 
-        m.insert("pfstandard", Method::new("d&d", false, PFSTANDARD_DESC, PFSTANDARD_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
-        m.insert("pfclassic", Method::new("d&d", false, PFCLASSIC_DESC, PFCLASSIC_HELP, |stats| method_nd_wchoice(6, 3, 6, stats), &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
-        m.insert("pfheroic", Method::new("d&d", false, PFHEROIC_DESC, PFHEROIC_HELP, |stats| method_nd_plus_wchoice(6, 2, 6, 6, stats), &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
+        m.insert("pfstandard", Method::new(
+            "d&d", false, PFSTANDARD_DESC, PFSTANDARD_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats),
+            &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
+        m.insert("pfclassic", Method::new(
+            "d&d", false, PFCLASSIC_DESC, PFCLASSIC_HELP, |stats| method_nd_wchoice(6, 3, 6, stats),
+            &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
+        m.insert("pfheroic", Method::new(
+            "d&d", false, PFHEROIC_DESC, PFHEROIC_HELP, |stats| method_nd_plus_wchoice(6, 2, 6, 6, stats),
+            &["d&d", "dnd", "d20", "pathfinder", "pathfinder1", "pf", "pf1", "choice"]));
 
-        m.insert("pathfinder2", Method::new("d&d", false, PF2_DESC, PF2_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["pathfinder", "pathfinder2", "pf", "pf2", "choice"]));
+        m.insert("pathfinder2", Method::new(
+            "d&d", false, PF2_DESC, PF2_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats),
+            &["pathfinder", "pathfinder2", "pf", "pf2", "choice"]));
 
-        m.insert("starfinder", Method::new("d&d", false, SF_DESC, SF_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats), &["starfinder", "sf", "choice"]));
-        m.insert("sffocused", Method::new("d&d", false, SFFOCUSED_DESC, SFFOCUSED_HELP, |stats| method_array(&SFFOCUSED_ARRAY, stats), &["starfinder", "sf", "pre-set", "choice"]));
-        m.insert("sfsplit", Method::new("d&d", false, SFSPLIT_DESC, SFSPLIT_HELP, |stats| method_array(&SFSPLIT_ARRAY, stats), &["starfinder", "sf", "pre-set", "choice"]));
-        m.insert("sfversatile", Method::new("d&d", false, SFVERSATILE_DESC, SFVERSATILE_HELP, |stats| method_array(&SFVERSATILE_ARRAY, stats), &["starfinder", "sf", "pre-set", "choice"]));
+        m.insert("starfinder", Method::new(
+            "d&d", false, SF_DESC, SF_HELP, |stats| method_nddrop1_wchoice(6, 4, 6, stats),
+            &["starfinder", "sf", "choice"]));
+        m.insert("sffocused", Method::new(
+            "d&d", false, SFFOCUSED_DESC, SFFOCUSED_HELP, |stats| method_array(&SFFOCUSED_ARRAY, stats),
+            &["starfinder", "sf", "pre-set", "choice"]));
+        m.insert("sfsplit", Method::new(
+            "d&d", false, SFSPLIT_DESC, SFSPLIT_HELP, |stats| method_array(&SFSPLIT_ARRAY, stats),
+            &["starfinder", "sf", "pre-set", "choice"]));
+        m.insert("sfversatile", Method::new(
+            "d&d", false, SFVERSATILE_DESC, SFVERSATILE_HELP, |stats| method_array(&SFVERSATILE_ARRAY, stats),
+            &["starfinder", "sf", "pre-set", "choice"]));
 
-        m.insert("cp2013_1", Method::new("cyberpunk-cp", true, CP2013_1_DESC, CP2013_1_HELP, |stats| method_nd_wochoice(1, 9, 10, stats), &["cyberpunk", "cp", "cyberpunk2013", "cp2013", "character_points", "choice"]));
-        m.insert("cp2013_2", Method::new("cyberpunk-cp", true, CP2013_2_DESC, CP2013_2_HELP, |stats| method_nd_plus_wochoice(1, 6, 10, 30, stats), &["cyberpunk", "cp", "cyberpunk2013", "cp2013", "character_points", "choice"]));
-        m.insert("cp2020_1", Method::new("cyberpunk-cp", true, CP2020_1_DESC, CP2020_1_HELP, |stats| method_nd_wochoice(1, 9, 10, stats), &["cyberpunk", "cp", "cyberpunk2020", "cp2020", "character_points", "choice"]));
-        m.insert("cp2020_2", Method::new("cyberpunk-stat", false, CP2020_2_DESC, CP2020_2_HELP, method_cp2, &["cyberpunk", "cp", "cyberpunk2020", "cp2020", "choice"]));
-        m.insert("cp2020_3", Method::new("cyberpunk-stat", true, CP2020_3_DESC, CP2020_3_HELP, method_cp4, &["cyberpunk", "cp", "cyberpunk2020", "cp2020", "ordered"]));
+        m.insert("cp2013_1", Method::new(
+            "cyberpunk-cp", true, CP2013_1_DESC, CP2013_1_HELP, |stats| method_nd_wochoice(1, 9, 10, stats),
+            &["cyberpunk", "cp", "cyberpunk2013", "cp2013", "character_points", "choice"]));
+        m.insert("cp2013_2", Method::new(
+            "cyberpunk-cp", true, CP2013_2_DESC, CP2013_2_HELP, |stats| method_nd_plus_wochoice(1, 6, 10, 30, stats),
+            &["cyberpunk", "cp", "cyberpunk2013", "cp2013", "character_points", "choice"]));
+        m.insert("cp2020_1", Method::new(
+            "cyberpunk-cp", true, CP2020_1_DESC, CP2020_1_HELP, |stats| method_nd_wochoice(1, 9, 10, stats),
+            &["cyberpunk", "cp", "cyberpunk2020", "cp2020", "character_points", "choice"]));
+        m.insert("cp2020_2", Method::new(
+            "cyberpunk-stat", false, CP2020_2_DESC, CP2020_2_HELP, method_cp2,
+            &["cyberpunk", "cp", "cyberpunk2020", "cp2020", "choice"]));
+        m.insert("cp2020_3", Method::new(
+            "cyberpunk-stat", true, CP2020_3_DESC, CP2020_3_HELP, method_cp4,
+            &["cyberpunk", "cp", "cyberpunk2020", "cp2020", "ordered"]));
 
-        m.insert("cyberspace1", Method::new("cyberspace", false, CYBERSPACE_1_DESC, CYBERSPACE_1_HELP, |stats| method_nd_wchoice(11, 1, 100, stats), &["cyberpunk", "cp", "cyberspace", "choice"]));
-        m.insert("cyberspace2", Method::new("cyberspace", true, CYBERSPACE_2_DESC, CYBERSPACE_2_HELP, |stats| method_nd_wochoice(11, 1, 100, stats), &["cyberpunk", "cp", "cyberspace", "ordered"]));
+        m.insert("cyberspace1", Method::new(
+            "cyberspace", false, CYBERSPACE_1_DESC, CYBERSPACE_1_HELP, |stats| method_nd_wchoice(11, 1, 100, stats),
+            &["cyberpunk", "cp", "cyberspace", "choice"]));
+        m.insert("cyberspace2", Method::new(
+            "cyberspace", true, CYBERSPACE_2_DESC, CYBERSPACE_2_HELP, |stats| method_nd_wochoice(11, 1, 100, stats),
+            &["cyberpunk", "cp", "cyberspace", "ordered"]));
 
-        m.insert("arsmagica1", Method::new("arsmagica", false, ARM1_DESC, ARM1_HELP, method_arm1, &["arsmagica", "arm", "choice"]));
-        m.insert("arsmagica2", Method::new("arsmagica", true, ARM2_DESC, ARM2_HELP, method_arm2, &["arsmagica", "arm", "ordered"]));
+        m.insert("arsmagica1", Method::new(
+            "arsmagica", false, ARM1_DESC, ARM1_HELP, method_arm1,
+            &["arsmagica", "arm", "choice"]));
+        m.insert("arsmagica2", Method::new(
+            "arsmagica", true, ARM2_DESC, ARM2_HELP, method_arm2,
+            &["arsmagica", "arm", "ordered"]));
 
-        m.insert("wh40k", Method::new("warhammer", true, WH40K_DESC, WH40K_HELP, |stats| method_nd_wochoice(9, 2, 10, stats), &["wh", "warhammer", "wh40k", "warhammer40k", "ordered"]));
-        m.insert("wh40k_reroll", Method::new("warhammer-reroll", true, WH40KREROLL_DESC, WH40KREROLL_HELP, |stats| method_nd_wochoice(10, 2, 10, stats), &["wh", "warhammer", "wh40k", "warhammer40k", "reroll", "ordered"]));
-        m.insert("wh40k_choice", Method::new("warhammer", false, WH40KCHOICE_DESC, WH40KCHOICE_HELP, |stats| method_nd_wchoice(9, 2, 10, stats), &["wh", "warhammer", "wh40k", "warhammer40k", "choice"]));
-        m.insert("wh40k_choicereroll", Method::new("warhammer-reroll", false, WH40KCHOICEREROLL_DESC, WH40KCHOICEREROLL_HELP, |stats| method_nd_wchoice(10, 2, 10, stats), &["wh", "warhammer", "wh40k", "warhammer40k", "reroll", "choice"]));
+        m.insert("wh40k", Method::new(
+            "warhammer", true, WH40K_DESC, WH40K_HELP, |stats| method_nd_wochoice(9, 2, 10, stats),
+            &["wh", "warhammer", "wh40k", "warhammer40k", "ordered"]));
+        m.insert("wh40k_reroll", Method::new(
+            "warhammer-reroll", true, WH40KREROLL_DESC, WH40KREROLL_HELP, |stats| method_nd_wochoice(10, 2, 10, stats),
+            &["wh", "warhammer", "wh40k", "warhammer40k", "reroll", "ordered"]));
+        m.insert("wh40k_choice", Method::new(
+            "warhammer", false, WH40KCHOICE_DESC, WH40KCHOICE_HELP, |stats| method_nd_wchoice(9, 2, 10, stats),
+            &["wh", "warhammer", "wh40k", "warhammer40k", "choice"]));
+        m.insert("wh40k_choicereroll", Method::new(
+            "warhammer-reroll", false, WH40KCHOICEREROLL_DESC, WH40KCHOICEREROLL_HELP, |stats| method_nd_wchoice(10, 2, 10, stats),
+            &["wh", "warhammer", "wh40k", "warhammer40k", "reroll", "choice"]));
         
-        m.insert("swn", Method::new_w_comment("d&d", true, SWN_DESC, SWN_HELP, SWN_COMMENT, |stats| method_nd_wochoice(6, 3, 6, stats), &["swn", "osr", "ordered"]));
-        m.insert("swnstandard", Method::new("d&d", false, SWNSTANDARD_DESC, SWNSTANDARD_HELP,  |stats| method_array(&SWN_ARRAY, stats), &["swn", "osr", "pre-set", "choice"]));
+        m.insert("swn", Method::new_w_comment(
+            "d&d", true, SWN_DESC, SWN_HELP, SWN_COMMENT, |stats| method_nd_wochoice(6, 3, 6, stats),
+            &["swn", "osr", "ordered"]));
+        m.insert("swnstandard", Method::new(
+            "d&d", false, SWNSTANDARD_DESC, SWNSTANDARD_HELP,  |stats| method_array(&SWN_ARRAY, stats),
+            &["swn", "osr", "pre-set", "choice"]));
 
-        m.insert("rq6", Method::new("runequest", true, RQ6_DESC, RQ6_HELP, method_rq6_1, &["runequest", "rq", "runequest6", "rq6", "ordered"]));
-        m.insert("rq6_choice", Method::new_w_comment("runequest", false, RQ6CHOICE_DESC, RQ6CHOICE_HELP, RQ6CHOICE_COMMENT, method_rq6_2, &["runequest", "rq", "runequest6", "rq6", "choice"]));
+        m.insert("rq6", Method::new(
+            "runequest", true, RQ6_DESC, RQ6_HELP, method_rq6_1,
+            &["runequest", "rq", "runequest6", "rq6", "ordered"]));
+        m.insert("rq6_choice", Method::new_w_comment(
+            "runequest", false, RQ6CHOICE_DESC, RQ6CHOICE_HELP, RQ6CHOICE_COMMENT, method_rq6_2,
+            &["runequest", "rq", "runequest6", "rq6", "choice"]));
 
         m
     };

@@ -53,7 +53,7 @@ Examples:
 	1d - one 6-sided dice
 	2d - two 6-sided dices
 	d4 - one 4-sided dice
-	d20 - one 20-sided dice
+	1d20 - one 20-sided dice
 	2d8 - two 8-sided dices
 	2d8reroll1 - two 8-sided dices, reroll all 1's
 	2d8r8 - two 8-sided dices, reroll all 8's
