@@ -7,7 +7,7 @@
 // except according to those terms.
 
 pub static DELIMITER: &str = "------------------";
-pub static TAB: &str = "--";
+pub static TAB: &str = "__";
 
 pub static METHODS_MESSAGE: &str = "Generation methods:";
 pub static TAGS_MESSAGE: &str = "Tags for generation methods:";
@@ -66,8 +66,8 @@ Examples:
 	2d20c1 - lowest of two 20-sided dices
 	4ddrop1 - greatest three of four 6-sided dices
 	4dgreatest3 - greatest three of four 6-sided dices
-	4dg3 - greatest three of four 6-sided dices
-	4dlowest3 - lowest three of four 6-sided dices
+	4d6g3 - greatest three of four 6-sided dices
+	4d6lowest3 - lowest three of four 6-sided dices
 	4dl3 - lowest three of four 6-sided dices
 	4dr1drop1 - greatest three of four 6-sided dices, reroll all 1's
 	2d8plus4 - two 8-sided dices, plus 4 to sum

@@ -1,5 +1,142 @@
+// dice codes without advantages/disadvantages
+// simple, single dice code
+4d8d2p4
+@6-20
+%%%%%%%%%%%%
+-v 4d8d2p4
+4d8 drop 2 + 4: @6-20
+%%%%%%%%%%%%
+-vv 4d8d2p4
+4d8 drop 2 + 4: @6-20
+%%%%%%%%%%%%
+-vvv 4d8d2p4
+4d8 drop 2 + 4 [@1-8, @1-8, @1-8, @1-8]: @6-20
+%%%%%%%%%%%%
+// simple, multiple dice codes
+4d8d2p4 4d6
+@6-20
+@4-24
+%%%%%%%%%%%%
+-v 4d8d2p4 4d6
+4d8 drop 2 + 4: @6-20
+4d6: @4-24
+%%%%%%%%%%%%
+-vv 4d8d2p4 4d6
+4d8 drop 2 + 4: @6-20
+4d6: @4-24
+%%%%%%%%%%%%
+-vvv 4d8d2p4 4d6
+4d8 drop 2 + 4 [@1-8, @1-8, @1-8, @1-8]: @6-20
+4d6 [@1-6, @1-6, @1-6, @1-6]: @4-24
+%%%%%%%%%%%%
+// complex, single dice code
+4d8d2p4+4d6
+@10-44
+%%%%%%%%%%%%
+-v 4d8d2p4+4d6
+4d8d2p4+4d6: @10-44
+%%%%%%%%%%%%
+-vv 4d8d2p4+4d6
+__4d8 drop 2 + 4: @6-20
+__4d6: @4-24
+4d8d2p4+4d6: @10-44
+%%%%%%%%%%%%
+-vvv 4d8d2p4+4d6
+__4d8 drop 2 + 4 [@1-8, @1-8, @1-8, @1-8]: @6-20
+__4d6 [@1-6, @1-6, @1-6, @1-6]: @4-24
+4d8d2p4+4d6: @10-44
+%%%%%%%%%%%%
+// complex, multiple dice codes
+4d8d2p4+4d6 4d10
+@10-44
+@4-40
+%%%%%%%%%%%%
+-v 4d8d2p4+4d6 4d10
+4d8d2p4+4d6: @10-44
+4d10: @4-40
+%%%%%%%%%%%%
+-vv 4d8d2p4+4d6 4d10
+__4d8 drop 2 + 4: @6-20
+__4d6: @4-24
+4d8d2p4+4d6: @10-44
+4d10: @4-40
+%%%%%%%%%%%%
+-vvv 4d8d2p4+4d6 4d10
+__4d8 drop 2 + 4 [@1-8, @1-8, @1-8, @1-8]: @6-20
+__4d6 [@1-6, @1-6, @1-6, @1-6]: @4-24
+4d8d2p4+4d6: @10-44
+4d10 [@1-10, @1-10, @1-10, @1-10]: @4-40
+%%%%%%%%%%%%
+// simple, single dice code with numbers-only
+--numbers-only 4d8d2p4
+@6-20
+%%%%%%%%%%%%
+-v --numbers-only 4d8d2p4
+@6-20
+%%%%%%%%%%%%
+-vv --numbers-only 4d8d2p4
+@6-20
+%%%%%%%%%%%%
+-vvv --numbers-only 4d8d2p4
+[@1-8, @1-8, @1-8, @1-8] @6-20
+%%%%%%%%%%%%
+// simple, multiple dice codes with numbers-only
+--numbers-only 4d8d2p4 4d6
+@6-20
+@4-24
+%%%%%%%%%%%%
+-v --numbers-only 4d8d2p4 4d6
+@6-20
+@4-24
+%%%%%%%%%%%%
+-vv --numbers-only 4d8d2p4 4d6
+@6-20
+@4-24
+%%%%%%%%%%%%
+-vvv --numbers-only 4d8d2p4 4d6
+[@1-8, @1-8, @1-8, @1-8] @6-20
+[@1-6, @1-6, @1-6, @1-6] @4-24
+%%%%%%%%%%%%
+// complex, single dice code with numbers-only
+--numbers-only 4d8d2p4+4d6
+@10-44
+%%%%%%%%%%%%
+-v --numbers-only 4d8d2p4+4d6
+@10-44
+%%%%%%%%%%%%
+-vv --numbers-only 4d8d2p4+4d6
+__@6-20
+__@4-24
+@10-44
+%%%%%%%%%%%%
+-vvv --numbers-only 4d8d2p4+4d6
+__[@1-8, @1-8, @1-8, @1-8] @6-20
+__[@1-6, @1-6, @1-6, @1-6] @4-24
+@10-44
+%%%%%%%%%%%%
+// complex, multiple dice codes with numbers-only
+--numbers-only 4d8d2p4+4d6 4d10
+@10-44
+@4-40
+%%%%%%%%%%%%
+-v --numbers-only 4d8d2p4+4d6 4d10
+@10-44
+@4-40
+%%%%%%%%%%%%
+-vv --numbers-only 4d8d2p4+4d6 4d10
+__@6-20
+__@4-24
+@10-44
+@4-40
+%%%%%%%%%%%%
+-vvv --numbers-only 4d8d2p4+4d6 4d10
+__[@1-8, @1-8, @1-8, @1-8] @6-20
+__[@1-6, @1-6, @1-6, @1-6] @4-24
+@10-44
+[@1-10, @1-10, @1-10, @1-10] @4-40
+%%%%%%%%%%%%
 // dice codes from help_dice_codes 
-// each with eigh options (/-v/-vv/-vvv * /--numbers-only)
+// each with eight options (/-v/-vv/-vvv * /--numbers-only)
 // d
 d
 @1-6
@@ -275,34 +412,494 @@ d4
 -vvv --numbers-only 2d8r1,2..4,5,8
 [@6-7, @6-7] @12-14
 %%%%%%%%%%%%
-// dice codes without advantages/disadvantages
-// simple, single dice codes
-4d8d2p4
+// 2d20drop1
+2d20drop1
+@1-20
+%%%%%%%%%%%%
+-v 2d20drop1
+2d20 drop 1: @1-20
+%%%%%%%%%%%%
+-vv 2d20drop1
+2d20 drop 1: @1-20
+%%%%%%%%%%%%
+-vvv 2d20drop1
+2d20 drop 1 [@1-20, @1-20]: @1-20
+%%%%%%%%%%%%
+--numbers-only 2d20drop1
+@1-20
+%%%%%%%%%%%%
+-v --numbers-only 2d20drop1
+@1-20
+%%%%%%%%%%%%
+-vv --numbers-only 2d20drop1
+@1-20
+%%%%%%%%%%%%
+-vvv --numbers-only 2d20drop1
+[@1-20, @1-20] @1-20
+%%%%%%%%%%%%
+// 2d20d1
+2d20d1
+@1-20
+%%%%%%%%%%%%
+-v 2d20d1
+2d20 drop 1: @1-20
+%%%%%%%%%%%%
+-vv 2d20d1
+2d20 drop 1: @1-20
+%%%%%%%%%%%%
+-vvv 2d20d1
+2d20 drop 1 [@1-20, @1-20]: @1-20
+%%%%%%%%%%%%
+--numbers-only 2d20d1
+@1-20
+%%%%%%%%%%%%
+-v --numbers-only 2d20d1
+@1-20
+%%%%%%%%%%%%
+-vv --numbers-only 2d20d1
+@1-20
+%%%%%%%%%%%%
+-vvv --numbers-only 2d20d1
+[@1-20, @1-20] @1-20
+%%%%%%%%%%%%
+// 2d20crop1
+2d20crop1
+@1-20
+%%%%%%%%%%%%
+-v 2d20crop1
+2d20 crop 1: @1-20
+%%%%%%%%%%%%
+-vv 2d20crop1
+2d20 crop 1: @1-20
+%%%%%%%%%%%%
+-vvv 2d20crop1
+2d20 crop 1 [@1-20, @1-20]: @1-20
+%%%%%%%%%%%%
+--numbers-only 2d20crop1
+@1-20
+%%%%%%%%%%%%
+-v --numbers-only 2d20crop1
+@1-20
+%%%%%%%%%%%%
+-vv --numbers-only 2d20crop1
+@1-20
+%%%%%%%%%%%%
+-vvv --numbers-only 2d20crop1
+[@1-20, @1-20] @1-20
+%%%%%%%%%%%%
+// 2d20c1
+2d20c1
+@1-20
+%%%%%%%%%%%%
+-v 2d20c1
+2d20 crop 1: @1-20
+%%%%%%%%%%%%
+-vv 2d20c1
+2d20 crop 1: @1-20
+%%%%%%%%%%%%
+-vvv 2d20c1
+2d20 crop 1 [@1-20, @1-20]: @1-20
+%%%%%%%%%%%%
+--numbers-only 2d20c1
+@1-20
+%%%%%%%%%%%%
+-v --numbers-only 2d20c1
+@1-20
+%%%%%%%%%%%%
+-vv --numbers-only 2d20c1
+@1-20
+%%%%%%%%%%%%
+-vvv --numbers-only 2d20c1
+[@1-20, @1-20] @1-20
+%%%%%%%%%%%%
+// 4ddrop1
+4ddrop1
+@3-18
+%%%%%%%%%%%%
+-v 4ddrop1
+4d6 drop 1: @3-18
+%%%%%%%%%%%%
+-vv 4ddrop1
+4d6 drop 1: @3-18
+%%%%%%%%%%%%
+-vvv 4ddrop1
+4d6 drop 1 [@1-6, @1-6, @1-6, @1-6]: @3-18
+%%%%%%%%%%%%
+--numbers-only 4ddrop1
+@3-18
+%%%%%%%%%%%%
+-v --numbers-only 4ddrop1
+@3-18
+%%%%%%%%%%%%
+-vv --numbers-only 4ddrop1
+@3-18
+%%%%%%%%%%%%
+-vvv --numbers-only 4ddrop1
+[@1-6, @1-6, @1-6, @1-6] @3-18
+%%%%%%%%%%%%
+// 4dgreatest3
+4dgreatest3
+@3-18
+%%%%%%%%%%%%
+-v 4dgreatest3
+4d6 drop 1: @3-18
+%%%%%%%%%%%%
+-vv 4dgreatest3
+4d6 drop 1: @3-18
+%%%%%%%%%%%%
+-vvv 4dgreatest3
+4d6 drop 1 [@1-6, @1-6, @1-6, @1-6]: @3-18
+%%%%%%%%%%%%
+--numbers-only 4dgreatest3
+@3-18
+%%%%%%%%%%%%
+-v --numbers-only 4dgreatest3
+@3-18
+%%%%%%%%%%%%
+-vv --numbers-only 4dgreatest3
+@3-18
+%%%%%%%%%%%%
+-vvv --numbers-only 4dgreatest3
+[@1-6, @1-6, @1-6, @1-6] @3-18
+%%%%%%%%%%%%
+// 4d6g3
+4d6g3
+@3-18
+%%%%%%%%%%%%
+-v 4d6g3
+4d6 drop 1: @3-18
+%%%%%%%%%%%%
+-vv 4d6g3
+4d6 drop 1: @3-18
+%%%%%%%%%%%%
+-vvv 4d6g3
+4d6 drop 1 [@1-6, @1-6, @1-6, @1-6]: @3-18
+%%%%%%%%%%%%
+--numbers-only 4d6g3
+@3-18
+%%%%%%%%%%%%
+-v --numbers-only 4d6g3
+@3-18
+%%%%%%%%%%%%
+-vv --numbers-only 4d6g3
+@3-18
+%%%%%%%%%%%%
+-vvv --numbers-only 4d6g3
+[@1-6, @1-6, @1-6, @1-6] @3-18
+%%%%%%%%%%%%
+// 4d6lowest3
+4d6lowest3
+@3-18
+%%%%%%%%%%%%
+-v 4d6lowest3
+4d6 crop 1: @3-18
+%%%%%%%%%%%%
+-vv 4d6lowest3
+4d6 crop 1: @3-18
+%%%%%%%%%%%%
+-vvv 4d6lowest3
+4d6 crop 1 [@1-6, @1-6, @1-6, @1-6]: @3-18
+%%%%%%%%%%%%
+--numbers-only 4d6lowest3
+@3-18
+%%%%%%%%%%%%
+-v --numbers-only 4d6lowest3
+@3-18
+%%%%%%%%%%%%
+-vv --numbers-only 4d6lowest3
+@3-18
+%%%%%%%%%%%%
+-vvv --numbers-only 4d6lowest3
+[@1-6, @1-6, @1-6, @1-6] @3-18
+%%%%%%%%%%%%
+// 4d6l3
+4d6l3
+@3-18
+%%%%%%%%%%%%
+-v 4d6l3
+4d6 crop 1: @3-18
+%%%%%%%%%%%%
+-vv 4d6l3
+4d6 crop 1: @3-18
+%%%%%%%%%%%%
+-vvv 4d6l3
+4d6 crop 1 [@1-6, @1-6, @1-6, @1-6]: @3-18
+%%%%%%%%%%%%
+--numbers-only 4d6l3
+@3-18
+%%%%%%%%%%%%
+-v --numbers-only 4d6l3
+@3-18
+%%%%%%%%%%%%
+-vv --numbers-only 4d6l3
+@3-18
+%%%%%%%%%%%%
+-vvv --numbers-only 4d6l3
+[@1-6, @1-6, @1-6, @1-6] @3-18
+%%%%%%%%%%%%
+// 4dr1drop1
+4dr1drop1
+@6-18
+%%%%%%%%%%%%
+-v 4dr1drop1
+4d6 reroll 1 drop 1: @6-18
+%%%%%%%%%%%%
+-vv 4dr1drop1
+4d6 reroll 1 drop 1: @6-18
+%%%%%%%%%%%%
+-vvv 4dr1drop1
+4d6 reroll 1 drop 1 [@2-6, @2-6, @2-6, @2-6]: @6-18
+%%%%%%%%%%%%
+--numbers-only 4dr1drop1
+@6-18
+%%%%%%%%%%%%
+-v --numbers-only 4dr1drop1
+@6-18
+%%%%%%%%%%%%
+-vv --numbers-only 4dr1drop1
+@6-18
+%%%%%%%%%%%%
+-vvv --numbers-only 4dr1drop1
+[@2-6, @2-6, @2-6, @2-6] @6-18
+%%%%%%%%%%%%
+// 2d8plus4
+2d8plus4
 @6-20
 %%%%%%%%%%%%
--v 4d8d2p4
-4d8 drop 2 + 4: @6-20
+-v 2d8plus4
+2d8+4: @6-20
 %%%%%%%%%%%%
--vv 4d8d2p4
-4d8 drop 2 + 4: @6-20
+-vv 2d8plus4
+2d8+4: @6-20
 %%%%%%%%%%%%
--vvv 4d8d2p4
-4d8 drop 2 + 4 [@1-8, @1-8, @1-8, @1-8]: @6-20
+-vvv 2d8plus4
+2d8+4 [@1-8, @1-8]: @6-20
 %%%%%%%%%%%%
-// simple, multiple dice codes
-4d8d2p4 4d6
+--numbers-only 2d8plus4
 @6-20
-@4-24
 %%%%%%%%%%%%
--v 4d8d2p4 4d6
-4d8 drop 2 + 4: @6-20
-4d6: @4-24
+-v --numbers-only 2d8plus4
+@6-20
 %%%%%%%%%%%%
--vv 4d8d2p4 4d6
-4d8 drop 2 + 4: @6-20
-4d6: @4-24
+-vv --numbers-only 2d8plus4
+@6-20
 %%%%%%%%%%%%
--vvv 4d8d2p4 4d6
-4d8 drop 2 + 4 [@1-8, @1-8, @1-8, @1-8]: @6-20
-4d6 [@1-6, @1-6, @1-6, @1-6]: @4-24
+-vvv --numbers-only 2d8plus4
+[@1-8, @1-8] @6-20
+%%%%%%%%%%%%
+// 2d8p4
+2d8p4
+@6-20
+%%%%%%%%%%%%
+-v 2d8p4
+2d8+4: @6-20
+%%%%%%%%%%%%
+-vv 2d8p4
+2d8+4: @6-20
+%%%%%%%%%%%%
+-vvv 2d8p4
+2d8+4 [@1-8, @1-8]: @6-20
+%%%%%%%%%%%%
+--numbers-only 2d8p4
+@6-20
+%%%%%%%%%%%%
+-v --numbers-only 2d8p4
+@6-20
+%%%%%%%%%%%%
+-vv --numbers-only 2d8p4
+@6-20
+%%%%%%%%%%%%
+-vvv --numbers-only 2d8p4
+[@1-8, @1-8] @6-20
+%%%%%%%%%%%%
+// 4dminus2
+4dminus2
+@2-22
+%%%%%%%%%%%%
+-v 4dminus2
+4d6-2: @2-22
+%%%%%%%%%%%%
+-vv 4dminus2
+4d6-2: @2-22
+%%%%%%%%%%%%
+-vvv 4dminus2
+4d6-2 [@1-6, @1-6, @1-6, @1-6]: @2-22
+%%%%%%%%%%%%
+--numbers-only 4dminus2
+@2-22
+%%%%%%%%%%%%
+-v --numbers-only 4dminus2
+@2-22
+%%%%%%%%%%%%
+-vv --numbers-only 4dminus2
+@2-22
+%%%%%%%%%%%%
+-vvv --numbers-only 4dminus2
+[@1-6, @1-6, @1-6, @1-6] @2-22
+%%%%%%%%%%%%
+// 4dm2
+4dm2
+@2-22
+%%%%%%%%%%%%
+-v 4dm2
+4d6-2: @2-22
+%%%%%%%%%%%%
+-vv 4dm2
+4d6-2: @2-22
+%%%%%%%%%%%%
+-vvv 4dm2
+4d6-2 [@1-6, @1-6, @1-6, @1-6]: @2-22
+%%%%%%%%%%%%
+--numbers-only 4dm2
+@2-22
+%%%%%%%%%%%%
+-v --numbers-only 4dm2
+@2-22
+%%%%%%%%%%%%
+-vv --numbers-only 4dm2
+@2-22
+%%%%%%%%%%%%
+-vvv --numbers-only 4dm2
+[@1-6, @1-6, @1-6, @1-6] @2-22
+%%%%%%%%%%%%
+// 6d8drop1crop2
+6d8drop1crop2
+@3-24
+%%%%%%%%%%%%
+-v 6d8drop1crop2
+6d8 drop 1 crop 2: @3-24
+%%%%%%%%%%%%
+-vv 6d8drop1crop2
+6d8 drop 1 crop 2: @3-24
+%%%%%%%%%%%%
+-vvv 6d8drop1crop2
+6d8 drop 1 crop 2 [@1-8, @1-8, @1-8, @1-8, @1-8, @1-8]: @3-24
+%%%%%%%%%%%%
+--numbers-only 6d8drop1crop2
+@3-24
+%%%%%%%%%%%%
+-v --numbers-only 6d8drop1crop2
+@3-24
+%%%%%%%%%%%%
+-vv --numbers-only 6d8drop1crop2
+@3-24
+%%%%%%%%%%%%
+-vvv --numbers-only 6d8drop1crop2
+[@1-8, @1-8, @1-8, @1-8, @1-8, @1-8] @3-24
+%%%%%%%%%%%%
+// 6d8drop1crop2p10minus20
+6d8drop1crop2p10minus20
+@-7-14
+%%%%%%%%%%%%
+-v 6d8drop1crop2p10minus20
+6d8 drop 1 crop 2 - 10: @-7-14
+%%%%%%%%%%%%
+-vv 6d8drop1crop2p10minus20
+6d8 drop 1 crop 2 - 10: @-7-14
+%%%%%%%%%%%%
+-vvv 6d8drop1crop2p10minus20
+6d8 drop 1 crop 2 - 10 [@1-8, @1-8, @1-8, @1-8, @1-8, @1-8]: @-7-14
+%%%%%%%%%%%%
+--numbers-only 6d8drop1crop2p10minus20
+@-7-14
+%%%%%%%%%%%%
+-v --numbers-only 6d8drop1crop2p10minus20
+@-7-14
+%%%%%%%%%%%%
+-vv --numbers-only 6d8drop1crop2p10minus20
+@-7-14
+%%%%%%%%%%%%
+-vvv --numbers-only 6d8drop1crop2p10minus20
+[@1-8, @1-8, @1-8, @1-8, @1-8, @1-8] @-7-14
+%%%%%%%%%%%%
+// 6d8r1,2drop1crop2p10minus20
+6d8r1,2drop1crop2p10minus20
+@-1-14
+%%%%%%%%%%%%
+-v 6d8r1,2drop1crop2p10minus20
+6d8 reroll 1,2 drop 1 crop 2 - 10: @-1-14
+%%%%%%%%%%%%
+-vv 6d8r1,2drop1crop2p10minus20
+6d8 reroll 1,2 drop 1 crop 2 - 10: @-1-14
+%%%%%%%%%%%%
+-vvv 6d8r1,2drop1crop2p10minus20
+6d8 reroll 1,2 drop 1 crop 2 - 10 [@3-8, @3-8, @3-8, @3-8, @3-8, @3-8]: @-1-14
+%%%%%%%%%%%%
+--numbers-only 6d8r1,2drop1crop2p10minus20
+@-1-14
+%%%%%%%%%%%%
+-v --numbers-only 6d8r1,2drop1crop2p10minus20
+@-1-14
+%%%%%%%%%%%%
+-vv --numbers-only 6d8r1,2drop1crop2p10minus20
+@-1-14
+%%%%%%%%%%%%
+-vvv --numbers-only 6d8r1,2drop1crop2p10minus20
+[@3-8, @3-8, @3-8, @3-8, @3-8, @3-8] @-1-14
+%%%%%%%%%%%%
+// d+d
+d+d
+@2-12
+%%%%%%%%%%%%
+-v d+d
+d+d: @2-12
+%%%%%%%%%%%%
+-vv d+d
+__1d6: @1-6
+__1d6: @1-6
+d+d: @2-12
+%%%%%%%%%%%%
+-vvv d+d
+__1d6 [@1-6]: @1-6
+__1d6 [@1-6]: @1-6
+d+d: @2-12
+%%%%%%%%%%%%
+--numbers-only d+d
+@2-12
+%%%%%%%%%%%%
+-v --numbers-only d+d
+@2-12
+%%%%%%%%%%%%
+-vv --numbers-only d+d
+__@1-6
+__@1-6
+@2-12
+%%%%%%%%%%%%
+-vvv --numbers-only d+d
+__[@1-6] @1-6
+__[@1-6] @1-6
+@2-12
+%%%%%%%%%%%%
+// 2d*d8
+2d*d8
+@2-96
+%%%%%%%%%%%%
+-v 2d*d8
+2d*d8: @2-96
+%%%%%%%%%%%%
+-vv 2d*d8
+__2d6: @2-12
+__1d8: @1-8
+2d*d8: @2-96
+%%%%%%%%%%%%
+-vvv 2d*d8
+__2d6 [@1-6, @1-6]: @2-12
+__1d8 [@1-8]: @1-8
+2d*d8: @2-96
+%%%%%%%%%%%%
+--numbers-only 2d*d8
+@2-96
+%%%%%%%%%%%%
+-v --numbers-only 2d*d8
+@2-96
+%%%%%%%%%%%%
+-vv --numbers-only 2d*d8
+__@2-12
+__@1-8
+@2-96
+%%%%%%%%%%%%
+-vvv --numbers-only 2d*d8
+__[@1-6, @1-6] @2-12
+__[@1-8] @1-8
+@2-96
 %%%%%%%%%%%%

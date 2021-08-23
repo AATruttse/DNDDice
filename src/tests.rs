@@ -22,7 +22,7 @@ mod tests {
 
         let reader = BufReader::new(file);
         let mut test_num : usize = 1;
-        let mut line_num : usize = 1;
+        let mut line_num : usize = 0;
         let mut lines = Vec::new(); // test line-by-line. first line - command to execute, second and other - command stdout
         for line in reader.lines() {
             match line {
@@ -46,6 +46,8 @@ mod tests {
                 }
             }
         }
+
+        println!("Successfully executed {} tests.", test_num);
     }
 
     /// executes single test
