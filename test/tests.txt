@@ -1,3 +1,25 @@
+// dice codes with advantages/disadvantages
+// simple, single dice code
+4d8d2Ap4
+@6-20
+%%%%%%%%%%%%
+// simple, single dice code
+--numbers-only 4d8d2Ap4
+@6-20
+%%%%%%%%%%%%
+// -v 4d8d2Ap4
+// 4d8 drop 2 Adv + 4: @6-20
+// %%%%%%%%%%%%
+// -vv 4d8d2Ap4
+// 4d8 drop 2 + 4: @6-20
+// 4d8 drop 2 + 4: @6-20
+// 4d8 drop 2 Adv + 4: @6-20
+// %%%%%%%%%%%%
+// -vvv 4d8d2Ap4
+// 4d8 drop 2 + 4 [@1-8, @1-8, @1-8, @1-8]: @6-20
+// 4d8 drop 2 + 4 [@1-8, @1-8, @1-8, @1-8]: @6-20
+// 4d8 drop 2 Adv + 4: @6-20
+// %%%%%%%%%%%%
 // dice codes without advantages/disadvantages
 // simple, single dice code
 4d8d2p4

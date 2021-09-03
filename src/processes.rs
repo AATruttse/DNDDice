@@ -119,7 +119,7 @@ fn process_keys(all_stats: &mut Vec<IntValue>) {
             process_roll(false, false, OPT.dices_num, OPT.dice, &reroll, OPT.plus, OPT.minus, OPT.drop, OPT.crop)
         }                
     };
-    
+
     all_stats.push(res);
 }
 
@@ -151,6 +151,30 @@ pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>)-> R
             collect::<Result<Vec<Arythmetic>, DiceError>>()?;
             */
 
+            let results_vec: Vec<(&str, IntValue, bool)> = dices.
+                enumerate().
+                map(|(num, it)| 
+                    process_code(dices_num > 1,
+                                num,
+                                &it.iter().
+                                    map(|p| p.map_or("", |m| m.as_str())).
+                                    collect::<Vec<&str>>())
+                ).
+                collect::<Result<Vec<(&str, IntValue, bool)>, DiceError>>()?;
+
+            let has_advantages = results_vec.iter().fold(false, |res, (_, _, val)| res || *val);
+
+            let dices_vec: Vec<Arythmetic> = results_vec.
+                iter().
+                map(|it| {
+                    match it {
+                        &(s, v, _) => (s, v)
+                    }
+                }).collect();
+
+            
+
+        /*
             let dices_vec: Vec<Arythmetic> = dices.
                 enumerate().
                 map(|(num, it)|
@@ -168,7 +192,7 @@ pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>)-> R
                     }
                 ).
             collect::<Result<Vec<Arythmetic>, DiceError>>()?;
-
+*/
             if OPT.debug {
                 println!("{:?}", dices_vec);
             }
@@ -180,7 +204,7 @@ pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>)-> R
             // process parsed dice codes
             let res = process_arithmetic(&dices_vec);
 
-            render_codes(dices_num, dicecode, res);
+            render_codes(dices_num, has_advantages, dicecode, res);
             log_codes(dices_num, dicecode, res);
 
             all_stats.push(res);
@@ -287,7 +311,7 @@ fn process_roll(
 
     let add = plus as IntValue - minus as IntValue;
 
-    let show_dice_code = log_and_render_roll(is_several_rolls, n, d, reroll, add, drop, crop);
+    let show_dice_code = log_and_render_roll(is_several_rolls, is_advantage, n, d, reroll, add, drop, crop);
     
     let res = match n_d_reroll_drop_crop_plus(n,
         d,
@@ -303,8 +327,8 @@ fn process_roll(
         }
     };
 
-    render_roll(is_several_rolls, show_dice_code, res);
-    log_roll(is_several_rolls, res);
+    render_roll(is_several_rolls, show_dice_code, is_advantage, res);
+    log_roll(is_several_rolls, is_advantage, res);
 
     res
 }
@@ -338,6 +362,7 @@ fn parse_reroll_code (reroll_str: &str) -> Option<Vec<usize>> {
 /// logs and shows dice code
 fn log_and_render_roll(
     is_several_rolls: bool,
+    is_advantage: bool,
     n: usize,
     d: usize,
     reroll: &[usize],

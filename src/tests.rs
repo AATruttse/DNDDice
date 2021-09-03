@@ -80,14 +80,14 @@ mod tests {
 
         let cmd_out_strings : Vec<&str> = cmd_stdout.split("\n").filter(|&s| s.len() != 0).collect(); // command stdout splitted line-by-line
         let test_out_strings : Vec<&str> = lines[1..].iter().map(|s| s.as_str()).collect(); // test template for output - second and other lines 
-        assert!(cmd_out_strings.len() == test_out_strings.len()); // number of lines in cmd stdout in test te,plate must be the same
+        assert!(cmd_out_strings.len() == test_out_strings.len()); // number of lines in cmd stdout and in test template must be the same
 
         for i in 0..cmd_out_strings.len() {
             print!("\"{}\" - \"{}\"...", cmd_out_strings[i], test_out_strings[i]);
 
             let rg = Regex::new(r"(@(-?\d+)-(-?\d+))").unwrap(); // regex for min-max sequence (@min-max) in test string
 
-            // need to do complex operations
+            // need to do complex operation
             // replace all min-max sequence (@min-max) in test string with @ symbol
             // escape all special characters in test string
             // replace @ symbol with sequence for number (\d+)

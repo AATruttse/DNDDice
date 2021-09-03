@@ -18,11 +18,13 @@ use crate::strings::TAB;
 pub fn render_roll(
         is_several_rolls: bool,
         show_dice_code: bool,
+        is_advantage: bool,
         res: IntValue 
     ) {
     if OPT.debug ||
        OPT.verbose > 1 ||
        (!is_several_rolls &&
+        !is_advantage &&
             (!OPT.is_collect_stat() || OPT.verbose > 0)
         ) {
             let roll_res = format!("{}{}",
@@ -152,10 +154,12 @@ pub fn render_stats(is_shownumber: bool,
 /// render dice from codes
 pub fn render_codes(
     dices_num: usize,
+    is_advantage: bool,
     dicecode: &str,
     res: IntValue
 ) {
     if OPT.debug || 
+       (dices_num == 1 && is_advantage) ||
        (dices_num > 1 &&
             (OPT.verbose > 0 ||
             (OPT.verbose == 0 && !OPT.is_collect_stat() && dices_num > 1)))
