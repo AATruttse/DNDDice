@@ -138,19 +138,6 @@ pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>)-> R
             let dices_num = re.captures_iter(&dicecode).into_iter().count();
 
             // parse individual dice codes
-            /*
-            let dices_vec: Vec<Arythmetic> = dices.
-                enumerate().
-                map(|(num, it)| 
-                    process_code(dices_num > 1,
-                                 num,
-                                 &it.iter().
-                                    map(|p| p.map_or("", |m| m.as_str())).
-                                    collect::<Vec<&str>>())
-                ).
-            collect::<Result<Vec<Arythmetic>, DiceError>>()?;
-            */
-
             let results_vec: Vec<(&str, IntValue, bool)> = dices.
                 enumerate().
                 map(|(num, it)| 
@@ -172,27 +159,6 @@ pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>)-> R
                     }
                 }).collect();
 
-            
-
-        /*
-            let dices_vec: Vec<Arythmetic> = dices.
-                enumerate().
-                map(|(num, it)|
-                    {    
-                        // we don't need flag that process_code returns so use this match to decrease the tuple's dimension
-                        match process_code(dices_num > 1,
-                                 num,
-                                 &it.iter().
-                                    map(|p| p.map_or("", |m| m.as_str())).
-                                    collect::<Vec<&str>>())
-                        {
-                            Ok((s, v, _)) => Ok((s, v)),
-                            Err(e) => Err(e)
-                        }
-                    }
-                ).
-            collect::<Result<Vec<Arythmetic>, DiceError>>()?;
-*/
             if OPT.debug {
                 println!("{:?}", dices_vec);
             }
@@ -374,13 +340,13 @@ fn log_and_render_roll(
 
     let mut show_dice_code = false;
     if OPT.debug ||
-        (OPT.verbose > 0 && !is_several_rolls) ||
+        (OPT.verbose > 0 && !is_several_rolls && !is_advantage) ||
         OPT.verbose > 1 {
         show_dice_code = true;
         output(&dice_str);
     }
 
-    if (OPT.log > 0 && !is_several_rolls) ||
+    if (OPT.log > 0 && !is_several_rolls && !is_advantage) ||
         OPT.log > 1 {
         log(&dice_str);
     }

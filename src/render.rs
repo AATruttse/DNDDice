@@ -158,8 +158,15 @@ pub fn render_codes(
     dicecode: &str,
     res: IntValue
 ) {
-    if OPT.debug || 
-       (dices_num == 1 && is_advantage) ||
+    if dices_num == 1 && is_advantage
+    {
+        if !OPT.numbers_only && OPT.verbose > 0 {
+            let dicecode_str = format!("{}: ", dicecode);
+            output(&dicecode_str);
+        }
+        outputln(&res.to_string());
+    }
+    else if OPT.debug || 
        (dices_num > 1 &&
             (OPT.verbose > 0 ||
             (OPT.verbose == 0 && !OPT.is_collect_stat() && dices_num > 1)))
