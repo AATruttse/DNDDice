@@ -139,8 +139,7 @@ mod tests {
                 }
             }
 
-            println!("   Ok!");
-            //println!("   Ok!\n{:?}\n{:?}", test_nums, out_nums);
+            println!("   Ok!");            
         }
     }
 
