@@ -79,7 +79,7 @@ pub fn log_start() {
 /// log roll results
 pub fn log_roll(
     is_several_rolls: bool,
-    is_advantage: bool,
+    _is_advantage: bool,
     res: IntValue 
 ) {
     if OPT.log > 1 ||
