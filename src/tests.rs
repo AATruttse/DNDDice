@@ -7,12 +7,24 @@ mod tests {
 
     pub static TESTFILE: &str = "./test/tests.txt";
     pub static TESTDELIMITER: &str = "%%%%";
-    pub static TESTCOMMAND: &str = "./target/debug/dnddice.exe";
+    pub static TESTCOMMAND_WIN: &str = "./target/debug/dnddice.exe";
+    pub static TESTCOMMAND_LIN: &str = "./target/debug/dnddice";
     pub static TESTCOMMENT: &str = "//";
 
-    /// reads file with tests divided by delimiter strings and executes test one-by-one
+    /// runs all tests on windows
     #[test]
-    fn test_dice_codes() {
+    fn test_win() {
+        test_dice_codes(TESTCOMMAND_WIN);
+    }
+
+    /// runs all tests on linux
+    #[test]
+    fn test_linux() {
+        test_dice_codes(TESTCOMMAND_LIN);
+    }
+
+    /// reads file with tests divided by delimiter strings and executes test one-by-one
+    fn test_dice_codes(test_command: &str) {
         let file = match std::fs::File::open(TESTFILE) {
             Ok(ok) => ok,
             Err(e) => {
@@ -30,7 +42,7 @@ mod tests {
                     line_num += 1;
                     // if strings starts with delimiter - executes test, clear lines vector
                     if l.as_str().starts_with(TESTDELIMITER) {
-                            single_test(line_num, test_num, &lines);
+                            single_test(test_command, line_num, test_num, &lines);
                             lines.clear();
                             test_num += 1;
                     }
@@ -53,29 +65,29 @@ mod tests {
     /// executes single test
     /// n - number of test
     /// lines - first line - command to execute, second and other - command stdout
-    fn single_test(line_num: usize, test_num: usize, lines: &Vec<String>) {
+    fn single_test(test_command: &str, line_num: usize, test_num: usize, lines: &Vec<String>) {
         // test must be non-empty
         if lines.len() == 0
         {
             panic!("Test file error - empty test #{} on line {}", test_num, line_num);
         }
 
-        let mut run_cmd = Command::new(TESTCOMMAND);
+        let mut run_cmd = Command::new(test_command);
         run_cmd.args(lines[0].split(" "));
 
         let cmd_res = match run_cmd.output() {
             Ok(out) => out,
             Err(e) => {
-                panic!("Can't execute command {} {} (test #{} on line {}):\n{}", TESTCOMMAND, lines[0], test_num, line_num, e);
+                panic!("Can't execute command {} {} (test #{} on line {}):\n{}", test_command, lines[0], test_num, line_num, e);
             }
         };
 
         assert!(cmd_res.status.success());
-        println!("{} {}", TESTCOMMAND, lines[0]);
+        println!("{} {}", test_command, lines[0]);
 
         let cmd_stdout = match str::from_utf8(&cmd_res.stdout) {
             Ok(s) => s,
-            Err(e) => panic!("Invalid UTF-8 sequence in command {} {} output (test #{} on line {}):\n{}", TESTCOMMAND, lines[0], test_num, line_num, e),
+            Err(e) => panic!("Invalid UTF-8 sequence in command {} {} output (test #{} on line {}):\n{}", test_command, lines[0], test_num, line_num, e),
         };
 
         let cmd_out_strings : Vec<&str> = cmd_stdout.split("\n").filter(|&s| s.len() != 0).collect(); // command stdout splitted line-by-line
