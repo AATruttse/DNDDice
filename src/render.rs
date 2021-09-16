@@ -9,20 +9,23 @@
 use itertools::Itertools;
 
 use crate::dices::IntValue;
+use crate::errors::errorln;
 use crate::init::OPT;
 use crate::output::{output, outputln};
 use crate::statlists::StatList;
-use crate::strings::TAB;
+use crate::strings::{ADVDISADV_ERROR_MSG, ADVDISADV_ADV_CODE, ADVDISADV_DISADV_CODE, TAB};
 
 /// show roll results
 pub fn render_roll(
         is_several_rolls: bool,
         show_dice_code: bool,
         is_advantage: bool,
-        res: IntValue 
+        res: IntValue,
+        force_render: bool
     ) {
     if OPT.debug ||
        OPT.verbose > 1 ||
+       force_render ||
        (!is_several_rolls &&
         !is_advantage &&
             (!OPT.is_collect_stat() || OPT.verbose > 0)
@@ -68,7 +71,9 @@ pub fn render_dices_title(n: usize,
             reroll,
             add,
             drop,
-            crop
+            crop,
+            false,
+            false
         );
         output(&code_str);
     }
@@ -82,7 +87,10 @@ pub fn format_dice_str (
     reroll: &[usize],
     add: IntValue,
     drop: usize,
-    crop: usize) -> String {
+    crop: usize,
+    adv: bool,
+    disadv: bool
+) -> String {
         if OPT.numbers_only {
             return match is_several_rolls {
                 true => TAB.to_string(),
@@ -115,15 +123,26 @@ pub fn format_dice_str (
             x if x < 0 => format!("{}-{}{}", add_space, add_space,-x),
             _  => "".to_string()
         };
+
+        let adv_str: String = match (adv, disadv) {
+            (false, true) => ADVDISADV_DISADV_CODE.to_string(),
+            (true, false) => ADVDISADV_ADV_CODE.to_string(),
+            (false, false) => "".to_string(),
+            (true, true) => {
+                errorln(&ADVDISADV_ERROR_MSG);
+                std::process::exit(1);
+            },
+        };
     
-        format!("{}{}d{}{}{}{}{}",
+        format!("{}{}d{}{}{}{}{}{}",
             match is_several_rolls {true => TAB, _ => ""},
             n,
             d,
             reroll_str,
             drop_str,
             crop_str,
-            add_str
+            add_str,
+            adv_str
         )
 }
 

@@ -335,6 +335,70 @@
 -n2 -d8 -r1,2..4,5,8 --numbers-only -vvv
 [@6-7, @6-7] @12-14
 %%%%%%%%%%%%
+-n4 -d8 --advantage
+@4-32
+%%%%%%%%%%%%
+-n4 -d8 --advantage -v
+4d8 with advantage: @4-32
+%%%%%%%%%%%%
+-n4 -d8 --advantage -vv
+4d8: @4-32
+4d8: @4-32
+4d8 with advantage: @4-32
+%%%%%%%%%%%%
+-n4 -d8 --advantage -vvv
+4d8 [@1-8, @1-8, @1-8, @1-8]: @4-32
+4d8 [@1-8, @1-8, @1-8, @1-8]: @4-32
+4d8 with advantage: @4-32
+%%%%%%%%%%%%
+-n4 -d8 --disadvantage
+@4-32
+%%%%%%%%%%%%
+-n4 -d8 --disadvantage -v
+4d8 with disadvantage: @4-32
+%%%%%%%%%%%%
+-n4 -d8 --disadvantage -vv
+4d8: @4-32
+4d8: @4-32
+4d8 with disadvantage: @4-32
+%%%%%%%%%%%%
+-n4 -d8 --disadvantage -vvv
+4d8 [@1-8, @1-8, @1-8, @1-8]: @4-32
+4d8 [@1-8, @1-8, @1-8, @1-8]: @4-32
+4d8 with disadvantage: @4-32
+%%%%%%%%%%%%
+-n4 -d8 --advantage --numbers-only
+@4-32
+%%%%%%%%%%%%
+-n4 -d8 --advantage --numbers-only -v
+@4-32
+%%%%%%%%%%%%
+-n4 -d8 --advantage --numbers-only -vv
+@4-32
+@4-32
+@4-32
+%%%%%%%%%%%%
+-n4 -d8 --advantage --numbers-only -vvv
+[@1-8, @1-8, @1-8, @1-8] @4-32
+[@1-8, @1-8, @1-8, @1-8] @4-32
+@4-32
+%%%%%%%%%%%%
+-n4 -d8 --disadvantage --numbers-only
+@4-32
+%%%%%%%%%%%%
+-n4 -d8 --disadvantage --numbers-only -v
+@4-32
+%%%%%%%%%%%%
+-n4 -d8 --disadvantage --numbers-only -vv
+@4-32
+@4-32
+@4-32
+%%%%%%%%%%%%
+-n4 -d8 --disadvantage --numbers-only -vvv
+[@1-8, @1-8, @1-8, @1-8] @4-32
+[@1-8, @1-8, @1-8, @1-8] @4-32
+@4-32
+%%%%%%%%%%%%
 // dice codes with advantages/disadvantages
 // simple, single dice code
 4d8d2Ap4

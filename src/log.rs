@@ -132,7 +132,9 @@ pub fn log_dices_title(n: usize,
             reroll,
             add,
             drop,
-            crop
+            crop,
+            false,
+            false
         );
         log(&code_str);
     }

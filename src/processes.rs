@@ -120,6 +120,26 @@ fn process_keys(all_stats: &mut Vec<IntValue>) {
         }                
     };
 
+    if OPT.advantage || OPT.disadvantage {
+        if OPT.debug || OPT.verbose > 0
+        {
+            log_and_render_roll(false,
+             false,
+             OPT.dices_num,
+             OPT.dice,
+             &reroll,
+             OPT.plus as i32 - OPT.minus as i32,
+             OPT.drop,
+             OPT.crop,
+             OPT.advantage,
+             OPT.disadvantage
+            );
+        }
+
+        render_roll(false, !OPT.numbers_only && OPT.verbose > 0, false, res, true);
+        log_roll(false, false, res);
+    }
+
     all_stats.push(res);
 }
 
@@ -277,7 +297,7 @@ fn process_roll(
 
     let add = plus as IntValue - minus as IntValue;
 
-    let show_dice_code = log_and_render_roll(is_several_rolls, is_advantage, n, d, reroll, add, drop, crop);
+    let show_dice_code = log_and_render_roll(is_several_rolls, is_advantage, n, d, reroll, add, drop, crop, false, false);
     
     let res = match n_d_reroll_drop_crop_plus(n,
         d,
@@ -293,7 +313,7 @@ fn process_roll(
         }
     };
 
-    render_roll(is_several_rolls, show_dice_code, is_advantage, res);
+    render_roll(is_several_rolls, show_dice_code, is_advantage, res, false);
     log_roll(is_several_rolls, is_advantage, res);
 
     res
@@ -328,25 +348,27 @@ fn parse_reroll_code (reroll_str: &str) -> Option<Vec<usize>> {
 /// logs and shows dice code
 fn log_and_render_roll(
     is_several_rolls: bool,
-    is_advantage: bool,
+    is_advantage_part: bool,
     n: usize,
     d: usize,
     reroll: &[usize],
     add: IntValue,
     drop: usize,
-    crop: usize) -> bool {
+    crop: usize,
+    adv: bool,
+    disadv: bool) -> bool {
 
-    let dice_str = format_dice_str(is_several_rolls, n, d, reroll, add, drop, crop);
+    let dice_str = format_dice_str(is_several_rolls, n, d, reroll, add, drop, crop, adv, disadv);
 
     let mut show_dice_code = false;
     if OPT.debug ||
-        (OPT.verbose > 0 && !is_several_rolls && !is_advantage) ||
+        (OPT.verbose > 0 && !is_several_rolls && !is_advantage_part) ||
         OPT.verbose > 1 {
         show_dice_code = true;
         output(&dice_str);
     }
 
-    if (OPT.log > 0 && !is_several_rolls && !is_advantage) ||
+    if (OPT.log > 0 && !is_several_rolls && !is_advantage_part) ||
         OPT.log > 1 {
         log(&dice_str);
     }

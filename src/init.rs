@@ -253,7 +253,7 @@ impl Opt {
                 !self.find_tags.is_empty()
     }
 
-    /// checks, if stdin inpur is processed
+    /// checks, if stdin input is processed
     pub fn is_stdin(&self) -> bool {
         self.command_line
     }    

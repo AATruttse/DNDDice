@@ -31,6 +31,9 @@ pub static UNKNOWNMETHOD_ERROR_MSG: &str = "Unknown method";
 pub static UNKNOWNSTATLIST_ERROR_MSG: &str = "Internal error: Unknown stat list for method.";
 pub static ZEROSTAT_ERROR_MSG: &str = "Can't calculate statistics from zero-length slice";
 
+pub static ADVDISADV_ADV_CODE: &str = " with advantage";
+pub static ADVDISADV_DISADV_CODE: &str = " with disadvantage";
+
 pub static DICECODES_HELP_MSG: &str = "Dice codes format:
 DiceCodes = DiceCode{ DiceCode}
 DiceCode = SingleDice{(+|-|*|/|%|^)SingleDice}
