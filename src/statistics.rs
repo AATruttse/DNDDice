@@ -6,6 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use std::cmp::max;
 use std::collections::BTreeMap;
 
 use crate::dices::IntValue;
@@ -208,7 +209,12 @@ pub fn show_stats(stats: &Vec<IntValue>) {
         }
 
         for (key, val) in statistics.get_probabilities() {
-            let key_str = format!("{: <1$} -", key, &statistics.get_max().to_string().len());
+            let max_key_len = max(
+                statistics.get_max().to_string().len(),
+                statistics.get_min().to_string().len()
+            );
+
+            let key_str = format!("{: <1$} -", key, max_key_len);
             output(&key_str);
 
             if !OPT.prob_no_numbers {
