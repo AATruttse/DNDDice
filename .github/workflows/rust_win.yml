@@ -39,7 +39,7 @@ jobs:
 
   release_assets:
     name: Release assets
-    needs: create_release # we need to know the upload URL
+    needs: build, create_release # we need to know the upload URL
     runs-on: windows-latest
     steps:
       # checkout of cource
@@ -47,6 +47,8 @@ jobs:
         uses: actions/checkout@v1
       - name: Build release
         run:  cargo build --release
+      - name: Zip release
+        run:  tar.exe -a -c -f dnddice-win.zip .\target\release\dnddice.exe
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -57,9 +59,9 @@ jobs:
           # you like, remember that they need to be different for each platform.
           # You can choose any build matrix parameters. For Rust I use the
           # target triple.
-          asset_name: dnddice.exe
+          asset_name: dnddice-win.zip
           # The path to the file you want to upload.
-          asset_path: .\target\release\dnddice.exe
+          asset_path: .\dnddice-win.zip
           # probably you will need to change it, but most likely you are
           # uploading a binary file
-          asset_content_type: application/octet-stream          
+          asset_content_type: application/zip         

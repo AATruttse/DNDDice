@@ -46,7 +46,7 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
     -o, --output-file <output-file>                      Output file [default: ]
         --plus <plus>                                    Result plus [default: 0]
         --prob-chart-precision <prob-chart-precision>    Set precision for probabilities' chart [default: 100]
-    -r, --reroll <reroll>                                Reroll dices' results [default: ]
+    -r, --reroll <reroll>                                Reroll dices' results (examples: "1", "2,3", "1..4", "1,2,5..10,12..15,18") [default: ]
         --round-digits <round-digits>                    Round probabilities to number of digits [default: 2]
 
 ## ARGS:
