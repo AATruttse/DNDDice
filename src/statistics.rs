@@ -11,7 +11,7 @@ use std::collections::BTreeMap;
 use crate::dices::IntValue;
 use crate::init::OPT;
 use crate::output::{output, outputln};
-use crate::strings::ZEROSTAT_ERROR_MSG;
+use crate::strings::{GRAPH_CHAR, ZEROSTAT_ERROR_MSG};
 
 /// Float type for statistics
 pub type StatValue = f32;
@@ -208,8 +208,20 @@ pub fn show_stats(stats: &Vec<IntValue>) {
         }
 
         for (key, val) in statistics.get_probabilities() {
-            let prob_str = format!("{} - {:.digits$}", key, val, digits=OPT.round_digits as usize);
-            outputln(&prob_str);
+            let key_str = format!("{: <1$} -", key, &statistics.get_max().to_string().len());
+            output(&key_str);
+
+            if !OPT.prob_no_numbers {
+                let val_str = format!(" {:.digits$}", val, digits=OPT.round_digits as usize);
+                output(&val_str);
+            }
+
+            if OPT.prob_chart {
+                let graph_str = format!(" {}", GRAPH_CHAR.to_string().repeat((val*(OPT.prob_chart_precision as f32)) as usize));
+                output(&graph_str);
+            }
+
+            outputln("");
         }
     }
 }

@@ -11,7 +11,7 @@ mod tests {
     pub static TESTCOMMAND_LIN: &str = "./target/debug/dnddice";
     pub static TESTCOMMENT: &str = "//";
 
-    /// runs all tests on windows
+    /// runs all tests on windows 
     #[test]
     fn test_win() {
         test_dice_codes(TESTCOMMAND_WIN);
