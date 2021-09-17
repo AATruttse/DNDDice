@@ -150,15 +150,15 @@ pub struct Opt {
     #[structopt(long)]
     pub probabilities: bool,
 
-    /// Show probabilities in pseudographic mode
+    /// Show probabilities' chart
     #[structopt(long)]
     pub prob_chart: bool,
 
-    /// Show probabilities in pseudographic mode
+    /// Set precision for probabilities' chart
     #[structopt(long, default_value = "100")]
     pub prob_chart_precision: usize,
 
-    /// Not show probabilities' numbers
+    /// Do not show probabilities' numbers
     #[structopt(long)]
     pub prob_no_numbers: bool,    
 

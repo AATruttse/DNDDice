@@ -223,7 +223,7 @@ pub fn show_stats(stats: &Vec<IntValue>) {
             }
 
             if OPT.prob_chart {
-                let graph_str = format!(" {}", GRAPH_CHAR.to_string().repeat((val*(OPT.prob_chart_precision as f32)) as usize));
+                let graph_str = format!(" {}", GRAPH_CHAR.to_string().repeat((val*(OPT.prob_chart_precision as f32)).round() as usize));
                 output(&graph_str);
             }
 
