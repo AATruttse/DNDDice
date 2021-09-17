@@ -82,7 +82,7 @@ pub struct Opt {
     #[structopt(short="d", long="dice", default_value = "6")]
     pub dice: usize,
 
-    /// Reroll dices' results
+    /// Reroll dices' results (examples: "1", "2,3", "1..4", "1,2,5..10,12..15,18")
     #[structopt(short="r", long="reroll", default_value = "")]
     pub reroll: String,
 
