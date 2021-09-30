@@ -51,7 +51,7 @@ jobs:
 
   release_assets:
     name: Release assets
-    needs: build, test, create_release # we need to know the upload URL
+    needs: [build, test, create_release] # we need to know the upload URL
     runs-on: windows-latest
     steps:
       # checkout of cource
