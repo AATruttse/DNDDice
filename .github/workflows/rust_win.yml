@@ -10,27 +10,20 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  build_test:
+    name: Build & run Win tests
     runs-on: windows-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Build
       run: cargo build --verbose
-    #- name: Run tests
-    #  run: cargo test --verbose -- --nocapture test_win
-
-  test:
-    name: Run Win tests
-    needs: build
-    runs-on: windows-latest
-    steps:
-      - name: Run tests
-        run:  cargo test --verbose -- --nocapture test_win
+    - name: Run tests
+      run: cargo test --verbose -- --nocapture test_win
 
   create_release:
     name: Create release
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     # Note this. We are going to use that in further jobs.
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -41,14 +34,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: release
+          tag_name: release_win
           release_name: Release for Win
           draft: false
           prerelease: false
 
   release_assets:
     name: Release assets
-    needs: [build, test, create_release] # we need to know the upload URL
+    needs: [build_test, create_release] # we need to know the upload URL
     runs-on: windows-latest
     steps:
       # checkout of cource
