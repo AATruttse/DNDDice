@@ -34,7 +34,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: release_win_${{ github.ref }}
+          tag_name: release_win
           release_name: Release for Win
           draft: false
           prerelease: false
@@ -50,7 +50,7 @@ jobs:
       - name: Build release
         run:  cargo build --release
       - name: Zip release
-        run:  tar.exe -a -c -f dnddice-win.zip .\target\release\dnddice.exe
+        run:  tar.exe -C .\target\release -acf dnddice-win.zip dnddice.exe
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
