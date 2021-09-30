@@ -25,9 +25,6 @@ jobs:
     needs: build
     runs-on: windows-latest
     steps:
-      # checkout of cource
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Run tests
         run:  cargo test --verbose -- --nocapture test_win
 
