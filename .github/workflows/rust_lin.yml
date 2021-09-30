@@ -11,9 +11,8 @@ env:
 
 jobs:
   build_test:
-
+    name: Build & run Ubuntu tests
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Build
@@ -21,4 +20,50 @@ jobs:
     - name: Run tests
       run: cargo test --verbose -- --nocapture test_lin
 
+  create_release:
+    name: Create release
+    runs-on: ubuntu-latest
+    # Note this. We are going to use that in further jobs.
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: release_ubuntu
+          release_name: Release for Ubuntu
+          draft: false
+          prerelease: false
+
+  release_assets:
+    name: Release assets
+    needs: [build_test, create_release] # we need to know the upload URL
+    runs-on: ubuntu-latest
+    steps:
+      # checkout of cource
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Build release
+        run:  cargo build --release
+      - name: Zip release
+        run:  tar -czf dnddice-ubuntu.tar.gz ./target/release/dnddice
+      - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.create_release.outputs.upload_url }}
+          # This is how it will be named on the release page. Put hatever name
+          # you like, remember that they need to be different for each platform.
+          # You can choose any build matrix parameters. For Rust I use the
+          # target triple.
+          asset_name: dnddice-ubuntu.tar.gz
+          # The path to the file you want to upload.
+          asset_path: .\dnddice-ubuntu.tar.gz
+          # probably you will need to change it, but most likely you are
+          # uploading a binary file
+          asset_content_type: application/gzip
       
