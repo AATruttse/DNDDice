@@ -56,8 +56,12 @@ jobs:
         uses: actions/checkout@v1
       - name: Build release
         run:  cargo build --release
+      - name: Copy batch file
+        run:  copy .\assets\dnddice.bat .\target\release
       - name: Zip release
-        run:  tar.exe -C .\target\release -acf dnddice-win.zip dnddice.exe
+        run:  tar.exe -C .\target\release -acf dnddice-win.zip dnddice.exe dnddice.bat
+      - name: Delete batch file
+        run:  del .\target\release\dnddice.bat
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
