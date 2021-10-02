@@ -58,7 +58,7 @@ pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usi
                 all_stats.extend(stat.clone());
             }
 
-            if (OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat()) && !OPT.numbers_only && idx == num - 1 {
+            if (OPT.is_debug() || OPT.verbose > 0 || !OPT.is_collect_stat()) && !OPT.numbers_only && idx == num - 1 {
                 outputln(method.get_comment());
             }
         },

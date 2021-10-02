@@ -19,7 +19,8 @@ use crate::strings::{LOGFILE_ERROR_MSG, OUTPUTFILE_ERROR_MSG, NONUTF8FILENAME_ER
 #[structopt(name = "dnddice", about = "RPG dice thrower for command line. Author: Dargot, dargot@yandex.ru")]
 pub struct Opt {
     /// Activate debug mode (only in debug build configuration!)
-    #[structopt(long)]
+    #[cfg(debug_assertions)]
+    #[structopt(long, help="Activate debug mode")]
     pub debug: bool,
 
     /// Command-line mode
@@ -272,12 +273,12 @@ impl Opt {
     
     /// checks, if it needs to show debug information
     pub fn is_debug(&self) -> bool {
-        if cfg!(debug_assertions) {
-            self.debug
-        }
-        else {
-            false
-        }
+        #[cfg(debug_assertions)]
+            return self.debug;
+
+        #[cfg(not(debug_assertions))]
+            return false;
+        
     }
 
 }
