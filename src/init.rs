@@ -18,7 +18,7 @@ use crate::strings::{LOGFILE_ERROR_MSG, OUTPUTFILE_ERROR_MSG, NONUTF8FILENAME_ER
 #[derive(Debug, StructOpt)]
 #[structopt(name = "dnddice", about = "RPG dice thrower for command line. Author: Dargot, dargot@yandex.ru")]
 pub struct Opt {
-    /// Activate debug mode
+    /// Activate debug mode (only in debug build configuration!)
     #[structopt(long)]
     pub debug: bool,
 
@@ -86,20 +86,20 @@ pub struct Opt {
     #[structopt(short="r", long="reroll", default_value = "")]
     pub reroll: String,
 
-    /// Advantage
-    #[structopt(long)]
+    /// Roll with advantage
+    #[structopt(short="A", long)]
     pub advantage: bool,
 
-    /// Advantage
-    #[structopt(long)]
+    /// Roll with disadvantage
+    #[structopt(short="I", long)]
     pub disadvantage: bool,
 
     /// Result plus
-    #[structopt(long="plus", default_value = "0")]
+    #[structopt(short="p", long="plus", default_value = "0")]
     pub plus: usize,
 
     /// Result minus
-    #[structopt(long="minus", default_value = "0")]
+    #[structopt(short="m", long="minus", default_value = "0")]
     pub minus: usize,
 
     /// Number of lowest dices to be dropped
@@ -111,11 +111,11 @@ pub struct Opt {
     pub crop: usize,
 
     /// Stat generation method (adnd1, adnd2, etc.) See --help-methods for full list.
-    #[structopt(short, long, default_value = "")]
+    #[structopt(short="M", long, default_value = "")]
     pub method: String,
 
     /// Method parameters
-    #[structopt(short="p", long="parameters", default_value = "")]
+    #[structopt(short="P", long="parameters", default_value = "")]
     pub method_parameters: String,
 
     /// Show method description
@@ -188,7 +188,7 @@ lazy_static! {
     pub static ref OPT: Opt = {
         let opt = Opt::from_args();
         
-        if opt.debug {
+        if opt.is_debug() {
             println!("{:?}", opt);
         }
         
@@ -268,7 +268,17 @@ impl Opt {
     /// checks, if stdin input is processed
     pub fn is_stdin(&self) -> bool {
         self.command_line
-    }    
+    }
+    
+    /// checks, if it needs to show debug information
+    pub fn is_debug(&self) -> bool {
+        if cfg!(debug_assertions) {
+            self.debug
+        }
+        else {
+            false
+        }
+    }
 
 }
 

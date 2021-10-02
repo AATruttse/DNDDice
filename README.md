@@ -4,10 +4,10 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
     dnddice.exe [FLAGS] [OPTIONS] [dicecodes]...
 
 ## FLAGS:
-        --advantage          Advantage
+    -A, --advantage          Roll with advantage
     -c, --command-line       Command-line mode
-        --debug              Activate debug mode
-        --disadvantage       Advantage
+        --debug              Activate debug mode (only in debug build configuration!)
+    -I, --disadvantage       Roll with disadvantage
     -h, --help               Prints help information
         --help-dice-codes    Show help about dice codes' format description
         --help-methods       Show help about generation methods. See --help-method=METHOD to see help about METHOD
@@ -36,17 +36,20 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
     -d, --dice <dice>                                    Dice sides [default: 6]
     -n, --dice-num <dices-num>                           Number of dices [default: 1]
     -D, --drop <drop>                                    Number of lowest dices to be dropped [default: 0]
-        --find-tags <find-tags>                          Show help about generation method by tags (for example: "DnD,ordered"). See --help-tags to see tags' list [default: ]
+        --find-tags <find-tags>                          Show help about generation method by tags (for example: "DnD,ordered").
+                                                            See --help-tags to see tags' list [default: ]
         --help-method <help-method>                      Show help about generation method [default: ]
         --log-file <log-file>                            Log file [default: dnddice.log]
-    -m, --method <method>                                Stat generation method (adnd1, adnd2, etc.) See --help-methods for full list [default: ]
-    -p, --parameters <method-parameters>                 Method parameters [default: ]
-        --minus <minus>                                  Result minus [default: 0]
+    -M, --method <method>                                Stat generation method (adnd1, adnd2, etc.). See --help-methods for full
+                                                            list [default: ]
+    -P, --parameters <method-parameters>                 Method parameters [default: ]
+    -m, --minus <minus>                                  Result minus [default: 0]
     -N, --repetitions-num <num>                          Number of repetitions [default: 1]
     -o, --output-file <output-file>                      Output file [default: ]
-        --plus <plus>                                    Result plus [default: 0]
+    -p, --plus <plus>                                    Result plus [default: 0]
         --prob-chart-precision <prob-chart-precision>    Set precision for probabilities' chart [default: 100]
-    -r, --reroll <reroll>                                Reroll dices' results (examples: "1", "2,3", "1..4", "1,2,5..10,12..15,18") [default: ]
+    -r, --reroll <reroll>                                Reroll dices' results (examples: "1", "2,3", "1..4",
+                                                            "1,2,5..10,12..15,18") [default: ]
         --round-digits <round-digits>                    Round probabilities to number of digits [default: 2]
 
 ## ARGS:

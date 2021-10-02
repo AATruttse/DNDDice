@@ -23,7 +23,7 @@ pub fn render_roll(
         res: IntValue,
         force_render: bool
     ) {
-    if OPT.debug ||
+    if OPT.is_debug() ||
        OPT.verbose > 1 ||
        force_render ||
        (!is_several_rolls &&
@@ -39,7 +39,7 @@ pub fn render_roll(
 
 /// show single roll dices results
 pub fn render_dices(dices: &Vec<usize>) {
-    if OPT.debug || OPT.verbose > 2 {
+    if OPT.is_debug() || OPT.verbose > 2 {
         let dice_res = format!("{}{:?}{}",
             match OPT.numbers_only {false => " ", _ => ""},
             dices,
@@ -185,7 +185,7 @@ pub fn render_codes(
         }
         outputln(&res.to_string());
     }
-    else if OPT.debug || 
+    else if OPT.is_debug() || 
        (dices_num > 1 &&
             (OPT.verbose > 0 ||
             (OPT.verbose == 0 && !OPT.is_collect_stat() && dices_num > 1)))

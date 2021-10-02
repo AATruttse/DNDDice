@@ -28,7 +28,7 @@ use crate::strings::{DELIMITER, ADVDISADV_ERROR_MSG, UNKNOWNSTATLIST_ERROR_MSG};
 pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usize, num: usize) -> Option<()> {
     let mut stat : Vec<IntValue> = Vec::<IntValue>::new();
 
-    if OPT.debug {
+    if OPT.is_debug() {
         println!("Method: {}", method_name);
     }
 
@@ -51,7 +51,7 @@ pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usi
                     log_method(n > 1, method.is_ordered(), i, &stat, statlist);
                 }
 
-                if OPT.debug || OPT.verbose > 0 || !OPT.is_collect_stat() {
+                if OPT.is_debug() || OPT.verbose > 0 || !OPT.is_collect_stat() {
                     render_stats(n > 1, method.is_ordered(), i, &stat, statlist);
                 }
 
@@ -63,7 +63,7 @@ pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usi
             }
         },
         None => {
-            if OPT.debug {
+            if OPT.is_debug() {
                 println!("Can't found method {}", method_name);
             }
             return None
@@ -121,7 +121,7 @@ fn process_keys(all_stats: &mut Vec<IntValue>) {
     };
 
     if OPT.advantage || OPT.disadvantage {
-        if OPT.debug || OPT.verbose > 0
+        if OPT.is_debug() || OPT.verbose > 0
         {
             log_and_render_roll(false,
              false,
@@ -179,7 +179,7 @@ pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>)-> R
                     }
                 }).collect();
 
-            if OPT.debug {
+            if OPT.is_debug() {
                 println!("{:?}", dices_vec);
             }
             
@@ -206,7 +206,7 @@ fn process_code<'a>(
      idx: usize,
      params: &Vec<&'a str>)
       -> Result<(&'a str, IntValue, bool), DiceError> {
-    if OPT.debug {
+    if OPT.is_debug() {
         println!("dice: {} - {:?}", idx, params);
     }
 
@@ -361,7 +361,7 @@ fn log_and_render_roll(
     let dice_str = format_dice_str(is_several_rolls, n, d, reroll, add, drop, crop, adv, disadv);
 
     let mut show_dice_code = false;
-    if OPT.debug ||
+    if OPT.is_debug() ||
         (OPT.verbose > 0 && !is_several_rolls && !is_advantage_part) ||
         OPT.verbose > 1 {
         show_dice_code = true;

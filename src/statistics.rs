@@ -120,7 +120,7 @@ impl Statistics {
             .map(|(key, val)| (*key, *val as StatValue / data.len() as StatValue))
             .collect();
 
-        if OPT.debug && OPT.is_collect_stat() {
+        if OPT.is_debug() && OPT.is_collect_stat() {
             println!("{:?}", self.bins);
             if OPT.probabilities {
                 println!("{:?}", self.probabilities);
