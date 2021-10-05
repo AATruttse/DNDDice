@@ -59,6 +59,10 @@ pub struct Opt {
     #[structopt(long="log-file", parse(from_os_str), default_value = "dnddice.log")]
     pub log_file: PathBuf,
 
+    /// Log delimiter
+    #[structopt(long, default_value = "------------")]
+    pub log_delimiter: String,    
+
     /// Output file
     #[structopt(short="o", long="output-file", parse(from_os_str), default_value = "")]
     pub output_file: PathBuf,
@@ -155,7 +159,11 @@ pub struct Opt {
     #[structopt(long)]
     pub prob_chart: bool,
 
-    /// Set precision for probabilities' chart
+    /// Symbol by means of which probabilities' chart is drawn 
+    #[structopt(long, default_value = "\u{2592}")]
+    pub prob_chart_symbol: String,
+
+    /// Precision for probabilities' chart
     #[structopt(long, default_value = "100")]
     pub prob_chart_precision: usize,
 
@@ -178,6 +186,10 @@ pub struct Opt {
     /// No help messages
     #[structopt(long)]
     pub no_help: bool,
+
+    /// Tab delimiter in logs and verbose mode
+    #[structopt(long, default_value = "__")]
+    pub tab_delimiter: String,
 
     /// Dice codes (2d8plus1, 4d6drop1, 2d4-1d6/1d3 etc.) See --help-dice-codes for format description
     #[structopt(default_value = "")]

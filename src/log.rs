@@ -14,7 +14,7 @@ use crate::dices::IntValue;
 use crate::init::{LOGFILE, OPT};
 use crate::render::format_dice_str;
 use crate::statlists::StatList;
-use crate::strings::{DELIMITER, NONUTF8FILENAME_ERROR_MSG, LOGFILEWRITE_ERROR_MSG};
+use crate::strings::{NONUTF8FILENAME_ERROR_MSG, LOGFILEWRITE_ERROR_MSG};
 
 /// Log message to log file
 pub fn log(log_str: &str) {
@@ -70,10 +70,10 @@ pub fn log_start() {
     let now = Local::now();
     let time_str = format!("{}", now.format("%Y %b %e %T"));
 
-    logln(DELIMITER);
-    logln(DELIMITER);
+    logln(&OPT.log_delimiter);
+    logln(&OPT.log_delimiter);
     logln(&time_str);
-    logln(DELIMITER);
+    logln(&OPT.log_delimiter);
 }
 
 /// log roll results

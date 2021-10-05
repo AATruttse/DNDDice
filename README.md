@@ -6,7 +6,6 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
 ## FLAGS:
     -A, --advantage          Roll with advantage
     -c, --command-line       Command-line mode
-        --debug              Activate debug mode (only in debug build configuration!)
     -I, --disadvantage       Roll with disadvantage
     -h, --help               Prints help information
         --help-dice-codes    Show help about dice codes' format description
@@ -39,6 +38,7 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
         --find-tags <find-tags>                          Show help about generation method by tags (for example: "DnD,ordered").
                                                             See --help-tags to see tags' list [default: ]
         --help-method <help-method>                      Show help about generation method [default: ]
+        --log-delimiter <log-delimiter>                  Log delimiter [default: ------------]
         --log-file <log-file>                            Log file [default: dnddice.log]
     -M, --method <method>                                Stat generation method (adnd1, adnd2, etc.). See --help-methods for full
                                                             list [default: ]
@@ -48,9 +48,11 @@ RPG dice thrower for command line. Author: Anton A. Truttse (Dargot) <dargot@yan
     -o, --output-file <output-file>                      Output file [default: ]
     -p, --plus <plus>                                    Result plus [default: 0]
         --prob-chart-precision <prob-chart-precision>    Set precision for probabilities' chart [default: 100]
+        --prob-chart-symbol <prob-chart-symbol>          Symbol by means of which probabilities' chart is drawn [default: ▒]
     -r, --reroll <reroll>                                Reroll dices' results (examples: "1", "2,3", "1..4",
                                                             "1,2,5..10,12..15,18") [default: ]
         --round-digits <round-digits>                    Round probabilities to number of digits [default: 2]
+        --tab-delimiter <tab-delimiter>                  Tab delimiter in logs and verbose mode [default: __]
 
 ## ARGS:
     <dicecodes>...    Dice codes (2d8plus1, 4d6drop1, 2d4-1d6/1d3 etc.) See --help-dice-codes for format description

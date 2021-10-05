@@ -6,10 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-pub static DELIMITER: &str = "------------------";
-pub static TAB: &str = "__";
-pub static GRAPH_CHAR: char = '\u{2592}';
-
 pub static METHODS_MESSAGE: &str = "Generation methods:";
 pub static TAGS_MESSAGE: &str = "Tags for generation methods:";
 pub static NO_TAGS_MESSAGE: &str = "There's no method with such tags.";

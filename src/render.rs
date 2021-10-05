@@ -13,7 +13,7 @@ use crate::errors::errorln;
 use crate::init::OPT;
 use crate::output::{output, outputln};
 use crate::statlists::StatList;
-use crate::strings::{ADVDISADV_ERROR_MSG, ADVDISADV_ADV_CODE, ADVDISADV_DISADV_CODE, TAB};
+use crate::strings::{ADVDISADV_ERROR_MSG, ADVDISADV_ADV_CODE, ADVDISADV_DISADV_CODE};
 
 /// show roll results
 pub fn render_roll(
@@ -93,7 +93,7 @@ pub fn format_dice_str (
 ) -> String {
         if OPT.numbers_only {
             return match is_several_rolls {
-                true => TAB.to_string(),
+                true => OPT.tab_delimiter.clone(),
                 _ => "".to_string()
             };
         }
@@ -135,7 +135,7 @@ pub fn format_dice_str (
         };
     
         format!("{}{}d{}{}{}{}{}{}",
-            match is_several_rolls {true => TAB, _ => ""},
+            match is_several_rolls {true => &OPT.tab_delimiter, _ => ""},
             n,
             d,
             reroll_str,

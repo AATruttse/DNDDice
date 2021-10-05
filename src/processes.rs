@@ -22,7 +22,7 @@ use crate::methods::METHODSMAP;
 use crate::output::{output, outputln};
 use crate::render::{format_dice_str, render_codes, render_roll, render_stats};
 use crate::statlists::{StatList, STATLISTSMAP};
-use crate::strings::{DELIMITER, ADVDISADV_ERROR_MSG, UNKNOWNSTATLIST_ERROR_MSG};
+use crate::strings::{ADVDISADV_ERROR_MSG, UNKNOWNSTATLIST_ERROR_MSG};
 
 /// process stat generation method, uses all_stat for statistics
 pub fn process_method(method_name: &str, all_stats: &mut Vec<IntValue>, idx: usize, num: usize) -> Option<()> {
@@ -379,7 +379,7 @@ fn log_and_render_roll(
 /// log and show title
 pub fn log_and_render_title(idx: usize, num: usize, desc: &str) {
     if OPT.log > 0 {
-        logln(DELIMITER);
+        logln(&OPT.log_delimiter);
         
         if num > 1 {
             let idx_str = format!("{}) ", idx + 1);
