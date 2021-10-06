@@ -24,7 +24,7 @@ mod tests
     /// runs all tests on windows 
     #[test]
     fn test_win() {
-        //test_dice_codes(TESTCOMMAND_WIN, false);
+        test_dice_codes(TESTCOMMAND_WIN, false);
         test_dice_codes(TESTCOMMAND_WIN, true);
     }
 
