@@ -79,11 +79,11 @@ pub fn log_start() {
 /// log roll results
 pub fn log_roll(
     is_several_rolls: bool,
-    _is_advantage: bool,
+    is_advantage: bool,
     res: IntValue 
 ) {
     if OPT.log > 1 ||
-       (OPT.log > 0 && !is_several_rolls) {
+       (OPT.log > 0 && !is_several_rolls && !is_advantage) {
         let log_str = format!(": {}", res);
         logln(&log_str);
     }
@@ -92,10 +92,11 @@ pub fn log_roll(
 /// logs dice from codes
 pub fn log_codes(
     dices_num: usize,
+    is_advantage: bool,
     dicecode: &str,
     res: IntValue
 ) {
-    if OPT.log > 0 && dices_num > 1 {
+    if OPT.log > 0 && (dices_num > 1 || is_advantage) {
         let log_str = format!("{}: {}", dicecode, res);
         logln(&log_str);
     }    

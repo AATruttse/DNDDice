@@ -121,7 +121,7 @@ fn process_keys(all_stats: &mut Vec<IntValue>) {
     };
 
     if OPT.advantage || OPT.disadvantage {
-        if OPT.is_debug() || OPT.verbose > 0
+        if OPT.is_debug() || OPT.verbose > 0 || OPT.log > 0
         {
             log_and_render_roll(false,
              false,
@@ -191,7 +191,7 @@ pub fn process_codes(dicecodes: &Vec<String>, all_stats: &mut Vec<IntValue>)-> R
             let res = process_arithmetic(&dices_vec);
 
             render_codes(dices_num, has_advantages, dicecode, res);
-            log_codes(dices_num, dicecode, res);
+            log_codes(dices_num, has_advantages, dicecode, res);
 
             all_stats.push(res);
         }
