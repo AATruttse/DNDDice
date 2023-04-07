@@ -59,7 +59,7 @@ jobs:
       - name: Copy batch file
         run:  copy .\assets\dnddice.bat .\target\release
       - name: Copy README & Licenses file
-        run:  for %I in (.\README.md .\LICENSE-APACHE .\LICENSE-MIT) do copy %I .\target\release\        
+        run:  Copy-Item .\README.md ,\LICENSE-APACHE,.\LICENSE-MIT -Destination .\target\release\ -PassThru
       - name: Zip release
         run:  tar.exe -C .\target\release -acf dnddice-win.zip dnddice.exe dnddice.bat README.md LICENSE-MIT LICENSE-APACHE
       - name: Delete unneeded files
