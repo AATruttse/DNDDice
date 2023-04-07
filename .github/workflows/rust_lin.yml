@@ -55,8 +55,12 @@ jobs:
         uses: actions/checkout@v1
       - name: Build release
         run:  cargo build --release
+      - name: Copy README & Licenses file
+        run:  copy ./README.md ./LICENSE-APACHE ./LICENSE-MIT ./target/release         
       - name: Zip release
-        run:  tar -C ./target/release -czf dnddice-ubuntu.tar.gz dnddice
+        run:  tar -C ./target/release -czf dnddice-ubuntu.tar.gz dnddice README.md LICENSE-MIT LICENSE-APACHE
+      - name: Delete unneeded files
+        run:  rm ./target/release/README.md ./target/release/LICENSE-MIT ./target/release/LICENSE-APACHE        
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:

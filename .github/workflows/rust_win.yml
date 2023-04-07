@@ -58,10 +58,12 @@ jobs:
         run:  cargo build --release
       - name: Copy batch file
         run:  copy .\assets\dnddice.bat .\target\release
+      - name: Copy README & Licenses file
+        run:  copy .\README.md .\LICENSE-APACHE .\LICENSE-MIT .\target\release        
       - name: Zip release
-        run:  tar.exe -C .\target\release -acf dnddice-win.zip dnddice.exe dnddice.bat
-      - name: Delete batch file
-        run:  del .\target\release\dnddice.bat
+        run:  tar.exe -C .\target\release -acf dnddice-win.zip dnddice.exe dnddice.bat README.md LICENSE-MIT LICENSE-APACHE
+      - name: Delete unneeded files
+        run:  del .\target\release\dnddice.bat .\target\release\README.md .\target\release\LICENSE-MIT .\target\release\LICENSE-APACHE
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
