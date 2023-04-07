@@ -28,12 +28,12 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - name: Delete old release
-        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        uses: dev-drprasad/delete-older-releases@v0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          delete_release: true
-          tag_name: release_ubuntu    
+          keep_latest: 0
+          delete_tag_pattern: release_ubuntu    
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
