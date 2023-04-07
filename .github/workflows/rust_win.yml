@@ -29,7 +29,7 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - name: Delete old release
-        uses: dev-drprasad/delete-older-releases@v0.2
+        uses: dev-drprasad/delete-older-releases@v0.2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
