@@ -6,27 +6,29 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-
 use std::fs::{File, OpenOptions};
 
 use std::path::PathBuf;
 use structopt::StructOpt;
 
 use crate::errors::errorln;
-use crate::strings::{LOGFILE_ERROR_MSG, OUTPUTFILE_ERROR_MSG, NONUTF8FILENAME_ERROR_MSG};
+use crate::strings::{LOGFILE_ERROR_MSG, NONUTF8FILENAME_ERROR_MSG, OUTPUTFILE_ERROR_MSG};
 
 #[derive(Debug, StructOpt)]
-#[structopt(name = "dnddice", about = "RPG dice thrower for command line. Author: Dargot, dargot@yandex.ru")]
+#[structopt(
+    name = "dnddice",
+    about = "RPG dice thrower for command line. Author: Dargot, dargot@yandex.ru"
+)]
 pub struct Opt {
     /// Activate debug mode (only in debug build configuration!)
     #[cfg(debug_assertions)]
-    #[structopt(long, help="Activate debug mode")]
+    #[structopt(long, help = "Activate debug mode")]
     pub debug: bool,
 
     /// Command-line mode
-    #[structopt(short="c", long)]
+    #[structopt(short = "c", long)]
     pub command_line: bool,
-    
+
     /// Show help about dice codes' format description
     #[structopt(long)]
     pub help_dice_codes: bool,
@@ -40,7 +42,7 @@ pub struct Opt {
     pub help_method: String,
 
     /// Show help about generation method by tags (for example: "DnD,ordered"). See --help-tags to see tags' list
-    #[structopt(long="find-tags", default_value = "")]
+    #[structopt(long = "find-tags", default_value = "")]
     pub find_tags: String,
 
     /// Show tags' list.
@@ -56,23 +58,28 @@ pub struct Opt {
     pub log: u8,
 
     /// Log file
-    #[structopt(long="log-file", parse(from_os_str), default_value = "dnddice.log")]
+    #[structopt(long = "log-file", parse(from_os_str), default_value = "dnddice.log")]
     pub log_file: PathBuf,
 
     /// Log delimiter
     #[structopt(long, default_value = "------------")]
-    pub log_delimiter: String,    
+    pub log_delimiter: String,
 
     /// Output file
-    #[structopt(short="o", long="output-file", parse(from_os_str), default_value = "")]
+    #[structopt(
+        short = "o",
+        long = "output-file",
+        parse(from_os_str),
+        default_value = ""
+    )]
     pub output_file: PathBuf,
-    
+
     /// Silent mode - no output to stdout
-    #[structopt(short="s", long="silent")]
+    #[structopt(short = "s", long = "silent")]
     pub silent_mode: bool,
 
     /// Number of repetitions
-    #[structopt(short="N", long="repetitions-num", default_value = "1")]
+    #[structopt(short = "N", long = "repetitions-num", default_value = "1")]
     pub num: usize,
 
     /// Show repetition number
@@ -80,47 +87,47 @@ pub struct Opt {
     pub show_number: bool,
 
     /// Number of dices
-    #[structopt(short="n", long="dice-num", default_value = "1")]
+    #[structopt(short = "n", long = "dice-num", default_value = "1")]
     pub dices_num: usize,
 
     /// Dice sides
-    #[structopt(short="d", long="dice", default_value = "6")]
+    #[structopt(short = "d", long = "dice", default_value = "6")]
     pub dice: usize,
 
     /// Reroll dices' results (examples: "1", "2,3", "1..4", "1,2,5..10,12..15,18")
-    #[structopt(short="r", long="reroll", default_value = "")]
+    #[structopt(short = "r", long = "reroll", default_value = "")]
     pub reroll: String,
 
     /// Roll with advantage
-    #[structopt(short="A", long)]
+    #[structopt(short = "A", long)]
     pub advantage: bool,
 
     /// Roll with disadvantage
-    #[structopt(short="I", long)]
+    #[structopt(short = "I", long)]
     pub disadvantage: bool,
 
     /// Result plus
-    #[structopt(short="p", long="plus", default_value = "0")]
+    #[structopt(short = "p", long = "plus", default_value = "0")]
     pub plus: usize,
 
     /// Result minus
-    #[structopt(short="m", long="minus", default_value = "0")]
+    #[structopt(short = "m", long = "minus", default_value = "0")]
     pub minus: usize,
 
     /// Number of lowest dices to be dropped
-    #[structopt(short="D", long="drop", default_value = "0")]
+    #[structopt(short = "D", long = "drop", default_value = "0")]
     pub drop: usize,
 
     /// Number of greatest dices to be dropped
-    #[structopt(short="C", long="crop", default_value = "0")]
+    #[structopt(short = "C", long = "crop", default_value = "0")]
     pub crop: usize,
 
     /// Stat generation method (adnd1, adnd2, etc.) See --help-methods for full list.
-    #[structopt(short="M", long, default_value = "")]
+    #[structopt(short = "M", long, default_value = "")]
     pub method: String,
 
     /// Method parameters
-    #[structopt(short="P", long="parameters", default_value = "")]
+    #[structopt(short = "P", long = "parameters", default_value = "")]
     pub method_parameters: String,
 
     /// Show method description
@@ -129,7 +136,7 @@ pub struct Opt {
 
     /// Show all statistics
     #[structopt(long)]
-    pub stat: bool,    
+    pub stat: bool,
 
     /// Show minimum
     #[structopt(long)]
@@ -159,7 +166,7 @@ pub struct Opt {
     #[structopt(long)]
     pub prob_chart: bool,
 
-    /// Symbol by means of which probabilities' chart is drawn 
+    /// Symbol by means of which probabilities' chart is drawn
     #[structopt(long, default_value = "\u{2592}")]
     pub prob_chart_symbol: String,
 
@@ -169,7 +176,7 @@ pub struct Opt {
 
     /// Do not show probabilities' numbers
     #[structopt(long)]
-    pub prob_no_numbers: bool,    
+    pub prob_no_numbers: bool,
 
     /// Show sum
     #[structopt(long)]
@@ -200,36 +207,37 @@ pub struct Opt {
 lazy_static! {
     pub static ref OPT: Opt = {
         let opt = Opt::from_args();
-        
+
         if opt.is_debug() {
             println!("{:?}", opt);
         }
-        
+
         opt
     };
-
     pub static ref LOGFILE: Option<File> = match OPT.log {
         x if x > 0 => {
             match OpenOptions::new()
                 .append(true)
                 .create(true)
-                .open(&OPT.log_file) {
-                    Ok(f) => Some(f),
-                    Err(e) => {
-                        eprintln!("{} {}:",
-                                  LOGFILE_ERROR_MSG,
-                                  match OPT.log_file.to_str() {
-                                        Some(err_str) => err_str,
-                                        None => NONUTF8FILENAME_ERROR_MSG
-                                });
-                        eprintln!("{}", e);
-                        None
-                    }
+                .open(&OPT.log_file)
+            {
+                Ok(f) => Some(f),
+                Err(e) => {
+                    eprintln!(
+                        "{} {}:",
+                        LOGFILE_ERROR_MSG,
+                        match OPT.log_file.to_str() {
+                            Some(err_str) => err_str,
+                            None => NONUTF8FILENAME_ERROR_MSG,
+                        }
+                    );
+                    eprintln!("{}", e);
+                    None
+                }
             }
-        },
-        _ => None
+        }
+        _ => None,
     };
-
     pub static ref OUTPUTFILE: Option<File> = match OPT.output_file.to_str() {
         Some(outfile_str) => {
             if outfile_str.is_empty() {
@@ -239,59 +247,57 @@ lazy_static! {
             match OpenOptions::new()
                 .append(true)
                 .create(true)
-                .open(&OPT.output_file) {
-                    Ok(f) => Some(f),
-                    Err(e) => {
-                        let err_str = format!("{} {}:", OUTPUTFILE_ERROR_MSG, outfile_str);
-                        errorln(&err_str);
-                        errorln(&e.to_string());
-                        None
-                    }
+                .open(&OPT.output_file)
+            {
+                Ok(f) => Some(f),
+                Err(e) => {
+                    let err_str = format!("{} {}:", OUTPUTFILE_ERROR_MSG, outfile_str);
+                    errorln(&err_str);
+                    errorln(&e.to_string());
+                    None
+                }
             }
-        },
+        }
         None => {
             let err_str = format!("{} {}", OUTPUTFILE_ERROR_MSG, NONUTF8FILENAME_ERROR_MSG);
             errorln(&err_str);
             None
         }
-    };    
+    };
 }
 
 impl Opt {
     /// checks, if any statistics need to be collected
     pub fn is_collect_stat(&self) -> bool {
-        return self.stat ||
-               self.min ||
-               self.max ||
-               self.mean ||
-               self.median ||
-               self.mode ||
-               self.probabilities;
+        return self.stat
+            || self.min
+            || self.max
+            || self.mean
+            || self.median
+            || self.mode
+            || self.probabilities;
     }
 
     /// checks, if any help info need to be shown
     pub fn is_help(&self) -> bool {
-        return  self.help_dice_codes ||
-                self.help_methods ||
-                self.help_tags ||
-                !self.help_method.is_empty() ||
-                !self.find_tags.is_empty()
+        return self.help_dice_codes
+            || self.help_methods
+            || self.help_tags
+            || !self.help_method.is_empty()
+            || !self.find_tags.is_empty();
     }
 
     /// checks, if stdin input is processed
     pub fn is_stdin(&self) -> bool {
         self.command_line
     }
-    
+
     /// checks, if it needs to show debug information
     pub fn is_debug(&self) -> bool {
         #[cfg(debug_assertions)]
-            return self.debug;
+        return self.debug;
 
         #[cfg(not(debug_assertions))]
-            return false;
-        
+        return false;
     }
-
 }
-

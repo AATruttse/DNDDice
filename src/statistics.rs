@@ -12,7 +12,7 @@ use std::collections::BTreeMap;
 use crate::dices::IntValue;
 use crate::init::OPT;
 use crate::output::{output, outputln};
-use crate::strings::{ZEROSTAT_ERROR_MSG};
+use crate::strings::ZEROSTAT_ERROR_MSG;
 
 /// Float type for statistics
 pub type StatValue = f32;
@@ -24,18 +24,17 @@ type StatBins = BTreeMap<IntValue, StatValue>;
 //static ERROR_MSG: &str = "Can't calculate statistics from zero-length slice";
 
 /// struct for dice statistics
-pub struct Statistics
-{
-    mean:   StatValue,
+pub struct Statistics {
+    mean: StatValue,
     median: IntValue,
-    mode:   IntValue,
-    sum:    IntValue,
+    mode: IntValue,
+    sum: IntValue,
 
-    min:    IntValue,
-    max:    IntValue,
-        
-    bins:   IntBins,
-    probabilities:   StatBins
+    min: IntValue,
+    max: IntValue,
+
+    bins: IntBins,
+    probabilities: StatBins,
 }
 
 impl Statistics {
@@ -61,7 +60,7 @@ impl Statistics {
 
     pub fn get_sum(&self) -> IntValue {
         self.sum
-    }    
+    }
 
     pub fn get_bins(&self) -> &IntBins {
         &self.bins
@@ -111,12 +110,14 @@ impl Statistics {
         if data.len() == 0 {
             panic!("{}", ZEROSTAT_ERROR_MSG);
         }
-  
+
         for &value in data {
             *self.bins.entry(value).or_insert(0) += 1;
         }
 
-        self.probabilities = self.bins.iter()
+        self.probabilities = self
+            .bins
+            .iter()
             .map(|(key, val)| (*key, *val as StatValue / data.len() as StatValue))
             .collect();
 
@@ -127,7 +128,9 @@ impl Statistics {
             }
         }
 
-        self.mode = *self.bins.iter()
+        self.mode = *self
+            .bins
+            .iter()
             .max_by_key(|&(_, count)| count)
             .map(|(val, _)| val)
             .expect(ZEROSTAT_ERROR_MSG);
@@ -158,72 +161,80 @@ impl Statistics {
 
 /// shows statistics result
 pub fn show_stats(stats: &Vec<IntValue>) {
-    let statistics : Statistics = Statistics::new(&stats);
+    let statistics: Statistics = Statistics::new(&stats);
 
     if OPT.sum {
         if !OPT.numbers_only {
-            output("Sum: ");    
+            output("Sum: ");
         }
         outputln(&statistics.get_sum().to_string());
     }
 
     if OPT.stat || OPT.min {
         if !OPT.numbers_only {
-            output("Min value: ");    
+            output("Min value: ");
         }
         outputln(&statistics.get_min().to_string());
     }
 
     if OPT.stat || OPT.max {
         if !OPT.numbers_only {
-            output("Max value: ");    
+            output("Max value: ");
         }
         outputln(&statistics.get_max().to_string());
     }
 
     if OPT.stat || OPT.mean {
         if !OPT.numbers_only {
-            output("Mean value: ");    
+            output("Mean value: ");
         }
-        let mean_str = format!("{:.digits$}", statistics.get_mean(), digits=OPT.round_digits as usize);
+        let mean_str = format!(
+            "{:.digits$}",
+            statistics.get_mean(),
+            digits = OPT.round_digits as usize,
+        );
         outputln(&mean_str);
     }
 
     if OPT.stat || OPT.median {
         if !OPT.numbers_only {
-            output("Median value: ");    
+            output("Median value: ");
         }
         outputln(&statistics.get_median().to_string());
     }
 
     if OPT.stat || OPT.mode {
         if !OPT.numbers_only {
-            output("Mode value: ");    
+            output("Mode value: ");
         }
         outputln(&statistics.get_mode().to_string());
     }
 
     if OPT.stat || OPT.probabilities {
         if !OPT.numbers_only {
-            outputln("Probabilities: ");    
+            outputln("Probabilities: ");
         }
 
         for (key, val) in statistics.get_probabilities() {
             let max_key_len = max(
                 statistics.get_max().to_string().len(),
-                statistics.get_min().to_string().len()
+                statistics.get_min().to_string().len(),
             );
 
             let key_str = format!("{: <1$} -", key, max_key_len);
             output(&key_str);
 
             if !OPT.prob_no_numbers {
-                let val_str = format!(" {:.digits$}", val, digits=OPT.round_digits as usize);
+                let val_str = format!(" {:.digits$}", val, digits = OPT.round_digits as usize);
                 output(&val_str);
             }
 
             if OPT.prob_chart {
-                let graph_str = format!(" {}", OPT.prob_chart_symbol.repeat((val*(OPT.prob_chart_precision as f32)).round() as usize));
+                let graph_str = format!(
+                    " {}",
+                    OPT.prob_chart_symbol
+                        .repeat((val * (OPT.prob_chart_precision as f32)).round() as usize)
+                );
                 output(&graph_str);
             }
 
@@ -231,5 +242,3 @@ pub fn show_stats(stats: &Vec<IntValue>) {
         }
     }
 }
-
-

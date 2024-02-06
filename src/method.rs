@@ -16,30 +16,30 @@ use crate::method_comments::ASYOUWISH_COMMENT;
 pub type Tags = BTreeSet<&'static str>;
 
 /// Type for generation method's function ptr
-pub type GenMethod = fn (&mut Vec<IntValue>) -> Result<(), DiceError>;
+pub type GenMethod = fn(&mut Vec<IntValue>) -> Result<(), DiceError>;
 
 /// struct for generation method
 pub struct Method {
     /// used in this method statistics list
-    statlist:   &'static str,
+    statlist: &'static str,
 
     /// is method gives ordered stats?
     is_ordered: bool,
 
     /// string with method's short description
-    desc:       &'static str,
+    desc: &'static str,
     /// string with method's long description
-    desc_long:  &'static str,
+    desc_long: &'static str,
     /// string with comment to show to user
-    comment:    &'static str,
+    comment: &'static str,
 
     /// method's function ptr
-    method:     GenMethod,
+    method: GenMethod,
     /// number of times the method's function is used
-    num:        usize,
+    num: usize,
 
     /// method's tags
-    tags:       Tags
+    tags: Tags,
 }
 
 impl Method {
@@ -61,7 +61,7 @@ impl Method {
 
     pub fn get_comment(&self) -> &str {
         self.comment
-    }    
+    }
 
     pub fn get_method(&self) -> GenMethod {
         self.method
@@ -73,7 +73,7 @@ impl Method {
 
     pub fn get_tags(&self) -> &Tags {
         &self.tags
-    }    
+    }
 
     /// checks if method corresponds to given tags' string
     pub fn check_tags(&self, tag_string: &str) -> bool {
@@ -92,12 +92,12 @@ impl Method {
 
     /// creates new method
     pub fn new(
-        statlist:   &'static str,
+        statlist: &'static str,
         is_ordered: bool,
-        desc:       &'static str,
-        desc_long:  &'static str,
-        method:     GenMethod,
-        tags:       &[&'static str]
+        desc: &'static str,
+        desc_long: &'static str,
+        method: GenMethod,
+        tags: &[&'static str],
     ) -> Self {
         let new_method = Method {
             statlist: statlist,
@@ -106,11 +106,11 @@ impl Method {
             desc_long: desc_long,
             comment: match is_ordered {
                 true => "",
-                false => ASYOUWISH_COMMENT
+                false => ASYOUWISH_COMMENT,
             },
             method: method,
             num: 1,
-            tags: tags.iter().copied().collect()
+            tags: tags.iter().copied().collect(),
         };
 
         new_method
@@ -118,69 +118,51 @@ impl Method {
 
     /// creates new method with given comment
     pub fn new_w_comment(
-        statlist:   &'static str,
+        statlist: &'static str,
         is_ordered: bool,
-        desc:       &'static str,
-        desc_long:  &'static str,
-        comment:    &'static str,
-        method:     GenMethod,
-        tags:       &[&'static str]
+        desc: &'static str,
+        desc_long: &'static str,
+        comment: &'static str,
+        method: GenMethod,
+        tags: &[&'static str],
     ) -> Self {
-        let mut new_method = Method::new(statlist,
-            is_ordered,
-            desc,
-            desc_long,
-            method,
-            tags
-        );
+        let mut new_method = Method::new(statlist, is_ordered, desc, desc_long, method, tags);
 
         new_method.comment = comment;
         new_method
     }
-    
+
     /// creates new method that rolls several times
     pub fn new_w_num(
-        statlist:   &'static str,
+        statlist: &'static str,
         is_ordered: bool,
-        desc:       &'static str,
-        desc_long:  &'static str,
-        method:     GenMethod,
-        num:        usize,
-        tags:       &[&'static str]
+        desc: &'static str,
+        desc_long: &'static str,
+        method: GenMethod,
+        num: usize,
+        tags: &[&'static str],
     ) -> Self {
-        let mut new_method = Method::new(statlist,
-            is_ordered,
-            desc,
-            desc_long,
-            method,
-            tags
-        );
+        let mut new_method = Method::new(statlist, is_ordered, desc, desc_long, method, tags);
 
         new_method.num = num;
         new_method
     }
-    
+
     /// creates new method that rolls several times with comment
     pub fn new_w_num_comment(
-        statlist:   &'static str,
+        statlist: &'static str,
         is_ordered: bool,
-        desc:       &'static str,
-        desc_long:  &'static str,
-        comment:    &'static str,
-        method:     GenMethod,
-        num:        usize,
-        tags:       &[&'static str]
+        desc: &'static str,
+        desc_long: &'static str,
+        comment: &'static str,
+        method: GenMethod,
+        num: usize,
+        tags: &[&'static str],
     ) -> Self {
-        let mut new_method = Method::new_w_comment(statlist,
-            is_ordered,
-            desc,
-            desc_long,
-            comment,
-            method,
-            tags
-        );
+        let mut new_method =
+            Method::new_w_comment(statlist, is_ordered, desc, desc_long, comment, method, tags);
 
         new_method.num = num;
         new_method
-    }        
+    }
 }

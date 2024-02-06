@@ -61,22 +61,20 @@ fn main() {
         for i in 0..n {
             if !OPT.method.is_empty() {
                 match process_method(&OPT.method, &mut all_stats, i, n) {
-                    Some(_) => {},
-                    None => cant_find_method(&OPT.method, true)
+                    Some(_) => {}
+                    None => cant_find_method(&OPT.method, true),
                 };
-            }
-            else {
+            } else {
                 process_dices(&mut all_stats, i, n);
             }
         }
 
         show_stats(&all_stats);
-        std::process::exit(0); 
+        std::process::exit(0);
     }
-
 
     let stdin = io::stdin();
     for line in stdin.lock().lines() {
         process_input(&line.unwrap());
-    }   
+    }
 }

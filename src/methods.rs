@@ -11,7 +11,7 @@ use std::collections::BTreeMap;
 
 use ndarray::{array, Array2};
 
-use crate::dices::{IntValue, n_d, n_d_drop, n_d_plus, n_d_reroll_drop};
+use crate::dices::{n_d, n_d_drop, n_d_plus, n_d_reroll_drop, IntValue};
 
 use crate::errors::DiceError;
 
@@ -30,7 +30,7 @@ static SFSPLIT_ARRAY: [IntValue; 6] = [16, 16, 11, 10, 10, 10];
 static SFVERSATILE_ARRAY: [IntValue; 6] = [14, 14, 14, 11, 10, 10];
 static SWN_ARRAY: [IntValue; 6] = [14, 14, 14, 11, 10, 10];
 
-/// Type for generation methods' BTreeMap 
+/// Type for generation methods' BTreeMap
 type GenMethodsMap = BTreeMap<&'static str, Method>;
 
 /// Checks, if size of vector vec is not lesser than n and resizes if needed.
@@ -47,7 +47,7 @@ fn dnd3mod(stat: IntValue) -> IntValue {
     match stat {
         stat if stat > 10 => (stat - 10) / 2,
         stat if stat < 10 => (stat - 11) / 2,
-        _ => 0
+        _ => 0,
     }
 }
 
@@ -70,7 +70,12 @@ fn method_rnd_array(arr: &Array2<IntValue>, stats: &mut Vec<IntValue>) -> Result
 }
 
 /// N dices without choice
-fn method_nd_wochoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_nd_wochoice(
+    statnum: usize,
+    n: usize,
+    d: usize,
+    stats: &mut Vec<IntValue>,
+) -> Result<(), DiceError> {
     vec_checksize(stats, statnum);
 
     for i in 0..statnum {
@@ -81,7 +86,12 @@ fn method_nd_wochoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntVal
 }
 
 /// N dices with choice
-fn method_nd_wchoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_nd_wchoice(
+    statnum: usize,
+    n: usize,
+    d: usize,
+    stats: &mut Vec<IntValue>,
+) -> Result<(), DiceError> {
     vec_checksize(stats, statnum);
 
     for i in 0..statnum {
@@ -89,13 +99,18 @@ fn method_nd_wchoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValu
     }
 
     stats[0..statnum].sort();
-    stats[0..statnum].reverse();    
+    stats[0..statnum].reverse();
 
     Ok(())
 }
 
 /// Best of 2 N dices without choice
-fn method_best_nd_wochoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_best_nd_wochoice(
+    statnum: usize,
+    n: usize,
+    d: usize,
+    stats: &mut Vec<IntValue>,
+) -> Result<(), DiceError> {
     vec_checksize(stats, statnum);
 
     for i in 0..statnum {
@@ -106,23 +121,35 @@ fn method_best_nd_wochoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<I
 }
 
 /// Best statnum of double statnum N dices with choice
-fn method_bestlist_nd_wchoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_bestlist_nd_wchoice(
+    statnum: usize,
+    n: usize,
+    d: usize,
+    stats: &mut Vec<IntValue>,
+) -> Result<(), DiceError> {
     vec_checksize(stats, statnum);
 
-    let mut dices: Vec<IntValue> = (0..(statnum as IntValue)*2).collect();
-    for i in 0..statnum*2 {
+    let mut dices: Vec<IntValue> = (0..(statnum as IntValue) * 2).collect();
+    for i in 0..statnum * 2 {
         dices[i] = n_d(n, d)?;
-    }   
+    }
+
     dices.sort();
     dices.reverse();
-    
+
     stats[0..statnum].clone_from_slice(&dices[0..statnum]);
 
     Ok(())
 }
 
 /// N dices plus without choice
-fn method_nd_plus_wochoice(statnum: usize, n: usize, d: usize, plus: IntValue, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_nd_plus_wochoice(
+    statnum: usize,
+    n: usize,
+    d: usize,
+    plus: IntValue,
+    stats: &mut Vec<IntValue>,
+) -> Result<(), DiceError> {
     vec_checksize(stats, statnum);
 
     for i in 0..statnum {
@@ -133,7 +160,13 @@ fn method_nd_plus_wochoice(statnum: usize, n: usize, d: usize, plus: IntValue, s
 }
 
 /// N dices plus with choice
-fn method_nd_plus_wchoice(statnum: usize, n: usize, d: usize, plus: IntValue, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_nd_plus_wchoice(
+    statnum: usize,
+    n: usize,
+    d: usize,
+    plus: IntValue,
+    stats: &mut Vec<IntValue>,
+) -> Result<(), DiceError> {
     vec_checksize(stats, statnum);
 
     for i in 0..statnum {
@@ -141,13 +174,18 @@ fn method_nd_plus_wchoice(statnum: usize, n: usize, d: usize, plus: IntValue, st
     }
 
     stats[0..statnum].sort();
-    stats[0..statnum].reverse();    
+    stats[0..statnum].reverse();
 
     Ok(())
 }
 
 /// N dices drop 1 with choice
-fn method_nddrop1_wchoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_nddrop1_wchoice(
+    statnum: usize,
+    n: usize,
+    d: usize,
+    stats: &mut Vec<IntValue>,
+) -> Result<(), DiceError> {
     vec_checksize(stats, statnum);
 
     for i in 0..statnum {
@@ -155,13 +193,18 @@ fn method_nddrop1_wchoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<In
     }
 
     stats[0..statnum].sort();
-    stats[0..statnum].reverse();     
+    stats[0..statnum].reverse();
 
     Ok(())
 }
 
 /// N dices drop 1 without choice
-fn method_nddrop1_wochoice(statnum: usize, n: usize, d: usize, stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
+fn method_nddrop1_wochoice(
+    statnum: usize,
+    n: usize,
+    d: usize,
+    stats: &mut Vec<IntValue>,
+) -> Result<(), DiceError> {
     vec_checksize(stats, statnum);
 
     for i in 0..statnum {
@@ -192,7 +235,9 @@ fn method_adnd1_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
     for i in 0..6 {
-        stats[i] = (0..6).map(|_| n_d(3, 6).unwrap()).fold(std::i32::MIN, |a,b| a.max(b));
+        stats[i] = (0..6)
+            .map(|_| n_d(3, 6).unwrap())
+            .fold(std::i32::MIN, |a, b| a.max(b));
     }
 
     Ok(())
@@ -273,11 +318,12 @@ fn method_arm2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 fn method_dnd3_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
-    while *stats[0..6].iter().max().unwrap() < 12 ||
-            stats[0..6].iter().fold (0, |sum, val| sum + dnd3mod(*val)) < -2 {
-            for i in 0..6 {
-                stats[i] = n_d(3, 6)?;
-            }
+    while *stats[0..6].iter().max().unwrap() < 12
+        || stats[0..6].iter().fold(0, |sum, val| sum + dnd3mod(*val)) < -2
+    {
+        for i in 0..6 {
+            stats[i] = n_d(3, 6)?;
+        }
     }
 
     stats[0..6].sort();
@@ -291,11 +337,12 @@ fn method_dnd3_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 fn method_dnd3_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
-    while *stats[0..6].iter().max().unwrap() < 12 ||
-            stats[0..6].iter().fold (0, |sum, val| sum + dnd3mod(*val)) < -2 {
-            for i in 0..6 {
-                stats[i] = n_d(3, 6)?;
-            }
+    while *stats[0..6].iter().max().unwrap() < 12
+        || stats[0..6].iter().fold(0, |sum, val| sum + dnd3mod(*val)) < -2
+    {
+        for i in 0..6 {
+            stats[i] = n_d(3, 6)?;
+        }
     }
 
     Ok(())
@@ -306,11 +353,12 @@ fn method_dnd3_3(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 fn method_dnd3_4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
-    while *stats[0..6].iter().max().unwrap() < 15 ||
-            stats[0..6].iter().fold (0, |sum, val| sum + dnd3mod(*val)) < 2 {
-            for i in 0..6 {
-                stats[i] = n_d_drop(4, 6, 1)?;
-            }
+    while *stats[0..6].iter().max().unwrap() < 15
+        || stats[0..6].iter().fold(0, |sum, val| sum + dnd3mod(*val)) < 2
+    {
+        for i in 0..6 {
+            stats[i] = n_d_drop(4, 6, 1)?;
+        }
     }
 
     stats[0..6].sort();
@@ -324,10 +372,10 @@ fn method_dnd3_4(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
 fn method_dnd4_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     vec_checksize(stats, 6);
 
-    while stats[0..6].iter().fold (0, |sum, val| sum + dnd3mod(*val)) < 4 {
-            for i in 0..6 {
-                stats[i] = n_d_drop(4, 6, 1)?;
-            }
+    while stats[0..6].iter().fold(0, |sum, val| sum + dnd3mod(*val)) < 4 {
+        for i in 0..6 {
+            stats[i] = n_d_drop(4, 6, 1)?;
+        }
     }
 
     stats[0..6].sort();
@@ -344,7 +392,7 @@ fn method_rq6_1(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     for i in 0..7 {
         stats[i] = match i {
             2 | 4 => n_d_plus(2, 6, 6)?,
-            _ => n_d(3, 6)?
+            _ => n_d(3, 6)?,
         };
     }
 
@@ -365,14 +413,15 @@ fn method_rq6_2(stats: &mut Vec<IntValue>) -> Result<(), DiceError> {
     }
 
     stats[0..5].sort();
-    stats[0..5].reverse();    
+    stats[0..5].reverse();
 
     stats[5..7].sort();
-    stats[5..7].reverse();    
+    stats[5..7].reverse();
 
     Ok(())
 }
 
+#[rustfmt::skip]
 lazy_static! {
     // BTreeMap with all methods
     pub static ref METHODSMAP: GenMethodsMap = {
@@ -591,6 +640,19 @@ lazy_static! {
         m.insert("wh40k_choicereroll", Method::new(
             "warhammer-reroll", false, WH40KCHOICEREROLL_DESC, WH40KCHOICEREROLL_HELP, |stats| method_nd_wchoice(10, 2, 10, stats),
             &["wh", "warhammer", "wh40k", "warhammer40k", "reroll", "choice"]));
+
+        m.insert("uesrpg", Method::new(
+            "uesrpg", true, UESRPG_DESC, UESRPG_HELP, |stats| method_nd_wochoice(9, 2, 10, stats),
+            &["uesrpg", "ordered"]));
+        m.insert("uesrpg_reroll", Method::new(
+            "uesrpg-reroll", true, UESRPGREROLL_DESC, UESRPGREROLL_HELP, |stats| method_nd_wochoice(10, 2, 10, stats),
+            &["uesrpg", "reroll", "ordered"]));
+        m.insert("uesrpg_choice", Method::new(
+            "uesrpg", false, UESRPGCHOICE_DESC, UESRPGCHOICE_HELP, |stats| method_nd_wchoice(9, 2, 10, stats),
+            &["uesrpg", "choice"]));
+        m.insert("uesrpg_choicereroll", Method::new(
+            "uesrpg-reroll", false, UESRPGCHOICEREROLL_DESC, UESRPGCHOICEREROLL_HELP, |stats| method_nd_wchoice(10, 2, 10, stats),
+            &["uesrpg", "reroll", "choice"]));            
         
         m.insert("swn", Method::new_w_comment(
             "d&d", true, SWN_DESC, SWN_HELP, SWN_COMMENT, |stats| method_nd_wochoice(6, 3, 6, stats),

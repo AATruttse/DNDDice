@@ -8,11 +8,13 @@
 
 pub static DND_DESC: &str = "3d6 for each stat without choice";
 
-pub static DNDREALMAN_DESC:     &str = "D&D for Real Men:) - Six 4d6 drop lowest with choice";
-pub static DNDCRAZYLOONIE_DESC: &str = "D&D for Crazy Loonies:) - 1d20 for each stat without choice";
-pub static DNDMUNCHKIN_DESC:    &str = "D&D for Munchkins:) - 25 for each stat. With choice:)";
-pub static DNDEVILCHAMPION_DESC: &str = "D&D for Evil Champions:) - Six 4d6, reroll 1's, drop lowest with choice";
-pub static DNDNEWBIE_DESC:      &str = "D&D for Newbies:) - 3d6 for each stat without choice";
+pub static DNDREALMAN_DESC: &str = "D&D for Real Men:) - Six 4d6 drop lowest with choice";
+pub static DNDCRAZYLOONIE_DESC: &str =
+    "D&D for Crazy Loonies:) - 1d20 for each stat without choice";
+pub static DNDMUNCHKIN_DESC: &str = "D&D for Munchkins:) - 25 for each stat. With choice:)";
+pub static DNDEVILCHAMPION_DESC: &str =
+    "D&D for Evil Champions:) - Six 4d6, reroll 1's, drop lowest with choice";
+pub static DNDNEWBIE_DESC: &str = "D&D for Newbies:) - 3d6 for each stat without choice";
 
 pub static ADND1_DESC: &str = DND_DESC;
 pub static ADND2_DESC: &str = "Best of two 3d6 for each without choice";
@@ -20,11 +22,16 @@ pub static ADND3_DESC: &str = "Six 3d6 with choice";
 pub static ADND4_DESC: &str = "Best six of 12 3d6 with choice";
 pub static ADND5_DESC: &str = "Six 4d6 drop lowest with choice";
 
-pub static ADND_CBON1_DESC: &str = "One of six '3d6 without choice' pregenerated sets for real necromancer";
-pub static ADND_CBON2_DESC: &str = "One of six 'Best of two 3d6 without choice' pregenerated sets for real necromancer";
-pub static ADND_CBON3_DESC: &str = "One of six 'Six 3d6 with choice' pregenerated sets for real necromancer";
-pub static ADND_CBON4_DESC: &str = "One of six 'Best six of 12 3d6 with choice' pregenerated sets for real necromancer";
-pub static ADND_CBON5_DESC: &str = "One of six 'Six 4d6 drop lowest with choice' pregenerated sets for real necromancer";
+pub static ADND_CBON1_DESC: &str =
+    "One of six '3d6 without choice' pregenerated sets for real necromancer";
+pub static ADND_CBON2_DESC: &str =
+    "One of six 'Best of two 3d6 without choice' pregenerated sets for real necromancer";
+pub static ADND_CBON3_DESC: &str =
+    "One of six 'Six 3d6 with choice' pregenerated sets for real necromancer";
+pub static ADND_CBON4_DESC: &str =
+    "One of six 'Best six of 12 3d6 with choice' pregenerated sets for real necromancer";
+pub static ADND_CBON5_DESC: &str =
+    "One of six 'Six 4d6 drop lowest with choice' pregenerated sets for real necromancer";
 pub static ADND_CBON6_DESC: &str = "One of six '8+7d6' pregenerated sets for real necromancer";
 pub static ADND_CBON7_DESC: &str = "Six 10+1d8 with choice";
 pub static ADND_CBON8_DESC: &str = "Six 10+1d8 with choice; +1 to INT&WIS";
@@ -43,7 +50,8 @@ pub static ADND1_3_DESC: &str = "Best of six 3d6 for each ability";
 pub static ADND1_4_DESC: &str = "Best of 12 '3d6 without choice' sets";
 
 pub static DND3_DESC: &str = ADND5_DESC;
-pub static DND3ORGANIC_DESC: &str = "Six 4d6 drop lowest without choice, reroll one, switch any two";
+pub static DND3ORGANIC_DESC: &str =
+    "Six 4d6 drop lowest without choice, reroll one, switch any two";
 pub static DND3CA_DESC: &str = "Six 3d6 with choice, reroll very bad stats";
 pub static DND3RA_DESC: &str = "3d6 for each stat without choice, reroll very bad stats";
 pub static DND3HP_DESC: &str = "Six 5d6 drop lowest two with choice, reroll below average stats";
@@ -89,9 +97,15 @@ pub static WH40KREROLL_DESC: &str = "2d10 for each characteristic without choice
 pub static WH40KCHOICE_DESC: &str = "2d10 for each characteristic with choice";
 pub static WH40KCHOICEREROLL_DESC: &str = "2d10 for each characteristic with choice, reroll one";
 
-pub static SWN_DESC: &str = "3d6 for each stat without choice, then you can change one ability to 14";
+pub static UESRPG_DESC: &str = "2d10 for each characteristic without choice";
+pub static UESRPGREROLL_DESC: &str = "2d10 for each characteristic without choice, reroll one";
+pub static UESRPGCHOICE_DESC: &str = "2d10 for each characteristic with choice";
+pub static UESRPGCHOICEREROLL_DESC: &str = "2d10 for each characteristic with choice, reroll one";
+
+pub static SWN_DESC: &str =
+    "3d6 for each stat without choice, then you can change one ability to 14";
 pub static SWNSTANDARD_DESC: &str = "14,12,11,10,9,7 with choice";
 
 pub static RQ6_DESC: &str = "3d6 for STR, CON, DEX, POW and CHA; 2d6+6 for SIZ and INT";
-pub static RQ6CHOICE_DESC: &str = "3d6 for STR, CON, DEX, POW and CHA with choice; 2d6+6 for SIZ and INT with choice";
-
+pub static RQ6CHOICE_DESC: &str =
+    "3d6 for STR, CON, DEX, POW and CHA with choice; 2d6+6 for SIZ and INT with choice";

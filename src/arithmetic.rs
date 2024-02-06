@@ -14,9 +14,9 @@ use crate::strings::DICECODEDECRYPTION_ERROR_MSG;
 pub type Arythmetic<'a> = (&'a str, IntValue);
 
 /// Type for arithmetic operation's ptr
-type ArithmeticOp = fn (IntValue, IntValue) -> IntValue;
+type ArithmeticOp = fn(IntValue, IntValue) -> IntValue;
 
-/// Type for arithmetic operations' BTreeMap 
+/// Type for arithmetic operations' BTreeMap
 type OpsMap = BTreeMap<&'static str, ArithmeticOp>;
 
 lazy_static! {
@@ -50,25 +50,23 @@ pub fn process_arithmetic(ar: &[Arythmetic]) -> IntValue {
 
 /// Recursive function which process arithmetic ops' slice in right order
 fn calc_arithmetic(ar: &[Arythmetic], order: usize) -> IntValue {
-//    let mut chains: Vec<&[Arythmetic]> = Vec::new();
     let mut results: Vec<Arythmetic> = Vec::new();
-    
+
     let mut idx: usize = 0;
 
     // build vector of local operations, calling recursively this function if see ops with greater priority
     for i in 0..ar.len() {
-        if i == (ar.len()-1) || ops_order(ar[i+1].0) == order {
-            let chain = &ar[idx..i+1];
+        if i == (ar.len() - 1) || ops_order(ar[i + 1].0) == order {
+            let chain = &ar[idx..i + 1];
             results.push(match chain.len() {
-                    1 => chain[0],
-                    _ => (chain[0].0, calc_arithmetic(chain, order+1))
-                }
-            );
-            idx = i+1;            
+                1 => chain[0],
+                _ => (chain[0].0, calc_arithmetic(chain, order + 1)),
+            });
+            idx = i + 1;
         }
     }
 
-    // process local operations one by one    
+    // process local operations one by one
     let mut result = results[0].1;
     for pair in results.windows(2) {
         result = OPSMAP.get(pair[1].0).expect(DICECODEDECRYPTION_ERROR_MSG)(result, pair[1].1);
@@ -90,36 +88,36 @@ fn ops_order(op: &str) -> usize {
 
 /// Function for arithmetic operation - plus
 #[inline(always)]
-fn plus (a: IntValue, b: IntValue) -> IntValue {
-    a+b
+fn plus(a: IntValue, b: IntValue) -> IntValue {
+    a + b
 }
 
 /// Function for arithmetic operation - minus
 #[inline(always)]
-fn minus (a: IntValue, b: IntValue) -> IntValue {
-    a-b
+fn minus(a: IntValue, b: IntValue) -> IntValue {
+    a - b
 }
 
 /// Function for arithmetic operation - multiplication
 #[inline(always)]
-fn mult (a: IntValue, b: IntValue) -> IntValue {
-    a*b
+fn mult(a: IntValue, b: IntValue) -> IntValue {
+    a * b
 }
 
 /// Function for arithmetic operation - division
 #[inline(always)]
-fn div (a: IntValue, b: IntValue) -> IntValue {
-    a/b
+fn div(a: IntValue, b: IntValue) -> IntValue {
+    a / b
 }
 
 /// Function for arithmetic operation - modul
 #[inline(always)]
-fn modul (a: IntValue, b: IntValue) -> IntValue {
-    a%b
+fn modul(a: IntValue, b: IntValue) -> IntValue {
+    a % b
 }
 
 /// Function for arithmetic operation - power
 #[inline(always)]
-fn power (a: IntValue, b: IntValue) -> IntValue {
+fn power(a: IntValue, b: IntValue) -> IntValue {
     a.pow(b as u32)
 }

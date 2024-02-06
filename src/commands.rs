@@ -10,14 +10,14 @@ use std::collections::BTreeMap;
 
 use crate::dices::IntValue;
 use crate::errors::{cant_find_method, process_dice_code_error};
-use crate::help::{help_dicecodes, help_method, help_methods, help_tags, find_tags};
+use crate::help::{find_tags, help_dicecodes, help_method, help_methods, help_tags};
 use crate::processes::{log_and_show_dice_num, process_codes, process_method};
 use crate::strings::{BADCOMMAND_ERROR_MSG, COMMAND_HELP_MSG};
 
 /// Type for interactive-mode command's execution functions
-pub type CommandFunc = fn (&Vec<&str>);
+pub type CommandFunc = fn(&Vec<&str>);
 
-/// Type for  interactive-mode command's execution functions' BTreeMap 
+/// Type for  interactive-mode command's execution functions' BTreeMap
 type CommandFuncsMap = BTreeMap<&'static str, CommandFunc>;
 
 /// Array for interactive mode commands - short, long, function, help message
@@ -91,44 +91,44 @@ fn command_method(_args: &Vec<&str>) {
     let n: usize = match _args.len() {
         1 => 1,
         _ => match _args[1].parse() {
-            Ok(n)   => n,
-            Err(_)  => {
+            Ok(n) => n,
+            Err(_) => {
                 show_bad_command();
                 return;
             }
-        }
+        },
     };
 
     let mut all_stats: Vec<IntValue> = Vec::new();
 
     for _i in 0..n {
-        match process_method(_args[0], &mut all_stats, _i, n){
-            Some(_) => {},
-            None => {
-                cant_find_method(_args[0], false);
-            }
+        match process_method(_args[0], &mut all_stats, _i, n) {
+            Some(_) => {}
+            None => cant_find_method(_args[0], false),
         }
-    }    
+    }
 }
 
 /// command processing for raw dice codes
 pub fn command_codes(input: &str, n: usize) {
-
     let mut input_string: String = input.to_owned();
 
     while input_string.find("  ") != None {
         input_string = input_string.replace("  ", " ");
     }
 
-    let codes: Vec<String> = input_string.split(' ').map(|code| code.to_owned()).collect();
+    let codes: Vec<String> = input_string
+        .split(' ')
+        .map(|code| code.to_owned())
+        .collect();
 
     let mut all_stats: Vec<IntValue> = Vec::new();
 
     for i in 0..n {
         log_and_show_dice_num(i, n);
         match process_codes(&codes, &mut all_stats) {
-            Ok(_) => {},
-            Err(e) => process_dice_code_error(&codes, e, false)
+            Ok(_) => {}
+            Err(e) => process_dice_code_error(&codes, e, false),
         }
     }
 }
@@ -146,8 +146,8 @@ lazy_static! {
 
         for comm in COMMANDS {
             c.insert(comm.1, comm.2);
-        }        
-            
+        }
+
         c
     };
 
@@ -156,10 +156,8 @@ lazy_static! {
 
         for comm in COMMANDS {
             c.insert(comm.0, comm.2);
-        }        
+        }
 
         c
-    };    
+    };
 }
-
-

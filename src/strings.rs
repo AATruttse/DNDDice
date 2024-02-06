@@ -22,7 +22,8 @@ pub static LOGFILEWRITE_ERROR_MSG: &str = "Can't write log file";
 pub static OUTPUTFILE_ERROR_MSG: &str = "Can't open output file";
 pub static OUTPUTFILEWRITE_ERROR_MSG: &str = "Can't write output file";
 pub static NONUTF8FILENAME_ERROR_MSG: &str = "[Non-UTF8 file name]";
-pub static ADVDISADV_ERROR_MSG: &str = "Can't process roll with advantage and disadvantage simultaneously";
+pub static ADVDISADV_ERROR_MSG: &str =
+    "Can't process roll with advantage and disadvantage simultaneously";
 
 pub static UNKNOWNMETHOD_ERROR_MSG: &str = "Unknown method";
 pub static UNKNOWNSTATLIST_ERROR_MSG: &str = "Internal error: Unknown stat list for method.";
@@ -90,7 +91,7 @@ Examples:
 	And remember, you can use all dice codes successively with space divisor! For example: 2d8 3d8c1 4d8d2
 	";
 
-	pub static BADCOMMAND_ERROR_MSG: &str = "Bad command.";
-	pub static COMMAND_HELP_MSG: &str = "Available commands:
+pub static BADCOMMAND_ERROR_MSG: &str = "Bad command.";
+pub static COMMAND_HELP_MSG: &str = "Available commands:
 DICECODE{ DICECODE}		- roll dices. Examples: 2d8plus1, 4d6drop1, 2d4-1d6/1d3 etc. See --help-dice-codes for format description
 .NUM DICECODE{ DICECODE}	- roll given dices NUM times";

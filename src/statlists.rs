@@ -11,10 +11,11 @@ use std::collections::BTreeMap;
 /// Type for stat list (D&D, Cyberpunk etc...)
 pub type StatList = Vec<&'static str>;
 
-/// Type for stat lists' BTreeMap 
+/// Type for stat lists' BTreeMap
 type StatListsMap = BTreeMap<&'static str, StatList>;
 
 // BTreeMap for stat lists
+#[rustfmt::skip]
 lazy_static! {
     pub static ref STATLISTSMAP: StatListsMap = {
         let mut m = StatListsMap::new();
@@ -28,6 +29,8 @@ lazy_static! {
         m.insert("warhammer", vec!["WS","BS","S","T","Ag","Int","Per","WP","Fel"]);
         m.insert("warhammer-reroll", vec!["WS","BS","S","T","Ag","Int","Per","WP","Fel", "reroll"]);
         m.insert("runequest", vec!["STR","CON","SIZ","DEX","INT","POW","CHA"]);
+        m.insert("uesrpg", vec!["Str","End","Ag","Int","WP","Prc","Prs","Luc"]);
+        m.insert("uesrpg-reroll", vec!["Str","End","Ag","Int","WP","Prc","Prs","Luc","reroll"]);
 
         m
     };
